@@ -21,7 +21,7 @@ object ExportDriver {
 
     // Now create SparkContext (possibly flooding the console with logging information)
     val conf = new SparkConf()
-      .setAppName("Spark Attribution")
+      .setAppName("Spark JDBC Exporter")
     val sc = new SparkContext(conf)
     val sql = new  SQLContext(sc)
 

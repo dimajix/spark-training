@@ -5,14 +5,13 @@ in Hive. We use Parquet as file format.
 
 
 ```sql
-CREATE EXTERNAL TABLE ish(
+CREATE EXTERNAL TABLE isd(
   usaf STRING,
     wban STRING,
     name STRING,
     country STRING,
-    fips STRING,
     state STRING,
-    call STRING,
+    icao STRING,
     latitude INT,
     longitude INT,
     elevation INT,
@@ -20,34 +19,34 @@ CREATE EXTERNAL TABLE ish(
     date_end STRING)
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
 STORED AS TEXTFILE
-LOCATION '/user/cloudera/data/weather/ish';
+LOCATION '/user/cloudera/data/weather/isd';
 ```
 
 
 ```sql
-CREATE TABLE ish 
+CREATE TABLE isd 
     STORED AS PARQUET 
 AS 
     SELECT 
         * 
-    FROM ish_raw 
+    FROM isd_raw 
     WHERE usaf <> 'USAF';
 ```
 
 Then we can perform a similar query:
 ```sql
 SELECT 
-    ish.country,
+    isd.country,
     w.year,
     MIN(w.air_temperature) as tmin,
     MAX(w.air_temperature) as tmax 
 FROM weather w
-INNER JOIN ish
-    ON w.usaf=ish.usaf 
-    AND w.wban=ish.wban
+INNER JOIN isd
+    ON w.usaf=isd.usaf 
+    AND w.wban=isd.wban
 WHERE
     w.air_temperature_qual = "1"
-GROUP BY w.year,ish.country;
+GROUP BY w.year,isd.country;
 ```
 
 ## Compare with Parquet
@@ -62,15 +61,15 @@ AS
 
 ```sql
 SELECT 
-    ish.country,
+    isd.country,
     w.year,
     MIN(w.air_temperature) as tmin,
     MAX(w.air_temperature) as tmax 
 FROM weather_parquet w
-INNER JOIN ish
-    ON w.usaf=ish.usaf 
-    AND w.wban=ish.wban
+INNER JOIN isd
+    ON w.usaf=isd.usaf 
+    AND w.wban=isd.wban
 WHERE
     w.air_temperature_qual = "1"
-GROUP BY w.year,ish.country;
+GROUP BY w.year,isd.country;
 ```

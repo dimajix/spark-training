@@ -20,7 +20,7 @@ object Driver {
 
     // Now create SparkContext (possibly flooding the console with logging information)
     val conf = new SparkConf()
-      .setAppName("Spark Attribution")
+      .setAppName("Spark Weather Analysis")
     val sc = new SparkContext(conf)
 
     // ... and run!
@@ -37,7 +37,7 @@ class Driver(args: Array[String]) {
   @Option(name = "--output", usage = "output dir", metaVar = "<outputDirectory>")
   private var outputPath: String = "weather/minmax"
   @Option(name = "--stations", usage = "stations definitioons", metaVar = "<stationsPath>")
-  private var stationsPath: String = "weather/ish"
+  private var stationsPath: String = "weather/isd"
 
   parseArgs(args)
 

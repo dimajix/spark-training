@@ -18,9 +18,8 @@ object StationData extends Serializable {
         StructField("wban", StringType, false) ::
         StructField("name", StringType, false) ::
         StructField("country", StringType, false) ::
-        StructField("fips", StringType, false) ::
         StructField("state", StringType, false) ::
-        StructField("call", StringType, false) ::
+        StructField("icao", StringType, false) ::
         StructField("latitude", IntegerType, true) ::
         StructField("longitude", IntegerType, true) ::
         StructField("elevation", IntegerType, true) ::
@@ -37,10 +36,10 @@ object StationData extends Serializable {
         return str.toInt
     }
     val columns = row.split(",").map(_.replaceAll("\"",""))
-    val latitude = getInt(columns(7))
-    val longitude = getInt(columns(8))
-    val elevation = getInt(columns(9))
-    Row(columns(0),columns(1),columns(2),columns(3),columns(4),columns(5),columns(6),latitude,longitude,elevation,columns(10),columns(11))
+    val latitude = getInt(columns(6))
+    val longitude = getInt(columns(7))
+    val elevation = getInt(columns(8))
+    Row(columns(0),columns(1),columns(2),columns(3),columns(4),columns(5),latitude,longitude,elevation,columns(10),columns(11))
   }
 }
 
@@ -85,18 +84,18 @@ val raw_weather = sc.textFile("weather/2011")
 val weather_rdd = raw_weather.map(WeatherData.extract)
 val weather = sqlContext.createDataFrame(weather_rdd, WeatherData.schema)
 
-val ish_raw = sc.textFile("weather/ish")
-val ish_head = ish_raw.first
-val ish_rdd = ish_raw
-  .filter(_ != ish_head)
+val isd_raw = sc.textFile("weather/isd")
+val isd_head = isd_raw.first
+val isd_rdd = isd_raw
+  .filter(_ != isd_head)
   .map(StationData.extract)
-val ish = sqlContext.createDataFrame(ish_rdd, StationData.schema)
+val isd = sqlContext.createDataFrame(isd_rdd, StationData.schema)
 
 
 weather.take(10).foreach(println)
 
 
-val joined_weather = weather.join(ish, weather("usaf") === ish("usaf") && weather("wban") === ish("wban")).withColumn("year", weather("date").substr(0,4))
+val joined_weather = weather.join(isd, weather("usaf") === isd("usaf") && weather("wban") === isd("wban")).withColumn("year", weather("date").substr(0,4))
 joined_weather.printSchema
 
 
@@ -106,7 +105,7 @@ joined_weather.groupBy("country", "year")
     .foreach(println)
 
 
-weather.join(ish, weather("usaf") === ish("usaf") && weather("wban") === ish("wban"))
+weather.join(isd, weather("usaf") === isd("usaf") && weather("wban") === isd("wban"))
   .withColumn("year", weather("date").substr(0,4))
   .groupBy("country", "year")
   .agg(
@@ -116,7 +115,7 @@ weather.join(ish, weather("usaf") === ish("usaf") && weather("wban") === ish("wb
   .take(100).foreach(println)
 
 
-weather.join(ish, weather("usaf") === ish("usaf") && weather("wban") === ish("wban"))
+weather.join(isd, weather("usaf") === isd("usaf") && weather("wban") === isd("wban"))
   .withColumn("year", weather("date").substr(0,4))
   .groupBy("country", "year")
   .agg(

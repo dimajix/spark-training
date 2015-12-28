@@ -14,9 +14,8 @@ CREATE TABLE `ish`(
   `wban` string COMMENT 'from deserializer', 
   `name` string COMMENT 'from deserializer', 
   `country` string COMMENT 'from deserializer', 
-  `fips` string COMMENT 'from deserializer', 
   `state` string COMMENT 'from deserializer', 
-  `call` string COMMENT 'from deserializer', 
+  `icao` string COMMENT 'from deserializer', 
   `latitude` string COMMENT 'from deserializer', 
   `longitude` string COMMENT 'from deserializer', 
   `elevation` string COMMENT 'from deserializer', 
@@ -52,9 +51,8 @@ CREATE TABLE `ish`(
   `wban` TEXT COMMENT 'from deserializer', 
   `name` TEXT COMMENT 'from deserializer', 
   `country` TEXT COMMENT 'from deserializer', 
-  `fips` TEXT COMMENT 'from deserializer', 
   `state` TEXT COMMENT 'from deserializer', 
-  `callname` TEXT COMMENT 'from deserializer', 
+  `icao` TEXT COMMENT 'from deserializer', 
   `latitude` TEXT COMMENT 'from deserializer', 
   `longitude` TEXT COMMENT 'from deserializer', 
   `elevation` TEXT COMMENT 'from deserializer', 
@@ -75,5 +73,5 @@ sqoop export \
     --export-dir /user/hive/warehouse/training.db/ish \
     --input-optionally-enclosed-by '"' \
     --input-fields-terminated-by ',' \
-    --columns usaf,wban,name,country,fips,state,callname,latitude,longitude,elevation,date_begin,date_end
+    --columns usaf,wban,name,country,state,icao,latitude,longitude,elevation,date_begin,date_end
 ```

@@ -87,19 +87,18 @@ Et voila:
     select * from weather limit 10;
 ```
 
-## Import ish Table
+## Import isd Table
 
-We also want to import the ish table, so we can lookup country names.
+We also want to import the isd table, so we can lookup country names.
 
 ```sql
-CREATE TABLE ish_raw(
+CREATE TABLE isd_raw(
     usaf STRING,
     wban STRING,
     name STRING,
     country STRING,
-    fips STRING,
     state STRING,
-    call STRING,
+    icao STRING,
     latitude INT,
     longitude INT,
     elevation INT,
@@ -112,36 +111,36 @@ WITH SERDEPROPERTIES (
    "escapeChar"    = "\\"
 )
 STORED AS TEXTFILE
-LOAD DATA LOCAL INPATH 'data/weather/ish-history.csv' OVERWRITE INTO TABLE ish_raw;
+LOAD DATA LOCAL INPATH 'data/weather/isd-history.csv' OVERWRITE INTO TABLE isd_raw;
 ```
 
 Now we can perform exactly the same query as in Java examples:
 ```sql
 SELECT 
-    ish.country,
+    isd.country,
     MIN(w.air_temperature) as tmin,
     MAX(w.air_temperature) as tmax 
 FROM weather w
-INNER JOIN ish_raw ish 
-    ON w.usaf=ish.usaf 
-    AND w.wban=ish.wban
+INNER JOIN isd_raw isd 
+    ON w.usaf=isd.usaf 
+    AND w.wban=isd.wban
 WHERE
     w.air_temperature_qual = "1"
-GROUP BY ish.country;
+GROUP BY isd.country;
 ```
 
 But we can also group by year:
 ```sql
 SELECT 
-    ish.country,
+    isd.country,
     w.year,
     MIN(w.air_temperature) as tmin,
     MAX(w.air_temperature) as tmax 
 FROM weather w
-INNER JOIN ish_raw ish 
-    ON w.usaf=ish.usaf 
-    AND w.wban=ish.wban
+INNER JOIN isd_raw isd 
+    ON w.usaf=isd.usaf 
+    AND w.wban=isd.wban
 WHERE
     w.air_temperature_qual = "1"
-GROUP BY w.year,ish.country
+GROUP BY w.year,isd.country
 ```

@@ -24,7 +24,7 @@ object AnalyzeDriver {
 
     // Now create SparkContext (possibly flooding the console with logging information)
     val conf = new SparkConf()
-      .setAppName("Spark Attribution")
+      .setAppName("Spark JDBC Analyzer")
     val sc = new SparkContext(conf)
     val sql = new SQLContext(sc)
 
@@ -79,16 +79,11 @@ class AnalyzeDriver(args: Array[String]) {
       .agg(
         col("year"),
         col("country"),
-        // The following is not supported in Spark 1.3
-        // min(when(col("air_temperature_quality") === lit(1), col("air_temperature")).otherwise(9999)).as("temp_min"),
-        // max(when(col("air_temperature_quality") === lit(1), col("air_temperature")).otherwise(-9999)).as("temp_max"),
-        // min(when(col("wind_speed_quality") === lit(1), col("wind_speed")).otherwise(9999)).as("wind_min"),
-        // max(when(col("wind_speed_quality") === lit(1), col("wind_speed")).otherwise(-9999)).as("wind_max")
-        min(callUDF((q:Int,t:Double) => if (q == 1) t else 9999.toDouble, DoubleType, col("air_temperature_quality"), col("air_temperature"))).as("temp_min"),
-        max(callUDF((q:Int,t:Double) => if (q == 1) t else -9999.toDouble, DoubleType, col("air_temperature_quality"), col("air_temperature"))).as("temp_max"),
-        min(callUDF((q:Int,t:Double) => if (q == 1) t else 9999.toDouble, DoubleType, col("wind_speed_quality"), col("wind_speed"))).as("wind_min"),
-        max(callUDF((q:Int,t:Double) => if (q == 1) t else -9999.toDouble, DoubleType, col("wind_speed_quality"), col("wind_speed"))).as("wind_max")
+        min(when(col("air_temperature_quality") === lit(1), col("air_temperature")).otherwise(9999)).as("temp_min"),
+        max(when(col("air_temperature_quality") === lit(1), col("air_temperature")).otherwise(-9999)).as("temp_max"),
+        min(when(col("wind_speed_quality") === lit(1), col("wind_speed")).otherwise(9999)).as("wind_min"),
+        max(when(col("wind_speed_quality") === lit(1), col("wind_speed")).otherwise(-9999)).as("wind_max")
       )
-      .saveAsParquetFile(outputPath)
+      .write.parquet(outputPath)
   }
 }
