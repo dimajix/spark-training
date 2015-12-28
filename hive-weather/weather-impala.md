@@ -1,8 +1,9 @@
-## For Impala
+# Impala
+
+## Convert isd Table in Hive
 
 Since Impala cannot use the SERDE from above, we need to convert the table
 in Hive. We use Parquet as file format.
-
 
 ```sql
 CREATE EXTERNAL TABLE isd(
@@ -32,6 +33,8 @@ AS
     FROM isd_raw 
     WHERE usaf <> 'USAF';
 ```
+
+# Use Impala
 
 Then we can perform a similar query:
 ```sql

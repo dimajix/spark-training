@@ -1,3 +1,16 @@
+# Preparation
+
+We need to upload the relevant data into HDFS.
+
+```bash
+hdfs dfs -mkdir -p data/weather
+hdfs dfs -put data/weather/20* data/weather
+hdfs dfs -mkdir -p data/weather/isd
+hdfs dfs -put data/weather/isd-history.csv data/weather/isd
+```
+
+# In Hive
+
 ## Create Database
 
 ```sql
@@ -45,21 +58,42 @@ DROP TABLE weather_2011;
 ```
 
 
-## Using Partitions and Views
+# Import Weather Data
+
+### Using LOAD DATA with local data
 
 First we recreate the table with
-
 ```sql
 CREATE TABLE weather_raw(data STRING) PARTITIONED BY(year STRING) STORED AS TEXTFILE;
 ```
 
 We load local data into the table using the correct partition
-
 ```sql
 LOAD DATA LOCAL INPATH 'data/weather/2009/*.gz' OVERWRITE INTO TABLE weather_raw PARTITION(year=2009);
 LOAD DATA LOCAL INPATH 'data/weather/2010/*.gz' OVERWRITE INTO TABLE weather_raw PARTITION(year=2010);
 LOAD DATA LOCAL INPATH 'data/weather/2011/*.gz' OVERWRITE INTO TABLE weather_raw PARTITION(year=2011);
 ```
+
+### Using External Table
+```sql
+CREATE EXTERNAL TABLE weather_raw(data STRING) PARTITIONED BY(year STRING) STORED AS TEXTFILE;
+```
+```sql
+ALTER TABLE weather_raw ADD PARTITION(year=2004) LOCATION '/user/cloudera/data/weather/2004';
+ALTER TABLE weather_raw ADD PARTITION(year=2005) LOCATION '/user/cloudera/data/weather/2005';
+ALTER TABLE weather_raw ADD PARTITION(year=2006) LOCATION '/user/cloudera/data/weather/2006';
+ALTER TABLE weather_raw ADD PARTITION(year=2007) LOCATION '/user/cloudera/data/weather/2007';
+ALTER TABLE weather_raw ADD PARTITION(year=2008) LOCATION '/user/cloudera/data/weather/2008';
+ALTER TABLE weather_raw ADD PARTITION(year=2009) LOCATION '/user/cloudera/data/weather/2009';
+ALTER TABLE weather_raw ADD PARTITION(year=2010) LOCATION '/user/cloudera/data/weather/2010';
+ALTER TABLE weather_raw ADD PARTITION(year=2011) LOCATION '/user/cloudera/data/weather/2011';
+ALTER TABLE weather_raw ADD PARTITION(year=2012) LOCATION '/user/cloudera/data/weather/2012';
+ALTER TABLE weather_raw ADD PARTITION(year=2013) LOCATION '/user/cloudera/data/weather/2013';
+ALTER TABLE weather_raw ADD PARTITION(year=2014) LOCATION '/user/cloudera/data/weather/2014';
+```
+
+
+## Create View
 
 Then we'll create a new view
 
@@ -84,12 +118,15 @@ CREATE VIEW weather AS
 
 Et voila:
 ```sql
-    select * from weather limit 10;
+    SELECT * FROM weather LIMIT 10;
 ```
 
-## Import isd Table
+
+# Import isd Table
 
 We also want to import the isd table, so we can lookup country names.
+
+### Using normal Table and LOAD DATA with local data
 
 ```sql
 CREATE TABLE isd_raw(
@@ -110,9 +147,42 @@ WITH SERDEPROPERTIES (
    "quoteChar"     = "\"",
    "escapeChar"    = "\\"
 )
-STORED AS TEXTFILE
+STORED AS TEXTFILE;
+```
+
+Load local data:
+```sql
 LOAD DATA LOCAL INPATH 'data/weather/isd-history.csv' OVERWRITE INTO TABLE isd_raw;
 ```
+
+### Using external Table
+
+```sql
+CREATE EXTERNAL TABLE isd_raw(
+    usaf STRING,
+    wban STRING,
+    name STRING,
+    country STRING,
+    state STRING,
+    icao STRING,
+    latitude INT,
+    longitude INT,
+    elevation INT,
+    date_begin STRING,
+    date_end STRING) 
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+   "separatorChar" = ",",
+   "quoteChar"     = "\"",
+   "escapeChar"    = "\\"
+)
+STORED AS TEXTFILE
+LOCATION '/user/cloudera/data/weather/isd';
+```
+
+
+# Performing Queries
+
 
 Now we can perform exactly the same query as in Java examples:
 ```sql
