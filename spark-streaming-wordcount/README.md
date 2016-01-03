@@ -6,7 +6,7 @@ This is the first Spark Streaming implementation of a simple word count.
 
 You need a NetCat server running with some sample data:
 
-    nc  
+    nc  -k -i1 -l 0.0.0.0 9977 < alice.txt
 
 ## Running
 

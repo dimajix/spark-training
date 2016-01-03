@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APP_NAME="spark-weather-streaming-wordcount"
+APP_NAME="spark-streaming-wordcount"
 APP_MAIN="de.dimajix.training.spark.wordcount.NetworkDriver"
 APP_VERSION="0.1.0"
 CDH_VERSION="cdh5.5.0"
@@ -10,6 +10,8 @@ JAR_NAME="target/$APP_NAME-$APP_VERSION-$CDH_VERSION-jar-with-dependencies.jar"
 SPARK_OPTS="--executor-cores 2
     --executor-memory 1G
     --driver-memory 512M
+    --conf spark.executor.extraJavaOptions=-Dlog4j.configuration=log4j-executor.properties
+    --conf spark.driver.extraJavaOptions=-Dlog4j.configuration=log4j-driver.properties
     --conf spark.shuffle.memoryFraction=0.8
     --conf spark.storage.memoryFraction=0.1
     --conf spark.yarn.max.executor.failures=2
