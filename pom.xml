@@ -161,6 +161,7 @@
         <module>spark-hive</module>
         <module>spark-jdbc</module>
         <module>spark-hbase</module>
+        <module>spark-streaming-wordcount</module>
         <module>hbase-intro</module>
     </modules>
 
