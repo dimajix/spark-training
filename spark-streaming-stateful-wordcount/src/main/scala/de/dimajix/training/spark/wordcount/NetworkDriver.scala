@@ -69,7 +69,8 @@ class NetworkDriver(args: Array[String]) {
     }
 
     words.updateStateByKey(updateFunc)
-      .print()
+      .transform(_.sortBy(_._2, ascending = false))
+      .print(20)
 
     ssc.start()
     ssc.awaitTermination()

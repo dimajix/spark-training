@@ -63,6 +63,7 @@ class NetworkDriver(args: Array[String]) {
     // Now create SparkContext (possibly flooding the console with logging information)
     val conf = new SparkConf()
       .setAppName("Spark Streaming Recoverable Word Count")
+      .set("spark.streaming.receiver.writeAheadLog.enable", "true")
     val ssc = new StreamingContext(conf, Seconds(1))
     ssc.checkpoint(checkpointDirectory)
 
@@ -78,7 +79,8 @@ class NetworkDriver(args: Array[String]) {
     }
 
     words.updateStateByKey(updateFunc)
-      .print()
+      .transform(_.sortBy(_._2, ascending = false))
+      .print(20)
 
     ssc
   }
