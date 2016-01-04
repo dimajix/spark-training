@@ -18,10 +18,7 @@ object NetworkDriver {
     // First create driver, so can already process arguments
     val driver = new NetworkDriver(args)
 
-    // ... and run!
-    val ssc = StreamingContext.getOrCreate(driver.checkpointDirectory, driver.createContext)
-    ssc.start()
-    ssc.awaitTermination()
+    driver.run()
   }
 }
 
@@ -55,7 +52,7 @@ class NetworkDriver(args: Array[String]) {
     }
   }
 
-  def createContext() : StreamingContext = {
+  private def createContext() : StreamingContext = {
     // If you do not see this printed, that means the StreamingContext has been loaded
     // from the new checkpoint
     println("Creating new context")
@@ -83,5 +80,12 @@ class NetworkDriver(args: Array[String]) {
       .print(20)
 
     ssc
+  }
+
+  def run() = {
+    // ... and run!
+    val ssc = StreamingContext.getOrCreate(checkpointDirectory, createContext)
+    ssc.start()
+    ssc.awaitTermination()
   }
 }
