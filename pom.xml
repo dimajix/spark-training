@@ -163,6 +163,7 @@
         <module>spark-hbase</module>
         <module>spark-streaming-wordcount</module>
         <module>spark-streaming-stateful-wordcount</module>
+        <module>spark-streaming-recoverable-wordcount</module>
         <module>hbase-intro</module>
     </modules>
 

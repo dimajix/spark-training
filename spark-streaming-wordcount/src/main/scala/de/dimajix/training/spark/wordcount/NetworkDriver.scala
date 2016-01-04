@@ -21,7 +21,7 @@ object NetworkDriver {
 
     // Now create SparkContext (possibly flooding the console with logging information)
     val conf = new SparkConf()
-      .setAppName("Spark Attribution")
+      .setAppName("Spark Streaming Word Count")
     val ssc = new StreamingContext(conf, Seconds(1))
 
     // ... and run!
