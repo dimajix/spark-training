@@ -67,8 +67,8 @@ class Driver(args: Array[String]) {
     val sc = ssc.sparkContext
 
     // Load Station data
-    val isd_raw = scala.io.Source.fromFile("file.txt")
-    val isd_map = isd_raw.getLines()
+    val isd_raw = sc.textFile(stationsPath).collect()
+    val isd_map = isd_raw
       .drop(1)
       .map(StationData.extract)
       .map(data => (data.usaf + data.wban, data))
