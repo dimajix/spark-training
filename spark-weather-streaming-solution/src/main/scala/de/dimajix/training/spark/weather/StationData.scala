@@ -1,30 +1,6 @@
 package de.dimajix.training.spark.weather
 
-import org.apache.spark.sql.Row
-import org.apache.spark.sql.types.FloatType
-import org.apache.spark.sql.types.IntegerType
-import org.apache.spark.sql.types.StringType
-import org.apache.spark.sql.types.StructField
-import org.apache.spark.sql.types.StructType
-
-
-object StationData extends Serializable {
-  def schema = {
-    StructType(
-      StructField("usaf", StringType, false) ::
-      StructField("wban", StringType, false) ::
-      StructField("name", StringType, false) ::
-      StructField("country", StringType, false) ::
-      StructField("state", StringType, false) ::
-      StructField("icao", StringType, false) ::
-      StructField("latitude", FloatType, true) ::
-      StructField("longitude", FloatType, true) ::
-      StructField("elevation", FloatType, true) ::
-      StructField("date_begin", StringType, false) ::
-      StructField("date_end", StringType, true) ::
-      Nil
-    )
-  }
+object StationData {
   def extract(row:String) = {
     def getFloat(str:String) : Float = {
       if (str.isEmpty)
@@ -38,6 +14,25 @@ object StationData extends Serializable {
     val latitude = getFloat(columns(6))
     val longitude = getFloat(columns(7))
     val elevation = getFloat(columns(8))
-    Row(columns(0),columns(1),columns(2),columns(3),columns(4),columns(5),latitude,longitude,elevation,columns(9),columns(10))
+    StationData(columns(0),columns(1),columns(2),columns(3),columns(4),columns(5),latitude,longitude,elevation,columns(9),columns(10))
   }
+}
+
+/**
+  * Created by kaya on 05.12.15.
+  */
+case class StationData(
+  usaf:String,
+  wban:String,
+  name:String,
+  country:String,
+  state:String,
+  icao:String,
+  latitude:Float,
+  longitude:Float,
+  elevation:Float,
+  date_begin:String,
+  date_end:String
+)
+{
 }
