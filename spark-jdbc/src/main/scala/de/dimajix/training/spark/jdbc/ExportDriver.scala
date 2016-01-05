@@ -37,9 +37,9 @@ class ExportDriver(args: Array[String]) {
   private val logger: Logger = LoggerFactory.getLogger(classOf[ExportDriver])
 
   @Option(name = "--weather", usage = "weather dirs", metaVar = "<weatherDirectory>")
-  private var inputPath: String = "data/weather/2005,data/weather/2006,data/weather/2007,data/weather/2008,data/weather/2009,data/weather/2010,data/weather/2011"
+  private var inputPath: String = "data/weather/2005,data/weather/2006,data/weather/2007,data/weather/2008,data/weather/2009,data/weather/2010,data/weather/2011,data/weather/2012"
   @Option(name = "--stations", usage = "stations definitioons", metaVar = "<stationsPath>")
-  private var stationsPath: String = "data/weather/ish-history.csv"
+  private var stationsPath: String = "data/weather/isd"
   @Option(name = "--dburi", usage = "JDBC connection", metaVar = "<connection>")
   private var dburi: String = "jdbc:mysql://localhost/training"
   @Option(name = "--dbuser", usage = "JDBC username", metaVar = "<db_user>")
@@ -80,14 +80,14 @@ class ExportDriver(args: Array[String]) {
     weather.write.jdbc(dburi, "weather", dbprops)
 
     // Load station data
-    val ish_raw = sql.sparkContext.textFile(stationsPath)
-    val ish_head = ish_raw.first
-    val ish_rdd = ish_raw
-      .filter(_ != ish_head)
+    val isd_raw = sql.sparkContext.textFile(stationsPath)
+    val isd_head = isd_raw.first
+    val isd_rdd = isd_raw
+      .filter(_ != isd_head)
       .map(StationData.extract)
-    val ish = sql.createDataFrame(ish_rdd, StationData.schema)
+    val isd = sql.createDataFrame(isd_rdd, StationData.schema)
 
     // Write data into DB via JDBC
-    ish.write.jdbc(dburi, "ish", dbprops)
+    isd.write.jdbc(dburi, "ish", dbprops)
   }
 }
