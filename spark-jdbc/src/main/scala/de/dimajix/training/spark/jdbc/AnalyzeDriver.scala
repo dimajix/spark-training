@@ -1,13 +1,13 @@
 package de.dimajix.training.spark.jdbc
 
+import java.util.Properties
+
 import scala.collection.JavaConversions._
 
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.DoubleType
-import org.apache.spark.sql.types.FloatType
 import org.kohsuke.args4j.CmdLineException
 import org.kohsuke.args4j.CmdLineParser
 import org.kohsuke.args4j.Option
@@ -65,13 +65,16 @@ class AnalyzeDriver(args: Array[String]) {
   }
 
   def run(sql: SQLContext) = {
-    val connection = dburi + "?user=" + dbuser + "&password=" + dbpassword
+    // Setup connection properties for JDBC
+    val dbprops = new Properties
+    dbprops.setProperty("user", dbuser)
+    dbprops.setProperty("password", dbpassword)
 
     // Load Weather data
-    val weather = sql.jdbc(connection, "weather")
+    val weather = sql.read.jdbc(dburi, "weather", dbprops)
 
     // Load station data
-    val ish = sql.jdbc(connection, "ish")
+    val ish = sql.read.jdbc(dburi, "ish", dbprops)
 
     weather.join(ish, weather("usaf") === ish("usaf") && weather("wban") === ish("wban"))
       .withColumn("year", weather("date").substr(0,4))

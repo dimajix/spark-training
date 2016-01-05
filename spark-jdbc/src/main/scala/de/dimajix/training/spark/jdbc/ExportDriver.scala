@@ -1,5 +1,7 @@
 package de.dimajix.training.spark.jdbc
 
+import java.util.Properties
+
 import scala.collection.JavaConversions._
 
 import org.apache.spark.SparkConf
@@ -64,13 +66,18 @@ class ExportDriver(args: Array[String]) {
   }
 
   def run(sql: SQLContext) = {
-    val connection = dburi + "?user=" + dbuser + "&password=" + dbpassword
+    // Setup connection properties for JDBC
+    val dbprops = new Properties
+    dbprops.setProperty("user", dbuser)
+    dbprops.setProperty("password", dbpassword)
 
     // Load Weather data
     val raw_weather = sql.sparkContext.textFile(inputPath)
     val weather_rdd = raw_weather.map(WeatherData.extract)
     val weather = sql.createDataFrame(weather_rdd, WeatherData.schema)
-    weather.createJDBCTable(connection, "weather", true)
+
+    // Write data into DB via JDBC
+    weather.write.jdbc(dburi, "weather", dbprops)
 
     // Load station data
     val ish_raw = sql.sparkContext.textFile(stationsPath)
@@ -79,6 +86,8 @@ class ExportDriver(args: Array[String]) {
       .filter(_ != ish_head)
       .map(StationData.extract)
     val ish = sql.createDataFrame(ish_rdd, StationData.schema)
-    ish.createJDBCTable(connection, "ish", true)
+
+    // Write data into DB via JDBC
+    ish.write.jdbc(dburi, "ish", dbprops)
   }
 }
