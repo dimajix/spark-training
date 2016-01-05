@@ -136,9 +136,9 @@ CREATE TABLE isd_raw(
     country STRING,
     state STRING,
     icao STRING,
-    latitude INT,
-    longitude INT,
-    elevation INT,
+    latitude FLOAT,
+    longitude FLOAT,
+    elevation FLOAT,
     date_begin STRING,
     date_end STRING) 
 ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
@@ -165,9 +165,9 @@ CREATE EXTERNAL TABLE isd_raw(
     country STRING,
     state STRING,
     icao STRING,
-    latitude INT,
-    longitude INT,
-    elevation INT,
+    latitude FLOAT,
+    longitude FLOAT,
+    elevation FLOAT,
     date_begin STRING,
     date_end STRING) 
 ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'

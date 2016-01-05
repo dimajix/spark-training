@@ -28,9 +28,9 @@ ish = LOAD 'weather/ish' USING org.apache.pig.piggybank.storage.CSVExcelStorage(
     country:CHARARRAY,
     state:CHARARRAY,
     icao:CHARARRAY,
-    latitude:INT,
-    longitude:INT,
-    elevation:INT,
+    latitude:FLOAT,
+    longitude:FLOAT,
+    elevation:FLOAT,
     date_begin:CHARARRAY,
     date_end:CHARARRAY);
 

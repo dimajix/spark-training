@@ -31,9 +31,9 @@ ish = LOAD 'data/weather/ish-history.csv' USING org.apache.pig.piggybank.storage
     country:CHARARRAY,
     state:CHARARRAY,
     icao:CHARARRAY,
-    latitude:INT,
-    longitude:INT,
-    elevation:INT,
+    latitude:FLOAT,
+    longitude:FLOAT,
+    elevation:FLOAT,
     date_begin:CHARARRAY,
     date_end:CHARARRAY);
 

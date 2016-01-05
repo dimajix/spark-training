@@ -20,26 +20,28 @@ object StationData extends Serializable {
         StructField("country", StringType, false) ::
         StructField("state", StringType, false) ::
         StructField("icao", StringType, false) ::
-        StructField("latitude", IntegerType, true) ::
-        StructField("longitude", IntegerType, true) ::
-        StructField("elevation", IntegerType, true) ::
+        StructField("latitude", FloatType, true) ::
+        StructField("longitude", FloatType, true) ::
+        StructField("elevation", FloatType, true) ::
         StructField("date_begin", StringType, false) ::
         StructField("date_end", StringType, true) ::
         Nil
     )
   }
   def extract(row:String) = {
-    def getInt(str:String) : Integer = {
+    def getFloat(str:String) : Float = {
       if (str.isEmpty)
-        return null
+        return Float.NaN
+      else if (str(0) == '+')
+        return str.substring(1).toFloat
       else
-        return str.toInt
+        return str.toFloat
     }
     val columns = row.split(",").map(_.replaceAll("\"",""))
-    val latitude = getInt(columns(6))
-    val longitude = getInt(columns(7))
-    val elevation = getInt(columns(8))
-    Row(columns(0),columns(1),columns(2),columns(3),columns(4),columns(5),latitude,longitude,elevation,columns(10),columns(11))
+    val latitude = getFloat(columns(6))
+    val longitude = getFloat(columns(7))
+    val elevation = getFloat(columns(8))
+    Row(columns(0),columns(1),columns(2),columns(3),columns(4),columns(5),latitude,longitude,elevation,columns(9),columns(10))
   }
 }
 
@@ -80,11 +82,11 @@ object WeatherData extends Serializable {
 }
 
 
-val raw_weather = sc.textFile("weather/2011")
+val raw_weather = sc.textFile("data/weather/2011")
 val weather_rdd = raw_weather.map(WeatherData.extract)
 val weather = sqlContext.createDataFrame(weather_rdd, WeatherData.schema)
 
-val isd_raw = sc.textFile("weather/isd")
+val isd_raw = sc.textFile("data/weather/isd")
 val isd_head = isd_raw.first
 val isd_rdd = isd_raw
   .filter(_ != isd_head)

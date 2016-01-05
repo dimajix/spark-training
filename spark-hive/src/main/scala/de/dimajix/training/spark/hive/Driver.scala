@@ -23,7 +23,7 @@ object Driver {
 
     // Now create SparkContext (possibly flooding the console with logging information)
     val conf = new SparkConf()
-      .setAppName("Spark Attribution")
+      .setAppName("Spark Hive Weather Analysis")
     val sc = new SparkContext(conf)
     val sql = new SQLContext(sc)
 
@@ -36,12 +36,12 @@ object Driver {
 class Driver(args: Array[String]) {
   private val logger: Logger = LoggerFactory.getLogger(classOf[Driver])
 
-  @Option(name = "--input", usage = "input table", metaVar = "<input_table>")
-  private var inputPath: String = "training.weather"
+  @Option(name = "--weather", usage = "input table", metaVar = "<weather_table>")
+  private var weatherTable: String = "training.weather"
+  @Option(name = "--stations", usage = "stations definitioons", metaVar = "<stations_table>")
+  private var stationsTable: String = "training.stations"
   @Option(name = "--output", usage = "output table", metaVar = "<output_table>")
   private var outputPath: String = "training.weather_minmax"
-  @Option(name = "--stations", usage = "stations definitioons", metaVar = "<stations_table>")
-  private var stationsPath: String = "training.stations"
 
   parseArgs(args)
 
@@ -63,17 +63,10 @@ class Driver(args: Array[String]) {
 
   def run(sql: SQLContext) = {
     // Load Weather data
-    val raw_weather = sql.sparkContext.textFile(inputPath)
-    val weather_rdd = raw_weather.map(WeatherData.extract)
-    val weather = sql.createDataFrame(weather_rdd, WeatherData.schema)
+    val weather = sql.table(weatherTable)
 
     // Load station data
-    val ish_raw = sql.sparkContext.textFile(stationsPath)
-    val ish_head = ish_raw.first
-    val ish_rdd = ish_raw
-      .filter(_ != ish_head)
-      .map(StationData.extract)
-    val ish = sql.createDataFrame(ish_rdd, StationData.schema)
+    val ish = sql.table(stationsTable)
 
     weather.join(ish, weather("usaf") === ish("usaf") && weather("wban") === ish("wban"))
         .withColumn("year", weather("date").substr(0,4))

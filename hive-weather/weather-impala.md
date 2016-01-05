@@ -13,9 +13,9 @@ CREATE EXTERNAL TABLE isd(
     country STRING,
     state STRING,
     icao STRING,
-    latitude INT,
-    longitude INT,
-    elevation INT,
+    latitude FLOAT,
+    longitude FLOAT,
+    elevation FLOAT,
     date_begin STRING,
     date_end STRING)
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
