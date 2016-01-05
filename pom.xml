@@ -158,6 +158,7 @@
         <module>spark-weather-rdd-solution</module>
         <module>spark-weather-df-exercise</module>
         <module>spark-weather-df-solution</module>
+        <module>spark-weather-streaming-solution</module>
         <module>spark-hive</module>
         <module>spark-jdbc</module>
         <module>spark-hbase</module>
