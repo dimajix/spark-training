@@ -1,5 +1,5 @@
 /* Load raw data */
-weather_raw = LOAD 'weather/2011' AS (data:CHARARRAY);
+weather_raw = LOAD 'data/weather/2011' AS (data:CHARARRAY);
 
 /* Extract columns from raw data - note different indexes in SUBSTRING compared to Hive/Impala! */
 weather = FOREACH weather_raw GENERATE
@@ -21,7 +21,7 @@ weather = FOREACH weather_raw GENERATE
 REGISTER '/usr/lib/pig/piggybank.jar';
 
 /* Now load ish lookup table */
-ish = LOAD 'weather/ish' USING org.apache.pig.piggybank.storage.CSVExcelStorage() AS (
+ish = LOAD 'data/weather/isd' USING org.apache.pig.piggybank.storage.CSVExcelStorage() AS (
     usaf:CHARARRAY,
     wban:CHARARRAY,
     name:CHARARRAY,
