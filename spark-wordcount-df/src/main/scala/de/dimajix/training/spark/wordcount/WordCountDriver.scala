@@ -71,6 +71,6 @@ class WordCountDriver(args: Array[String]) {
     val input = sql.createDataFrame(raw_input.map(line => Row(line)), schema)
     val words = input.explode("line","word") { line:String => line.split(" ") }
     val wc = words.groupBy(words("word")).count.orderBy(desc("count"))
-    wc.saveAsParquetFile(outputPath)
+    wc.write.parquet(outputPath)
   }
 }
