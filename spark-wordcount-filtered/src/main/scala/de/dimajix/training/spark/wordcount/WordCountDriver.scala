@@ -66,7 +66,7 @@ class WordCountDriver(args: Array[String]) {
     val sc = sql.sparkContext
 
     // Create a list of stop words
-    val stopWords = sc.broadcast(Set("the","a"))
+    val stopWords = sc.broadcast(Set("the","a","and","to","of"," "))
 
     // Create User-Defined-Function for sql
     val isStopWord = udf((word:String) => stopWords.value.contains(word.toLowerCase))
