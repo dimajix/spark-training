@@ -153,6 +153,7 @@
         <module>spark-skeleton</module>
         <module>spark-wordcount-rdd</module>
         <module>spark-wordcount-df</module>
+        <module>spark-wordcount-filtered</module>
         <module>spark-wordcount-sql</module>
         <module>spark-weather-rdd-exercise</module>
         <module>spark-weather-rdd-solution</module>
