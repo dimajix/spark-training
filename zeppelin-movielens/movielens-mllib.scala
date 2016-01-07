@@ -65,11 +65,11 @@ for (i <- 0 to userCountHistogram._1.length)
 
 
 // Make a histogram of entries per artist
-val artistCountHistogram = ratings.map(x => (x.movie, 1.0)).reduceByKey(_ + _).map(_._2).histogram(100)
+val movieCountHistogram = ratings.map(x => (x.movie, 1.0)).reduceByKey(_ + _).map(_._2).histogram(100)
 println("%table")
 println("ratings\tmovies")
-for (i <- 0 to artistCountHistogram._1.length)
-  println(artistCountHistogram._1(i).toString + '\t' + artistCountHistogram._2(i).toString)
+for (i <- 0 to movieCountHistogram._1.length)
+  println(movieCountHistogram._1(i).toString + '\t' + movieCountHistogram._2(i).toString)
 
 
 // Build Model
