@@ -75,6 +75,10 @@ val userArtistData = rawUserArtistData
   .cache()
 
 
+// Look at some general statistics
+println("Ratings per user: " + userArtistData.map(x => (x.user, 1.0)).reduceByKey(_ + _).map(_._2).stats.toString)
+println("Ratings per artist: " + userArtistData.map(x => (x.product, 1.0)).reduceByKey(_ + _).map(_._2).stats.toString)
+
 // Make a histogram of entries per user
 val userCountHistogram = userArtistData.map(x => (x.user, 1.0)).reduceByKey(_ + _).map(_._2).histogram(100)
 println("%table")
