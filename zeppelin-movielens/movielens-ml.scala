@@ -116,14 +116,16 @@ def evaluatePrediction(
 }
 
 def avgUserRating(trainData:DataFrame)(userMovies:DataFrame) = {
-  val avgPerUser = trainData.groupBy("user").agg(avg("rating") as "avg_rating"  cast org.apache.spark.sql.types.FloatType)
+  val avgPerUser = trainData.groupBy("user")
+    .agg(avg("rating") as "avg_rating"  cast org.apache.spark.sql.types.FloatType)
   userMovies.join(avgPerUser, "user")
     .withColumn("prediction", $"avg_rating")
     .select("user", "movie", "prediction")
 }
 
 def avgMovieRating(trainData:DataFrame)(userMovies:DataFrame) = {
-  val avgPerMovie = trainData.groupBy("movie").agg(avg("rating") as "avg_rating"  cast org.apache.spark.sql.types.FloatType)
+  val avgPerMovie = trainData.groupBy("movie")
+    .agg(avg("rating") as "avg_rating"  cast org.apache.spark.sql.types.FloatType)
   userMovies.join(avgPerMovie, "movie")
     .withColumn("prediction", $"avg_rating")
     .select("user", "movie", "prediction")
