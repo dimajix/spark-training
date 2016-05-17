@@ -1,9 +1,11 @@
+// Load Data
 val data = sc.textFile("/user/cloudera/data/bike-sharing/hour_nohead.csv")
   .map(_.split(','))
 
+// Have a look at the data
 data.take(3).foreach(x => println(x.mkString(",")))
 
-
+// Define a class for modeling the data
 case class BikeSharingData(
                             date:String,
                             season:Int,
@@ -41,9 +43,11 @@ def extractData(line:String) = {
   )
 }
 
+// Load data again, now transform into a data set
 val data = sc.textFile("/user/cloudera/data/bike-sharing/hour_nohead.csv")
   .map(extractData).toDF
 
+// Transform some columns into doubles, otherwise ML won't work
 import org.apache.spark.ml.feature.OneHotEncoder
 val ddata = data.withColumn("season", $"season".cast("Double"))
   .withColumn("year", $"year".cast("Double"))
@@ -56,6 +60,20 @@ val ddata = data.withColumn("season", $"season".cast("Double"))
   .withColumn("count", $"count".cast("Double"))
 val Array(trainData,testData) = ddata.randomSplit(Array(0.9,0.1))
 
+
+
+//---------- Make nice picture over time ------------------------------------
+println("%table")
+println("date\tcount")
+ddata.withColumn("day", unix_timestamp($"date", "yyyy-MM-dd"))
+  .select("day","count")
+  .collect()
+  .foreach(x => println(x.getLong(0).toString + "\t" + x.getDouble(1).toString))
+
+
+//---------- Calc variance ------------------------------------
+ddata.agg(avg($"count")).collect.foreach(println)
+ddata.agg(avg($"count"*$"count") - avg($"count")*avg($"count")).collect.foreach(println)
 
 
 // Transform categorial parameters to dummy variables
@@ -234,6 +252,16 @@ new RegressionEvaluator()
   .evaluate(predictions)
 
 
+
+//---------- Make plot over time ------------------------------------
+println("%table")
+println("date\tcount")
+ddata.withColumn("day", unix_timestamp($"date", "yyyy-MM-dd"))
+  .select("day","count")
+  .collect()
+  .foreach(x => println(x.getLong(0).toString + "\t" + x.getDouble(1).toString))
+
+
 //---------- Make histogram of counts ------------------------------------
 val histogram = ddata.select($"count").rdd
   .map(_.getDouble(0))
@@ -250,6 +278,18 @@ println("%table")
 println("count\tfreq")
 histogram._1.zip(histogram._2).foreach(x => println(x._1.toString + "\t" + x._2))
 
+
+//----------- Mean Squared Log Error -------------------------------------
+import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.Row
+
+def rmsle(df:DataFrame, lcol:String, pcol:String) = {
+  scala.math.sqrt(
+    df.select(col(lcol),col(pcol))
+      .map{case Row(prediction: Double, label: Double) => scala.math.pow(scala.math.log(prediction+1) - scala.math.log(label + 1), 2.0) }
+      .mean()
+  )
+}
 
 
 //---------- Transform target variable ------------------------------------
@@ -336,7 +376,80 @@ val pipe = new Pipeline()
       .setOutputCol("features"),
     new LinearRegression()
       .setFeaturesCol("features")
-      .setLabelCol("count")
+      .setLabelCol("log_count")
+      .setPredictionCol("log_prediction")
+  ))
+val pmodel = pipe.fit(ltrainData)
+val predictions = pmodel.transform(ltestData).withColumn("prediction", exp($"log_prediction") - 1.0)
+
+import org.apache.spark.ml.evaluation.RegressionEvaluator
+new RegressionEvaluator()
+  .setLabelCol("count")
+  .setPredictionCol("prediction")
+  .evaluate(predictions)
+
+rmsle(predictions, "count", "prediction")
+
+
+//---------- New Features ------------------------------------
+val ext_data = ddata.withColumn("workday_hour", concat(col("workingday").cast("String"),lit("_"),col("hour").cast("String")))
+
+val Array(ext_trainData,ext_testData) = ext_data.randomSplit(Array(0.9,0.1))
+val ltrainData = ext_trainData.withColumn("log_count", log($"count" + 1.0))
+val ltestData = ext_testData.withColumn("log_count", log($"count" + 1.0))
+
+
+val pipe = new Pipeline()
+  .setStages(Array(
+    new StringIndexer()
+      .setInputCol("season")
+      .setOutputCol("iseason"),
+    new OneHotEncoder()
+      .setInputCol("iseason")
+      .setOutputCol("vseason"),
+    new StringIndexer()
+      .setInputCol("year")
+      .setOutputCol("iyear"),
+    new OneHotEncoder()
+      .setInputCol("iyear")
+      .setOutputCol("vyear"),
+    new StringIndexer()
+      .setInputCol("month")
+      .setOutputCol("imonth"),
+    new OneHotEncoder()
+      .setInputCol("imonth")
+      .setOutputCol("vmonth"),
+    new StringIndexer()
+      .setInputCol("holiday")
+      .setOutputCol("iholiday"),
+    new OneHotEncoder()
+      .setInputCol("iholiday")
+      .setOutputCol("vholiday"),
+    new StringIndexer()
+      .setInputCol("weekday")
+      .setOutputCol("iweekday"),
+    new OneHotEncoder()
+      .setInputCol("iweekday")
+      .setOutputCol("vweekday"),
+    new StringIndexer()
+      .setInputCol("workday_hour")
+      .setOutputCol("iworkingday"),
+    new OneHotEncoder()
+      .setInputCol("iworkingday")
+      .setOutputCol("vworkingday"),
+    new StringIndexer()
+      .setInputCol("weather")
+      .setOutputCol("iweather"),
+    new OneHotEncoder()
+      .setInputCol("iweather")
+      .setOutputCol("vweather"),
+    new VectorAssembler()
+      .setInputCols(Array("vseason", "vyear", "vmonth", "vhour", "vholiday", "vweekday", "vworkingday", "vweather", "temperature", "apparentTemperature", "humidity", "windSpeed"))
+      .setOutputCol("features"),
+    new LinearRegression()
+      .setFeaturesCol("features")
+      .setLabelCol("log_count")
+      .setPredictionCol("log_prediction")
   ))
 val pmodel = pipe.fit(ltrainData)
 val predictions = pmodel.transform(ltestData).withColumn("prediction", exp($"log_prediction") - 1.0)
