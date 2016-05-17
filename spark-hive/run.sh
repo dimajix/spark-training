@@ -3,7 +3,7 @@
 APP_NAME="spark-hive"
 APP_MAIN="de.dimajix.training.spark.hive.Driver"
 APP_VERSION="0.1.0"
-CDH_VERSION="cdh5.5.0"
+CDH_VERSION="cdh5.7.0"
 
 JAR_NAME="target/$APP_NAME-$APP_VERSION-$CDH_VERSION-jar-with-dependencies.jar"
 EXTRA_CLASSPATH="/usr/lib/hive/lib/hive-common.jar:/usr/lib/hive/lib/hive-serde.jar:/usr/lib/hive/lib/hive-exec.jar:/usr/lib/hive/lib/hive-metastore.jar:/usr/lib/hive/lib/libfb303-0.9.2.jar"

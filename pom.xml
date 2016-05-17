@@ -5,16 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.dimajix.training</groupId>
     <artifactId>spark-training-root</artifactId>
-    <version>0.1.0-cdh5.5.0</version>
+    <version>0.1.0-cdh5.7.0</version>
     <packaging>pom</packaging>
     <name>spark-training-root</name>
 
     <properties>
-        <cdh.version>cdh5.5.0</cdh.version>
+        <cdh.version>cdh5.7.0</cdh.version>
         <hadoop.version>2.6.0</hadoop.version>
-        <spark.version>1.5.0</spark.version>
+        <spark.version>1.6.0</spark.version>
         <hive.version>1.1.0</hive.version>
-        <hbase.version>1.0.0</hbase.version>
+        <hbase.version>1.2.0</hbase.version>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <scala.version>2.10.5</scala.version>

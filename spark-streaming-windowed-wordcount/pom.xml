@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.dimajix.training</groupId>
     <artifactId>spark-streaming-windowed-wordcount</artifactId>
-    <version>0.1.0-cdh5.5.0</version>
+    <version>0.1.0-cdh5.7.0</version>
     <name>spark-streaming-windowed-wordcount</name>
 
     <parent>
         <groupId>de.dimajix.training</groupId>
         <artifactId>spark-training-root</artifactId>
-        <version>0.1.0-cdh5.5.0</version>
+        <version>0.1.0-cdh5.7.0</version>
     </parent>
 
     <build>
