@@ -108,8 +108,22 @@ def main():
     weather_minmax = weather_per_country_and_year \
         .aggregateByKey(WeatherMinMax(),reduce_wmm, combine_wmm)
 
+    # Helper method for pretty printing
+    def format_result(row):
+        (k,v) = row
+        country = k[0]
+        year = k[1]
+        minT = v.minTemperature or 0.0
+        maxT = v.maxTemperature or 0.0
+        minW = v.minWindSpeed or 0.0
+        maxW = v.maxWindSpeed or 0.0
+        line = "%s,%s,%f,%f,%f,%f" % (country, year, minT, maxT, minW, maxW)
+        return line.encode('utf-8')
+
     # Store results
-    weather_minmax.saveAsTextFile(opts.output)
+    weather_minmax \
+        .map(format_result) \
+        .saveAsTextFile(opts.output)
 
     logger.info("Successfully finished processing")
 

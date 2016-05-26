@@ -39,9 +39,9 @@ class WeatherData(object):
         self.time = line[23:27]
         self.usaf = line[4:10]
         self.wban = line[10:15]
-        self.airTemperatureQuality = line[92] == 1
+        self.airTemperatureQuality = line[92] == '1'
         self.airTemperature = float(line[87:92]) / 10
-        self.windSpeedQuality = line[69] == 1
+        self.windSpeedQuality = line[69] == '1'
         self.windSpeed = float(line[65:69]) / 10
 
 
