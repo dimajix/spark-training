@@ -62,7 +62,7 @@ import org.apache.spark.mllib.recommendation.Rating
 val userArtistData = rawUserArtistData
   .repartition(32)
   .map(line => {
-    val Array(userId,artistId,count) = line.split(' ').map(_.toInt)
+
     (artistId, (userId, count))
   })
   .leftOuterJoin(artistAlias)

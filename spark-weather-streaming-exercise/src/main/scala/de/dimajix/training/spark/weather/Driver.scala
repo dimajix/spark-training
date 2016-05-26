@@ -72,7 +72,7 @@ class Driver(args: Array[String]) {
     val sc = ssc.sparkContext
 
 
-    // #1 Load Station data into an appropüriate map. Key could be usaf+wban
+    // #1 Load Station data into an appropriate map. Key could be usaf+wban
 
     // #2 Put station data map into broadcast variable
 
