@@ -78,7 +78,7 @@ class WeatherMinMax(object):
         self.maxWindSpeed = maxW
 
 
-    def reduce_wmm(self, data):
+    def reduce(self, data):
         """
         Used for merging in a new weather data set into an existing WeatherMinMax object. The incoming
         objects will not be modified, instead a new object will be returned.
@@ -103,7 +103,7 @@ class WeatherMinMax(object):
         return WeatherMinMax(minTemperature, maxTemperature, minWindSpeed, maxWindSpeed)
 
 
-    def combine_wmm(self, other):
+    def combine(self, other):
         """
         Used for combining two WeatherMinMax objects into a new WeatherMinMax object
         :param self: First WeatherMinMax object
