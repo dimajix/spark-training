@@ -106,7 +106,7 @@ def main():
 
     # Aggregate min/max information per year and country
     weather_minmax = weather_per_country_and_year \
-        .aggregateByKey(WeatherMinMax(),reduce_wmm, combine_wmm)
+        .aggregateByKey(WeatherMinMax(),lambda a,v:a.reduce(v), lambda l,r:l.combine(r))
 
     # Helper method for pretty printing
     def format_result(row):

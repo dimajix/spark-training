@@ -45,6 +45,28 @@ class WeatherData(object):
         self.windSpeed = float(line[65:69]) / 10
 
 
+def nullsafe_min(a, b):
+    """
+    Helper method which is a None-aware version of 'min'
+    """
+    if a is None:
+        return b
+    if b is None:
+        return a
+    return min(a,b)
+
+
+def nullsafe_max(a, b):
+    """
+    Helper method which is a None-aware version of 'max'
+    """
+    if a is None:
+        return b
+    if b is None:
+        return a
+    return max(a,b)
+
+
 class WeatherMinMax(object):
     """
     Helper class used for aggregating weather information
@@ -56,62 +78,40 @@ class WeatherMinMax(object):
         self.maxWindSpeed = maxW
 
 
-def min2(a,b):
-    """
-    Helper method which is a None-aware version of 'min'
-    """
-    if a is None:
-        return b
-    if b is None:
-        return a
-    return min(a,b)
+    def reduce_wmm(self, data):
+        """
+        Used for merging in a new weather data set into an existing WeatherMinMax object. The incoming
+        objects will not be modified, instead a new object will be returned.
+        :param self: WeatherMinMax object
+        :param data: WeatherData object
+        :returns: A new WeatherMinMax object
+        """
+        if data.airTemperatureQuality:
+            minTemperature = nullsafe_min(self.minTemperature, data.airTemperature)
+            maxTemperature = nullsafe_max(self.maxTemperature, data.airTemperature)
+        else:
+            minTemperature = self.minTemperature
+            maxTemperature = self.maxTemperature
+
+        if data.windSpeedQuality:
+            minWindSpeed = nullsafe_min(self.minWindSpeed, data.windSpeed)
+            maxWindSpeed = nullsafe_max(self.maxWindSpeed, data.windSpeed)
+        else:
+            minWindSpeed = self.minWindSpeed
+            maxWindSpeed = self.maxWindSpeed
+
+        return WeatherMinMax(minTemperature, maxTemperature, minWindSpeed, maxWindSpeed)
 
 
-def max2(a,b):
-    """
-    Helper method which is a None-aware version of 'max'
-    """
-    if a is None:
-        return b
-    if b is None:
-        return a
-    return max(a,b)
-
-
-def reduce_wmm(wmm, data):
-    """
-    Used for merging in a new weather data set into an existing WeatherMinMax object. The incoming
-    objects will not be modified, instead a new object will be returned.
-    :param wmm: WeatherMinMax object
-    :param data: WeatherData object
-    :returns: A new WeatherMinMax object
-    """
-    if data.airTemperatureQuality:
-        minTemperature = min2(wmm.minTemperature, data.airTemperature)
-        maxTemperature = max2(wmm.maxTemperature, data.airTemperature)
-    else:
-        minTemperature = wmm.minTemperature
-        maxTemperature = wmm.maxTemperature
-
-    if data.windSpeedQuality:
-        minWindSpeed = min2(wmm.minWindSpeed, data.windSpeed)
-        maxWindSpeed = max2(wmm.maxWindSpeed, data.windSpeed)
-    else:
-        minWindSpeed = wmm.minWindSpeed
-        maxWindSpeed = wmm.maxWindSpeed
-
-    return WeatherMinMax(minTemperature, maxTemperature, minWindSpeed, maxWindSpeed)
-
-
-def combine_wmm(left, right):
-    """
-    Used for combining two WeatherMinMax objects into a new WeatherMinMax object
-    :param left: First WeatherMinMax object
-    :param right: Second WeatherMinMax object
-    :returns: A new WeatherMinMax object
-    """
-    minTemperature = min2(left.minTemperature, right.minTemperature)
-    maxTemperature = max2(left.maxTemperature, right.maxTemperature)
-    minWindSpeed = min2(left.minWindSpeed, right.minWindSpeed)
-    maxWindSpeed = max2(left.maxWindSpeed, right.maxWindSpeed)
-    return WeatherMinMax(minTemperature, maxTemperature, minWindSpeed, maxWindSpeed)
+    def combine_wmm(self, other):
+        """
+        Used for combining two WeatherMinMax objects into a new WeatherMinMax object
+        :param self: First WeatherMinMax object
+        :param other: Second WeatherMinMax object
+        :returns: A new WeatherMinMax object
+        """
+        minTemperature = nullsafe_min(self.minTemperature, other.minTemperature)
+        maxTemperature = nullsafe_max(self.maxTemperature, other.maxTemperature)
+        minWindSpeed = nullsafe_min(self.minWindSpeed, other.minWindSpeed)
+        maxWindSpeed = nullsafe_max(self.maxWindSpeed, other.maxWindSpeed)
+        return WeatherMinMax(minTemperature, maxTemperature, minWindSpeed, maxWindSpeed)
