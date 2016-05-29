@@ -11,8 +11,6 @@ from pyspark import SparkConf
 from weather import StationData
 from weather import WeatherData
 from weather import WeatherMinMax
-from weather import reduce_wmm
-from weather import combine_wmm
 
 
 logger = logging.getLogger(__name__)

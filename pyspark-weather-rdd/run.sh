@@ -4,7 +4,7 @@ DRIVER_NAME="driver.py"
 PYTHON_FILES="weather.py"
 
 SPARK_OPTS="--executor-cores 2
-    --executor-memory 1G
+    --executor-memory 2G
     --driver-memory 512M
     --conf spark.yarn.max.executor.failures=2
     --conf spark.task.maxFailures=2"
