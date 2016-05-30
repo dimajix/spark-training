@@ -75,9 +75,8 @@ def main():
     sqlContext = SQLContext(sc)
 
     logger.info("Starting processing")
-    text = sc.textFile('/user/cloudera/alice.txt').map(lambda line: [line])
-    df = sqlContext.createDataFrame(text, ['line'])
-    words = df.select(explode(split(df.line,' ')).alias('word')).filter(col('word') != '')
+    text = sqlContext.read.text('/user/cloudera/alice.txt')
+    words = text.select(explode(split(text.value,' ')).alias('word')).filter(col('word') != '')
     counts = words.groupBy(words.word).count().orderBy('count',ascending=False)
     csv = counts.select(concat('word',lit(','),'count'))
     csv.write.mode('overwrite').text(opts.output)
