@@ -1,12 +1,25 @@
 # Setup Instructions
 
+## Additional Data
+
+You need some additional data for some modules:
+
+    http://download.dimajix.net/training/amazon_baby.zip
+    http://download.dimajix.net/training/bike-sharing.tgz
+    http://download.dimajix.net/training/weather.tgz
+    
+## Zeppelin  
+    
+    http://download.dimajix.net/training/zeppelin-0.5.6-incubating.tgz
+
+
 ## Directory Structure
 
 For easiest results, I recommend to have the following directory layout
 
 /home/cloudera
          |
-         +---- hadoop-training
+         +---- spark-training
          |        |
          |        +----- exameple-01
          |        |
@@ -25,14 +38,3 @@ For easiest results, I recommend to have the following directory layout
 
 mvn install
 
-
-# Contained Examples
-
-## hadoop-wordcount-01
-
-Classic example
-
-
-## hadoop-wordcount-02
-
-Classic example, improved
