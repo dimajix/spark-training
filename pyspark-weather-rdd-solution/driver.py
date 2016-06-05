@@ -96,7 +96,9 @@ def main():
 
     # Helper method for extracting (country, date) and weather
     def extract_country_year_weather(data):
-        return ((data[1][1].country, data[1][0].date[0:4]), data[1][0])
+        weather = data[1][0]
+        station = data[1][1]
+        return ((station.country, weather.date[0:4]), weather)
 
     # Now extract country and year using the function above
     weather_per_country_and_year = \
