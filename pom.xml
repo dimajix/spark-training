@@ -5,22 +5,45 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.dimajix.training</groupId>
     <artifactId>spark-training-root</artifactId>
-    <version>0.1.0-cdh5.7.0</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>spark-training-root</name>
 
     <properties>
-        <cdh.version>cdh5.7.0</cdh.version>
         <hadoop.version>2.6.0</hadoop.version>
+        <hadoop.mr1.version>2.6.0-mr1</hadoop.mr1.version>
         <spark.version>1.6.0</spark.version>
         <hive.version>1.1.0</hive.version>
         <hbase.version>1.2.0</hbase.version>
+        <zookeeper.version>3.4.5</zookeeper.version>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <scala.version>2.10.5</scala.version>
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>cdh5.7</id>
+            <properties>
+                <cdh.version>cdh5.7.0</cdh.version>
+                <hadoop.version>2.6.0-${cdh.version}</hadoop.version>
+                <hadoop.mr1.version>2.6.0-mr1-${cdh.version}</hadoop.mr1.version>
+                <spark.version>1.6.0-${cdh.version}</spark.version>
+                <hive.version>1.1.0-${cdh.version}</hive.version>
+                <hbase.version>1.2.0-${cdh.version}</hbase.version>
+                <zookeeper.version>3.4.5-${cdh.version}</zookeeper.version>
+            </properties>
+
+            <repositories>
+                <repository>
+                    <id>cloudera</id>
+                    <url>http://repository.cloudera.com/artifactory/cloudera-repos/</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
@@ -176,11 +199,6 @@
             <id>maven-central</id>
             <url>http://repo1.maven.org/maven2/</url>
         </repository>
-
-        <repository>
-            <id>cloudera</id>
-            <url>http://repository.cloudera.com/artifactory/cloudera-repos/</url>
-        </repository>
     </repositories>
 
     <dependencyManagement>
@@ -188,35 +206,35 @@
             <dependency>
                 <groupId>org.apache.spark</groupId>
                 <artifactId>spark-core_2.10</artifactId>
-                <version>${spark.version}-${cdh.version}</version>
+                <version>${spark.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.spark</groupId>
                 <artifactId>spark-sql_2.10</artifactId>
-                <version>${spark.version}-${cdh.version}</version>
+                <version>${spark.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.spark</groupId>
                 <artifactId>spark-streaming_2.10</artifactId>
-                <version>${spark.version}-${cdh.version}</version>
+                <version>${spark.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.spark</groupId>
                 <artifactId>spark-hive_2.10</artifactId>
-                <version>${spark.version}-${cdh.version}</version>
+                <version>${spark.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hive</groupId>
                 <artifactId>hive-common</artifactId>
-                <version>${hive.version}-${cdh.version}</version>
+                <version>${hive.version}</version>
                 <scope>provided</scope>
                 <exclusions>
                     <exclusion>
@@ -233,28 +251,28 @@
             <dependency>
                 <groupId>org.apache.hive</groupId>
                 <artifactId>hive-serde</artifactId>
-                <version>${hive.version}-${cdh.version}</version>
+                <version>${hive.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hive</groupId>
                 <artifactId>hive-metastore</artifactId>
-                <version>${hive.version}-${cdh.version}</version>
+                <version>${hive.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hive</groupId>
                 <artifactId>hive-exec</artifactId>
-                <version>${hive.version}-${cdh.version}</version>
+                <version>${hive.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hive</groupId>
                 <artifactId>hive-jdbc</artifactId>
-                <version>${hive.version}-${cdh.version}</version>
+                <version>${hive.version}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>log4j</artifactId>
@@ -350,7 +368,7 @@
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-client</artifactId>
-                <version>${hadoop.version}-${cdh.version}</version>
+                <version>${hadoop.version}</version>
                 <scope>provided</scope>
                 <exclusions>
                     <exclusion>
@@ -363,49 +381,49 @@
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-annotations</artifactId>
-                <version>${hadoop.version}-${cdh.version}</version>
+                <version>${hadoop.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-auth</artifactId>
-                <version>${hadoop.version}-${cdh.version}</version>
+                <version>${hadoop.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-hdfs</artifactId>
-                <version>${hadoop.version}-${cdh.version}</version>
+                <version>${hadoop.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-main</artifactId>
-                <version>${hadoop.version}-${cdh.version}</version>
+                <version>${hadoop.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-project</artifactId>
-                <version>${hadoop.version}-${cdh.version}</version>
+                <version>${hadoop.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-project-dist</artifactId>
-                <version>${hadoop.version}-${cdh.version}</version>
+                <version>${hadoop.version}</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-core</artifactId>
-                <version>${hadoop.version}-mr1-${cdh.version}</version>
+                <version>${hadoop.mr1.version}</version>
                 <scope>provided</scope>
                 <exclusions>
                     <exclusion>
@@ -418,7 +436,7 @@
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-common</artifactId>
-                <version>${hadoop.version}-${cdh.version}</version>
+                <version>${hadoop.version}</version>
                 <scope>provided</scope>
                 <exclusions>
                     <exclusion>
@@ -443,7 +461,7 @@
             <dependency>
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-yarn-common</artifactId>
-                <version>${hadoop.version}-${cdh.version}</version>
+                <version>${hadoop.version}</version>
                 <scope>provided</scope>
                 <exclusions>
                     <exclusion>
@@ -456,7 +474,7 @@
             <dependency>
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-client</artifactId>
-                <version>${hbase.version}-${cdh.version}</version>
+                <version>${hbase.version}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>netty</artifactId>
@@ -468,7 +486,7 @@
             <dependency>
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-client</artifactId>
-                <version>${hbase.version}-${cdh.version}</version>
+                <version>${hbase.version}</version>
                 <type>test-jar</type>
                 <classifier>tests</classifier>
                 <scope>test</scope>
@@ -477,32 +495,32 @@
             <dependency>
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-prefix-tree</artifactId>
-                <version>${hbase.version}-${cdh.version}</version>
+                <version>${hbase.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-hadoop-compat</artifactId>
-                <version>${hbase.version}-${cdh.version}</version>
+                <version>${hbase.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-hadoop-compat</artifactId>
-                <version>${hbase.version}-${cdh.version}</version>
+                <version>${hbase.version}</version>
                 <type>test-jar</type>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-hadoop2-compat</artifactId>
-                <version>${hbase.version}-${cdh.version}</version>
+                <version>${hbase.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-hadoop2-compat</artifactId>
-                <version>${hbase.version}-${cdh.version}</version>
+                <version>${hbase.version}</version>
                 <type>test-jar</type>
                 <classifier>tests</classifier>
             </dependency>
@@ -510,13 +528,13 @@
             <dependency>
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-protocol</artifactId>
-                <version>${hbase.version}-${cdh.version}</version>
+                <version>${hbase.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-server</artifactId>
-                <version>${hbase.version}-${cdh.version}</version>
+                <version>${hbase.version}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>htrace-core</artifactId>
@@ -572,7 +590,7 @@
             <dependency>
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-server</artifactId>
-                <version>${hbase.version}-${cdh.version}</version>
+                <version>${hbase.version}</version>
                 <type>test-jar</type>
                 <classifier>tests</classifier>
             </dependency>
@@ -580,7 +598,7 @@
             <dependency>
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-common</artifactId>
-                <version>${hbase.version}-${cdh.version}</version>
+                <version>${hbase.version}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>jetty-util</artifactId>
@@ -592,7 +610,7 @@
             <dependency>
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-common</artifactId>
-                <version>${hbase.version}-${cdh.version}</version>
+                <version>${hbase.version}</version>
                 <type>test-jar</type>
                 <classifier>tests</classifier>
             </dependency>
@@ -600,7 +618,7 @@
             <dependency>
                 <groupId>org.apache.zookeeper</groupId>
                 <artifactId>zookeeper</artifactId>
-                <version>3.4.5-${cdh.version}</version>
+                <version>${zookeeper.version}</version>
                 <scope>provided</scope>
             </dependency>
 

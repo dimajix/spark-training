@@ -2,10 +2,9 @@
 
 APP_NAME="spark-weather-streaming-solution"
 APP_MAIN="de.dimajix.training.spark.weather.Driver"
-APP_VERSION="0.1.0"
-CDH_VERSION="cdh5.7.0"
+APP_VERSION="1.0.0"
 
-JAR_NAME="target/$APP_NAME-$APP_VERSION-$CDH_VERSION-jar-with-dependencies.jar"
+JAR_NAME="target/$APP_NAME-$APP_VERSION-jar-with-dependencies.jar"
 
 SPARK_OPTS="--executor-cores 2
     --executor-memory 1G
