@@ -83,10 +83,14 @@ def main():
     logger.info("Successfully finished processing")
 
 
-if __name__ == "__main__":
+def main():
     logging.basicConfig(level=logging.INFO)
     logging.getLogger('').setLevel(logging.INFO)
 
     logger.info("Starting main")
     main()
     logger.info("Successfully finished main")
+
+
+if __name__ == "__main__":
+    main()
