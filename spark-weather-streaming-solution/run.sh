@@ -10,6 +10,12 @@ SPARK_OPTS="--executor-cores 2
     --num-executors 3
     --executor-memory 1G
     --driver-memory 512M
+    --conf spark.sql.shuffle.partitions=10
+    --conf spark.ui.retainedJobs=25
+    --conf spark.worker.ui.retainedExecutors=100
+    --conf spark.sql.ui.retainedExecutions=10
+    --conf spark.ui.retainedStages=100
+    --conf spark.eventLog.enabled=false
     --conf spark.executor.extraJavaOptions=-Dlog4j.configuration=log4j-executor.properties
     --conf spark.driver.extraJavaOptions=-Dlog4j.configuration=log4j-driver.properties
     --conf spark.yarn.max.executor.failures=2
