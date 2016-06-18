@@ -21,7 +21,7 @@ object NetworkDriver {
 
     // Now create SparkContext (possibly flooding the console with logging information)
     val conf = new SparkConf()
-      .setAppName("Spark Streaming Word Count")
+        .setAppName("Spark Streaming Word Count")
     val ssc = new StreamingContext(conf, Seconds(1))
 
     // ... and run!
@@ -59,12 +59,12 @@ class NetworkDriver(args: Array[String]) {
   def run(ssc: StreamingContext) = {
     val input = ssc.socketTextStream(streamHostname, streamPort)
     input.window(Seconds(10), Seconds(3))
-      .flatMap(_.split(" "))
-      .filter(_ != "")
-      .map(x => (x,1))
-      .reduceByKey(_ + _)
-      .transform(_.sortBy(_._2, ascending = false))
-      .print(20)
+        .flatMap(_.split(" "))
+        .filter(_ != "")
+        .map(x => (x,1))
+        .reduceByKey(_ + _)
+        .transform(_.sortBy(_._2, ascending = false))
+        .print(20)
     ssc.start()
     ssc.awaitTermination()
   }

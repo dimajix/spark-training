@@ -8,13 +8,17 @@ This example requires the station data to be present in HDFS.
 
 You need a NetCat server running with some sample data:
 
-    zcat data/weather/2011/*.gz | nc  -k -i1 -l 0.0.0.0 9977
+    cat data/weather_sample | nc  -k -i1 -l 0.0.0.0 9977
     
 or better
     
-    zcat data/weather/2011/*.gz | spark-training/utils/pynetcat.py -P9977 -B50
+    cat data/weather_sample | spark-training/utils/pynetcat.py -P9977 -B50
 
-## Running
+## Running (stations in HDFS)
 
     ./run.sh --host quickstart --port 9977 --stations data/weather/isd
+
+## Running (stations on S3)  
+   
+    ./run.sh --host quickstart --port 9977 --stations s3://is24-data-dev-spark-training/data/weather/isd-history/
      
