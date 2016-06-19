@@ -172,6 +172,7 @@
     </build>
 
     <modules>
+        <module>scala-skeleton</module>
         <module>spark-wordcount-mini</module>
         <module>spark-skeleton</module>
         <module>spark-wordcount-rdd</module>
