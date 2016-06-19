@@ -18,9 +18,9 @@ You need to create an empty database in some MySQL server. This can be done via
 First you need to export data from HDFS into MySQL.
 
     ./run_export.sh \
-        --weather data/weather/20* \
-        --stations data/weather/isd \
-        --dburi jdbc:mysql://localhost/training \
+        --weather /user/hadoop/weather_sample \
+        --stations s3://is24-data-dev-spark-training/data/weather/isd-history \
+        --dburi jdbc:mysql://<hostname>/training \
         --dbuser root \
         --dbpass cloudera
 
@@ -28,6 +28,6 @@ Then we can run the analytics part
 
     ./run_analyze.sh \
         --output data/weather_minmax \
-        --dburi jdbc:mysql://localhost/training \
+        --dburi jdbc:mysql://<hostname>/training \
         --dbuser root \
         --dbpass cloudera

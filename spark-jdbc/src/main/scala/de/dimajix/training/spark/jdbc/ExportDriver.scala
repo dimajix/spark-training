@@ -70,6 +70,7 @@ class ExportDriver(args: Array[String]) {
     val dbprops = new Properties
     dbprops.setProperty("user", dbuser)
     dbprops.setProperty("password", dbpassword)
+    dbprops.setProperty("driver", "com.mysql.jdbc.Driver")
 
     // Load Weather data
     val raw_weather = sql.sparkContext.textFile(inputPath)
@@ -88,6 +89,6 @@ class ExportDriver(args: Array[String]) {
     val isd = sql.createDataFrame(isd_rdd, StationData.schema)
 
     // Write data into DB via JDBC
-    isd.write.jdbc(dburi, "ish", dbprops)
+    isd.write.jdbc(dburi, "isd", dbprops)
   }
 }

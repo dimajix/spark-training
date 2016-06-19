@@ -69,12 +69,13 @@ class AnalyzeDriver(args: Array[String]) {
     val dbprops = new Properties
     dbprops.setProperty("user", dbuser)
     dbprops.setProperty("password", dbpassword)
+    dbprops.setProperty("driver", "com.mysql.jdbc.Driver")
 
     // Load Weather data
     val weather = sql.read.jdbc(dburi, "weather", dbprops)
 
     // Load station data
-    val ish = sql.read.jdbc(dburi, "ish", dbprops)
+    val ish = sql.read.jdbc(dburi, "isd", dbprops)
 
     weather.join(ish, weather("usaf") === ish("usaf") && weather("wban") === ish("wban"))
       .withColumn("year", weather("date").substr(0,4))
