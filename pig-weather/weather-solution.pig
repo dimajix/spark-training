@@ -21,7 +21,7 @@ weather = FOREACH weather_raw GENERATE
 REGISTER '/usr/lib/pig/piggybank.jar';
 
 /* Now load ish lookup table */
-ish = LOAD 'data/weather/isd' USING org.apache.pig.piggybank.storage.CSVExcelStorage() AS (
+ish = LOAD 'data/weather/isd-history' USING org.apache.pig.piggybank.storage.CSVExcelStorage() AS (
     usaf:CHARARRAY,
     wban:CHARARRAY,
     name:CHARARRAY,

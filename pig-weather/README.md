@@ -8,7 +8,7 @@ You first need to upload the weather data into hadoop. This can also be done ins
     fs -put data/weather/2011 weather
     
     fs -mkdir weather/ish
-    fs -put data/weather/ish-history.csv weather/ish
+    fs -put data/weather/isd-history.csv weather/isd-history
     
 ## Cleanup output directory
     

@@ -164,6 +164,10 @@
 
     <modules>
         <module>scala-skeleton</module>
+        <module>hadoop-skeleton</module>
+        <module>hadoop-weather-intro</module>
+        <module>hadoop-weather-exercise</module>
+        <module>hadoop-weather-solution</module>
         <module>spark-wordcount-mini</module>
         <module>spark-skeleton</module>
         <module>spark-wordcount-rdd</module>
