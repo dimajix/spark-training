@@ -75,7 +75,7 @@ class Driver(args: Array[String]) {
 
 
         // #1 Load Station data from S3/HDFS into an RDD and collect() it to local machine
-        val isd_raw = sc.textFile(stationsPath).collect()
+        val isd_raw = sc.textFile(stationsPath).collect().tail.map(x => StationData.extract(x))
 
         // #2 Create an appropriate key for joining, this could be usaf+wban. The result should be a pair sequence
 

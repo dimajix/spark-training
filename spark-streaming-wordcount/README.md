@@ -10,4 +10,4 @@ You need a NetCat server running with some sample data:
 
 ## Running
 
-    ./run.sh --host quickstart --port 9977
+    ./run.sh --hostname $(hostname -f) --port 9977

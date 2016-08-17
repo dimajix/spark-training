@@ -85,7 +85,8 @@ class Driver(args: Array[String]) {
         val isd = sc.broadcast(isd_map)
 
         // #5 Creata a User defined Function (udf) for looking up the country from usaf and wban
-        val country = udf((usaf:String,wban:String) => isd.value.get(usaf + wban).map(_.country).getOrElse("none"))
+        val country = udf((usaf:String,wban:String) =>
+            isd.value.get(usaf + wban).map(_.country).getOrElse("none"))
 
         // #6 Create text stream from Socket via the socketTextStream method of the StreamingContext
         val stream = ssc.socketTextStream(streamHostname, streamPort, StorageLevel.MEMORY_ONLY)

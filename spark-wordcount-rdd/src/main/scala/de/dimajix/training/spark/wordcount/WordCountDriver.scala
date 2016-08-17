@@ -32,9 +32,9 @@ object WordCountDriver {
 class WordCountDriver(args: Array[String]) {
   private val logger: Logger = LoggerFactory.getLogger(classOf[WordCountDriver])
 
-  @Option(name = "--input", usage = "input table", metaVar = "<inputTable>")
+  @Option(name = "--input", usage = "input file", metaVar = "<inputFile>")
   private var inputPath: String = "wordcount.text"
-  @Option(name = "--output", usage = "output table", metaVar = "<outputTable>")
+  @Option(name = "--output", usage = "output file", metaVar = "<outputFile>")
   private var outputPath: String = "wordcount.word"
 
   parseArgs(args)
