@@ -11,7 +11,7 @@ FROM (
       MIN(w.air_temperature) as tmin,
       MAX(w.air_temperature) as tmax
   FROM weather w
-  INNER JOIN ish_raw ish
+  INNER JOIN isd_raw ish
       ON w.usaf=ish.usaf
       AND w.wban=ish.wban
   WHERE
@@ -46,7 +46,7 @@ FROM (
       MIN(w.air_temperature) as tmin,
       MAX(w.air_temperature) as tmax
   FROM weather w
-  INNER JOIN ish
+  INNER JOIN isd
       ON w.usaf=ish.usaf
       AND w.wban=ish.wban
   WHERE
