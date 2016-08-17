@@ -71,4 +71,4 @@ minmax_by_country = FOREACH weather_by_country GENERATE
 ILLUSTRATE minmax_by_country;
 
 /* Store results */
-STORE minmax_by_country INTO 'data/output/minmax' USING org.apache.pig.piggybank.storage.CSVExcelStorage();
+STORE minmax_by_country INTO 'data/weather/minmax' USING org.apache.pig.piggybank.storage.CSVExcelStorage();

@@ -4,15 +4,15 @@
 
 You first need to upload the weather data into hadoop. This can also be done inside pig:
 
-    fs -mkdir weather/
-    fs -put data/weather/2011 weather
+    fs -mkdir -p data/weather
+    fs -put data/weather/2011 data/weather
     
-    fs -mkdir weather/ish
-    fs -put data/weather/isd-history.csv weather/isd-history
+    fs -mkdir -p data/weather/isd-history
+    fs -put data/weather/isd-history/isd-history.csv data/weather/isd-history
     
 ## Cleanup output directory
     
-    fs -rm -R weather/minmax
+    fs -rm -R data/weather/minmax
 
 ## Run Pig Script
 
@@ -20,5 +20,5 @@ You first need to upload the weather data into hadoop. This can also be done ins
     
 ## Look at results
     
-    fs -cat weather/minmax/*
+    fs -cat data/weather/minmax/*
     

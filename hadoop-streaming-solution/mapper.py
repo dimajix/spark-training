@@ -3,7 +3,7 @@
 import sys
 import csv
 
-INVENTORY_FILE = "ish-history.csv"
+INVENTORY_FILE = "isd-history.csv"
 
 
 def read_countries():
