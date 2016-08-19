@@ -182,7 +182,7 @@
         <module>spark-weather-streaming-solution</module>
         <module>spark-hive</module>
         <module>spark-jdbc</module>
-        <module>spark-hbase</module>
+        <!-- <module>spark-hbase</module> -->
         <module>spark-streaming-wordcount</module>
         <module>spark-streaming-windowed-wordcount</module>
         <module>spark-streaming-stateful-wordcount</module>
