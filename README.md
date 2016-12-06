@@ -31,7 +31,12 @@ For easiest results, I recommend to have the following directory layout
                   |
                   +--- weather
                           |
-                          +--- 2011
+                          +--- isd-history
+                          +--- 2004
+                          +--- 2005
+                          .
+                          .
+                          +--- 2014
                           
 
 ## Building
