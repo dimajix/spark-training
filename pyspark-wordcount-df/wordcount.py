@@ -4,34 +4,12 @@
 import optparse
 import logging
 
-from pyspark.java_gateway import launch_gateway
 from pyspark import SparkContext
 from pyspark import SparkConf
 from pyspark.sql import SQLContext
 from pyspark.sql.functions import *
 
 logger = logging.getLogger(__name__)
-gateway = None
-
-
-def get_py4j_gateway():
-    """
-    This creates the Py4j gateway used by Spark. We create it here, so we can silence logging
-    activity.
-    """
-    global gateway
-    if not gateway:
-        logger.info("Creating Py4j gateway")
-        gateway = launch_gateway()
-        jvm = gateway.jvm
-
-        # Reduce verbosity of logging
-        l4j = jvm.org.apache.log4j
-        l4j.LogManager.getRootLogger(). setLevel( l4j.Level.WARN )
-        l4j.LogManager.getLogger("org"). setLevel( l4j.Level.WARN )
-        l4j.LogManager.getLogger("akka").setLevel( l4j.Level.WARN )
-
-    return gateway
 
 
 def create_context(appName):
@@ -47,8 +25,7 @@ def create_context(appName):
     #conf.set('spark.executor.memory','8g')
     #conf.set('spark.executor.cores','6')
 
-    gateway = get_py4j_gateway()
-    sc = SparkContext(appName=appName, conf=conf, gateway=gateway)
+    sc = SparkContext(appName=appName, conf=conf)
     return sc
 
 

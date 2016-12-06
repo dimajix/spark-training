@@ -93,7 +93,7 @@ WITH SERDEPROPERTIES (
    "escapeChar"    = "\\"
 )
 STORED AS TEXTFILE;
-LOAD DATA LOCAL INPATH 'data/weather/isd-history.csv' OVERWRITE INTO TABLE isd_raw;
+LOAD DATA LOCAL INPATH 'data/weather/isd-history' OVERWRITE INTO TABLE isd_raw;
 
 -- Import isd Table using external table
 CREATE EXTERNAL TABLE isd_raw(

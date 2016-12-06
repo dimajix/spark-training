@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export SPARK_MAJOR_VERSION=2
+
 DRIVER_NAME="driver.py"
 PYTHON_FILES="weather.py"
 

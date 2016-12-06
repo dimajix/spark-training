@@ -4,7 +4,6 @@
 import optparse
 import logging
 
-from pyspark.java_gateway import launch_gateway
 from pyspark import SparkContext
 from pyspark import SparkConf
 
@@ -14,27 +13,7 @@ from weather import WeatherMinMax
 
 
 logger = logging.getLogger(__name__)
-gateway = None
 
-
-def get_py4j_gateway():
-    """
-    This creates the Py4j gateway used by Spark. We create it here, so we can silence logging
-    activity.
-    """
-    global gateway
-    if not gateway:
-        logger.info("Creating Py4j gateway")
-        gateway = launch_gateway()
-        jvm = gateway.jvm
-
-        # Reduce verbosity of logging
-        l4j = jvm.org.apache.log4j
-        l4j.LogManager.getRootLogger(). setLevel( l4j.Level.WARN )
-        l4j.LogManager.getLogger("org"). setLevel( l4j.Level.WARN )
-        l4j.LogManager.getLogger("akka").setLevel( l4j.Level.WARN )
-
-    return gateway
 
 
 def create_context(appName):
@@ -47,8 +26,7 @@ def create_context(appName):
     conf = SparkConf()
     conf.set("spark.hadoop.validateOutputSpecs", "false")
 
-    gateway = get_py4j_gateway()
-    sc = SparkContext(appName=appName, conf=conf, gateway=gateway)
+    sc = SparkContext(appName=appName, conf=conf)
     return sc
 
 
@@ -144,6 +122,7 @@ def main():
 
     # Store results
     weather_minmax \
+        .coalesce(1) \
         .map(format_result) \
         .saveAsTextFile(opts.output)
 
