@@ -4,7 +4,6 @@
 import optparse
 import logging
 
-from pyspark.java_gateway import launch_gateway
 from pyspark import SparkContext
 from pyspark import SparkConf
 
@@ -13,16 +12,13 @@ logger = logging.getLogger(__name__)
 
 def create_context(appName):
     """
-    Creates Spark HiveContext, with WebUI disabled and logging minimized
+    Creates Spark HiveContext
     """
     logger.info("Creating Spark context - may take some while")
 
-    # Create SparkConf with UI disabled
+    # Create SparkConf containing some custom configurations
     conf = SparkConf()
     conf.set("spark.hadoop.validateOutputSpecs", "false")
-    #conf.set('spark.ui.enabled','false')
-    #conf.set('spark.executor.memory','8g')
-    #conf.set('spark.executor.cores','6')
 
     sc = SparkContext(appName=appName, conf=conf)
     return sc

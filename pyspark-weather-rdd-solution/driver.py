@@ -18,11 +18,11 @@ logger = logging.getLogger(__name__)
 
 def create_context(appName):
     """
-    Creates Spark HiveContext, with WebUI disabled and logging minimized
+    Creates SparkContext with some custom configs
     """
     logger.info("Creating Spark context - may take some while")
 
-    # Create SparkConf with UI disabled
+    # Create SparkConf containing some custom configurations
     conf = SparkConf()
     conf.set("spark.hadoop.validateOutputSpecs", "false")
     #conf.set('spark.ui.enabled','false')

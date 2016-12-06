@@ -4,29 +4,25 @@
 import optparse
 import logging
 
-from pyspark import SparkContext
-from pyspark import SparkConf
-from pyspark.sql import SQLContext
+from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 
 logger = logging.getLogger(__name__)
 
 
-def create_context(appName):
+def create_session(appName):
     """
-    Creates Spark HiveContext, with WebUI disabled and logging minimized
+    Creates SparkSession for SQL operations. Ths will implicitly also create
+    a SparkContext and a SQLContext.
     """
     logger.info("Creating Spark context - may take some while")
 
     # Create SparkConf with UI disabled
-    conf = SparkConf()
-    conf.set("spark.hadoop.validateOutputSpecs", "false")
-    #conf.set('spark.ui.enabled','false')
-    #conf.set('spark.executor.memory','8g')
-    #conf.set('spark.executor.cores','6')
-
-    sc = SparkContext(appName=appName, conf=conf)
-    return sc
+    spark = SparkSession.builder \
+                .appName(appName) \
+                .config("spark.hadoop.validateOutputSpecs", "false") \
+                .getOrCreate()
+    return spark
 
 
 def parse_options():
@@ -48,11 +44,10 @@ def main():
     opts = parse_options()
 
     logger.info("Creating Spark Context")
-    sc = create_context(appName="WordCount")
-    sqlContext = SQLContext(sc)
+    session = create_session(appName="WordCount")
 
     logger.info("Starting processing")
-    text = sqlContext.read.text('/user/cloudera/alice.txt')
+    text = session.read.text('/user/cloudera/alice.txt')
     words = text.select(explode(split(text.value,' ')).alias('word')).filter(col('word') != '')
     counts = words.groupBy(words.word).count().orderBy('count',ascending=False)
     csv = counts.select(concat('word',lit(','),'count'))
