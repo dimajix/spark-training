@@ -1,16 +1,6 @@
 package de.dimajix.training.spark.weather
 
-import scala.collection.JavaConversions._
-
-import org.apache.spark.SparkConf
-import org.apache.spark.SparkContext
-import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.SQLContext
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.FloatType
-import org.kohsuke.args4j.CmdLineException
-import org.kohsuke.args4j.CmdLineParser
-import org.kohsuke.args4j.Option
+import org.apache.spark.sql.SparkSession
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -20,13 +10,14 @@ import org.slf4j.LoggerFactory
 object Driver {
   def main(args: Array[String]) : Unit = {
     // First create driver, so can already process arguments
-    val driver = new Driver(args)
+    val options = new Options(args)
+    val driver = new Driver(options)
 
     // Now create SparkContext (possibly flooding the console with logging information)
-    val conf = new SparkConf()
-      .setAppName("Spark Weather Analysis")
-    val sc = new SparkContext(conf)
-    val sql = new SQLContext(sc)
+    val sql = SparkSession
+        .builder()
+        .appName("Spark Weather Analysis")
+        .getOrCreate()
 
     // ... and run!
     driver.run(sql)
@@ -34,35 +25,10 @@ object Driver {
 }
 
 
-class Driver(args: Array[String]) {
+class Driver(options:Options) {
   private val logger: Logger = LoggerFactory.getLogger(classOf[Driver])
 
-  @Option(name = "--input", usage = "input dirs", metaVar = "<inputDirectory>")
-  private var inputPath: String = "weather/2005,weather/2006,weather/2007,weather/2008,weather/2009,weather/2010,weather/2011"
-  @Option(name = "--output", usage = "output dir", metaVar = "<outputDirectory>")
-  private var outputPath: String = "weather/minmax"
-  @Option(name = "--stations", usage = "stations definitioons", metaVar = "<stationsPath>")
-  private var stationsPath: String = "weather/isd"
-
-  parseArgs(args)
-
-  private def parseArgs(args: Array[String]) {
-    val parser: CmdLineParser = new CmdLineParser(this)
-    parser.setUsageWidth(80)
-    try {
-      parser.parseArgument(args.toList)
-    }
-    catch {
-      case e: CmdLineException => {
-        System.err.println(e.getMessage)
-        parser.printUsage(System.err)
-        System.err.println
-        System.exit(1)
-      }
-    }
-  }
-
-  def run(sql: SQLContext) = {
+  def run(sql: SparkSession) = {
     // 1. Load raw weather data from text file
 
     // 2. Transform raw data into meaningful DataFrame. See WeatherData for helper functions

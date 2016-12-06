@@ -1,7 +1,5 @@
 package de.dimajix.training.spark.wordcount
 
-import scala.collection.JavaConversions._
-
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.Row
@@ -10,19 +8,17 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.StringType
 import org.apache.spark.sql.types.StructField
 import org.apache.spark.sql.types.StructType
-import org.kohsuke.args4j.CmdLineException
-import org.kohsuke.args4j.CmdLineParser
-import org.kohsuke.args4j.Option
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
   * Created by kaya on 03.12.15.
   */
-object WordCountDriver {
+object Driver {
   def main(args: Array[String]) : Unit = {
     // First create driver, so can already process arguments
-    val driver = new WordCountDriver(args)
+    val options = new Options(args)
+    val driver = new Driver(options)
 
     // Now create SparkContext (possibly flooding the console with logging information)
     val conf = new SparkConf()
@@ -36,31 +32,8 @@ object WordCountDriver {
 }
 
 
-class WordCountDriver(args: Array[String]) {
-  private val logger: Logger = LoggerFactory.getLogger(classOf[WordCountDriver])
-
-  @Option(name = "--input", usage = "input directory", metaVar = "<inputDirectory>")
-  private var inputPath: String = "alice"
-  @Option(name = "--output", usage = "output directory", metaVar = "<outputDirectory>")
-  private var outputPath: String = "alice_wordcount"
-
-  parseArgs(args)
-
-  private def parseArgs(args: Array[String]) {
-    val parser: CmdLineParser = new CmdLineParser(this)
-    parser.setUsageWidth(80)
-    try {
-      parser.parseArgument(args.toList)
-    }
-    catch {
-      case e: CmdLineException => {
-        System.err.println(e.getMessage)
-        parser.printUsage(System.err)
-        System.err.println
-        System.exit(1)
-      }
-    }
-  }
+class Driver(options:Options) {
+  private val logger: Logger = LoggerFactory.getLogger(classOf[Driver])
 
   def run(sql: SQLContext) = {
     val sc = sql.sparkContext
@@ -72,18 +45,18 @@ class WordCountDriver(args: Array[String]) {
     val isStopWord = udf((word:String) => stopWords.value.contains(word.toLowerCase))
 
     // Read data from HDFS
-    val raw_input = sql.sparkContext.textFile(inputPath)
+    val raw_input = sql.sparkContext.textFile(options.inputPath)
     val schema = StructType(
       StructField("line", StringType, false) :: Nil
     )
     val input = sql.createDataFrame(raw_input.map(line => Row(line)), schema)
 
     // Perform word count
-    input.explode("line","word") { line:String => line.split(" ") }
+    input.select(explode(split(col("line")," ")).as("word"))
       .filter(!isStopWord(col("word")))
       .groupBy("word")
       .count
       .orderBy(desc("count"))
-      .write.parquet(outputPath)
+      .write.parquet(options.outputPath)
   }
 }

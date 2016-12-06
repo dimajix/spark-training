@@ -17,7 +17,8 @@ import org.slf4j.LoggerFactory
 object NetworkDriver {
   def main(args: Array[String]) : Unit = {
     // First create driver, so can already process arguments
-    val driver = new NetworkDriver(args)
+    val options = new Options(args)
+    val driver = new NetworkDriver(options)
 
     // Now create SparkContext (possibly flooding the console with logging information)
     val conf = new SparkConf()
@@ -30,34 +31,11 @@ object NetworkDriver {
 }
 
 
-class NetworkDriver(args: Array[String]) {
+class NetworkDriver(options: Options) {
   private val logger: Logger = LoggerFactory.getLogger(classOf[NetworkDriver])
 
-  @Option(name = "--hostname", usage = "hostname of stream server", metaVar = "<hostname>")
-  private var streamHostname: String = "quickstart"
-  @Option(name = "--port", usage = "port of stream server", metaVar = "<port>")
-  private var streamPort: Int = 9977
-
-  parseArgs(args)
-
-  private def parseArgs(args: Array[String]) {
-    val parser: CmdLineParser = new CmdLineParser(this)
-    parser.setUsageWidth(80)
-    try {
-      parser.parseArgument(args.toList)
-    }
-    catch {
-      case e: CmdLineException => {
-        System.err.println(e.getMessage)
-        parser.printUsage(System.err)
-        System.err.println
-        System.exit(1)
-      }
-    }
-  }
-
   def run(ssc: StreamingContext) = {
-    val input = ssc.socketTextStream(streamHostname, streamPort)
+    val input = ssc.socketTextStream(options.streamHostname, options.streamPort)
     val words = input.flatMap(_.split(" "))
     words.filter(_ != "")
       .map(x => (x,1))

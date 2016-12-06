@@ -4,9 +4,7 @@ import java.util.Properties
 
 import scala.collection.JavaConversions._
 
-import org.apache.spark.SparkConf
-import org.apache.spark.SparkContext
-import org.apache.spark.sql.SQLContext
+import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 import org.kohsuke.args4j.CmdLineException
 import org.kohsuke.args4j.CmdLineParser
@@ -23,10 +21,10 @@ object AnalyzeDriver {
         val driver = new AnalyzeDriver(args)
 
         // Now create SparkContext (possibly flooding the console with logging information)
-        val conf = new SparkConf()
-            .setAppName("Spark JDBC Analyzer")
-        val sc = new SparkContext(conf)
-        val sql = new SQLContext(sc)
+        val sql = SparkSession
+            .builder()
+            .appName("Spark JDBC Analyzer")
+            .getOrCreate()
 
         // ... and run!
         driver.run(sql)
@@ -64,7 +62,7 @@ class AnalyzeDriver(args: Array[String]) {
         }
     }
 
-    def run(sql: SQLContext) = {
+    def run(sql: SparkSession) = {
         // Setup connection properties for JDBC
         val dbprops = new Properties
         dbprops.setProperty("user", dbuser)

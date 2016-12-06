@@ -10,16 +10,20 @@
     <name>spark-training-root</name>
 
     <properties>
-        <hadoop.version>2.6.0</hadoop.version>
-        <hadoop.mr1.version>2.6.0-mr1</hadoop.mr1.version>
-        <spark.version>1.6.0</spark.version>
-        <hive.version>1.1.0</hive.version>
+        <hadoop.version>2.7.3</hadoop.version>
+        <hadoop.mr1.version>2.7.3-mr1</hadoop.mr1.version>
+        <spark.version>2.0.2</spark.version>
+        <hive.version>1.2.0</hive.version>
         <hbase.version>1.2.0</hbase.version>
         <zookeeper.version>3.4.5</zookeeper.version>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
-        <scala.api_version>2.10</scala.api_version>
-        <scala.version>2.10.6</scala.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <scala.api_version>2.11</scala.api_version>
+        <scala.version>2.11.8</scala.version>
+        <protobuf.version>2.6.1</protobuf.version>
+        <guava.version>16.0.1</guava.version>
+        <slf4j.version>1.7.21</slf4j.version>
+        <logback.version>1.0.13</logback.version>
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -151,7 +155,7 @@
                             <configuration>
                                 <signature>
                                     <groupId>org.codehaus.mojo.signature</groupId>
-                                    <artifactId>java17</artifactId>
+                                    <artifactId>java18</artifactId>
                                     <version>1.0</version>
                                 </signature>
                             </configuration>
@@ -317,14 +321,14 @@
             <dependency>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest_${scala.api_version}</artifactId>
-                <version>2.2.5</version>
+                <version>2.2.6</version>
                 <scope>test</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.6</version>
+                <version>${slf4j.version}</version>
             </dependency>
 
             <dependency>
@@ -337,7 +341,7 @@
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
-                <version>1.0.13</version>
+                <version>${logback.version}</version>
                 <scope>runtime</scope>
             </dependency>
 
@@ -358,7 +362,7 @@
             <dependency>
                 <groupId>args4j</groupId>
                 <artifactId>args4j</artifactId>
-                <version>2.0.28</version>
+                <version>2.0.31</version>
             </dependency>
 
             <dependency>
@@ -619,15 +623,9 @@
             </dependency>
 
             <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>2.3</version>
-            </dependency>
-
-            <dependency>
                 <artifactId>protobuf-java</artifactId>
                 <groupId>com.google.protobuf</groupId>
-                <version>2.6.1</version>
+                <version>${protobuf.version}</version>
             </dependency>
 
             <dependency>
@@ -637,15 +635,9 @@
             </dependency>
 
             <dependency>
-                <groupId>org.mariadb.jdbc</groupId>
-                <artifactId>mariadb-java-client</artifactId>
-                <version>1.3.6</version>
-            </dependency>
-
-            <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>16.0.1</version>
+                <version>${guava.version}</version>
             </dependency>
 
             <dependency>

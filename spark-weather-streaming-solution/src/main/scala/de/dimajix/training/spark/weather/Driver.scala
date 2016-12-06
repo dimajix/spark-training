@@ -1,7 +1,5 @@
 package de.dimajix.training.spark.weather
 
-import scala.collection.JavaConversions._
-
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.SQLContext
@@ -9,9 +7,6 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.Seconds
 import org.apache.spark.streaming.StreamingContext
-import org.kohsuke.args4j.CmdLineException
-import org.kohsuke.args4j.CmdLineParser
-import org.kohsuke.args4j.Option
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -21,7 +16,8 @@ import org.slf4j.LoggerFactory
 object Driver {
     def main(args: Array[String]) : Unit = {
         // First create driver, so can already process arguments
-        val driver = new Driver(args)
+        val options = new Options(args)
+        val driver = new Driver(options)
 
         // ... and run!
         driver.run()
@@ -29,33 +25,8 @@ object Driver {
 }
 
 
-class Driver(args: Array[String]) {
+class Driver(options:Options) {
     private val logger: Logger = LoggerFactory.getLogger(classOf[Driver])
-
-    @Option(name = "--hostname", usage = "hostname of stream server", metaVar = "<hostname>")
-    private var streamHostname: String = "quickstart"
-    @Option(name = "--port", usage = "port of stream server", metaVar = "<port>")
-    private var streamPort: Int = 9977
-    @Option(name = "--stations", usage = "stations definitioons", metaVar = "<stationsPath>")
-    private var stationsPath: String = "data/weather/isd"
-
-    parseArgs(args)
-
-    private def parseArgs(args: Array[String]) {
-        val parser: CmdLineParser = new CmdLineParser(this)
-        parser.setUsageWidth(80)
-        try {
-            parser.parseArgument(args.toList)
-        }
-        catch {
-            case e: CmdLineException => {
-                System.err.println(e.getMessage)
-                parser.printUsage(System.err)
-                System.err.println
-                System.exit(1)
-            }
-        }
-    }
 
     private def createContext() : StreamingContext = {
         // If you do not see this printed, that means the StreamingContext has been loaded
@@ -71,7 +42,7 @@ class Driver(args: Array[String]) {
         val sc = ssc.sparkContext
 
         // #1 Load Station data from S3/HDFS into an RDD and collect() it to local machine
-        val isd_raw = sc.textFile(stationsPath).collect()
+        val isd_raw = sc.textFile(options.stationsPath).collect()
 
         // #2 Create an appropriate key for joining, this could be usaf+wban. The result should be a pair sequence
         // #3 Convert pair sequence to local map via toMap
@@ -89,7 +60,7 @@ class Driver(args: Array[String]) {
             isd.value.get(usaf + wban).map(_.country).getOrElse("none"))
 
         // #6 Create text stream from Socket via the socketTextStream method of the StreamingContext
-        val stream = ssc.socketTextStream(streamHostname, streamPort, StorageLevel.MEMORY_ONLY)
+        val stream = ssc.socketTextStream(options.streamHostname, options.streamPort, StorageLevel.MEMORY_ONLY)
 
         // #7 Extract weather data from stream, this can be done again via WeatherData.extractRow
         val weatherData = stream.map[Row](WeatherData.extract)

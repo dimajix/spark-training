@@ -1,6 +1,9 @@
 package de.dimajix.training.spark.weather
 
 import java.sql.Timestamp
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 import org.apache.spark.sql.Row
@@ -10,15 +13,13 @@ import org.apache.spark.sql.types.StringType
 import org.apache.spark.sql.types.StructField
 import org.apache.spark.sql.types.StructType
 import org.apache.spark.sql.types.TimestampType
-import org.joda.time.DateTimeZone
-import org.joda.time.format.DateTimeFormat
 
 
 object WeatherData extends Serializable {
   @transient
   private final val TIMESTAMP_FORMAT = "yyyyMMddHHmm"
   @transient
-  private final val timestampFormatter = DateTimeFormat.forPattern(TIMESTAMP_FORMAT).withZone(DateTimeZone.UTC).withLocale(Locale.US)
+  private final val timestampFormatter = DateTimeFormatter.ofPattern(TIMESTAMP_FORMAT, Locale.US).withZone(ZoneId.of("UTC"))
 
   def schema = {
     StructType(
@@ -37,7 +38,8 @@ object WeatherData extends Serializable {
   def extract(row:String) = {
     val date = row.substring(15,23)
     val time = row.substring(23,27)
-    val timestamp = new Timestamp(timestampFormatter.parseDateTime(date + time).getMillis())
+    val instant = Instant.from(timestampFormatter.parse(date + time))
+    val timestamp = new Timestamp(instant.toEpochMilli)
     val usaf = row.substring(4,10)
     val wban = row.substring(10,15)
     val airTemperatureQuality = row.charAt(92).toInt - '0'.toInt

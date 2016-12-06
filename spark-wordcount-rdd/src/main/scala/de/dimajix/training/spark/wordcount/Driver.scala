@@ -1,4 +1,4 @@
-package de.dimajix.training.spark.skeleton
+package de.dimajix.training.spark.wordcount
 
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
@@ -29,5 +29,12 @@ class Driver(options:Options) {
   private val logger: Logger = LoggerFactory.getLogger(classOf[Driver])
 
   def run(sc: SparkContext) = {
+    val input = sc.textFile(options.inputPath)
+    val words = input.flatMap(_.split(" "))
+    val wc = words.filter(_ != "")
+      .map(x => (x,1))
+      .reduceByKey(_ + _)
+      .sortBy(_._2,ascending=false)
+    wc.saveAsTextFile(options.outputPath)
   }
 }
