@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-export SPARK_MAJOR_VERSION=2
-
 DRIVER_NAME="driver.py"
 PYTHON_FILES="weather.py"
 
@@ -13,5 +11,13 @@ SPARK_OPTS="--executor-cores 2
 
 SPARK_MASTER="yarn"
 
+PYTHON_ROOT=/usr
+
+export PYSPARK_DRIVER_PYTHON=$PYTHON_ROOT/bin/python
+export PYSPARK_PYTHON=$PYTHON_ROOT/bin/python
+
+export PYTHONHASHSEED=0
+export SPARK_YARN_USER_ENV=PYTHONHASHSEED=0
+export SPARK_MAJOR_VERSION=2
 
 spark-submit $SPARK_OPTS --py-files $PYTHON_FILES --master $SPARK_MASTER $DRIVER_NAME $@
