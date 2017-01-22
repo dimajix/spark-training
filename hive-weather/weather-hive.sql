@@ -1,3 +1,4 @@
+-- noinspection SqlNoDataSourceInspectionForFile
 --------------------------------------------------------------------------------------------
 -- Create Database
 
@@ -6,8 +7,9 @@ USE training;
 
 --------------------------------------------------------------------------------------------
 -- Load some data to play with
-CREATE TABLE weather_2011(data STRING) STORED AS TEXTFILE;
-LOAD DATA LOCAL INPATH 'data/weather/2011*.gz' INTO TABLE weather_2011;
+CREATE EXTERNAL TABLE weather_2011(data STRING)
+STORED AS TEXTFILE
+LOCATION 's3://dimajix-training/data/weather/2011';
 
 -- Look inside
 SELECT * FROM weather_2011 limit 10;
@@ -37,17 +39,17 @@ DROP TABLE weather_2011;
 -- Using External Table
 CREATE EXTERNAL TABLE weather_raw(data STRING) PARTITIONED BY(year STRING) STORED AS TEXTFILE;
 
-ALTER TABLE weather_raw ADD PARTITION(year=2004) LOCATION '/user/cloudera/data/weather/2004';
-ALTER TABLE weather_raw ADD PARTITION(year=2005) LOCATION '/user/cloudera/data/weather/2005';
-ALTER TABLE weather_raw ADD PARTITION(year=2006) LOCATION '/user/cloudera/data/weather/2006';
-ALTER TABLE weather_raw ADD PARTITION(year=2007) LOCATION '/user/cloudera/data/weather/2007';
-ALTER TABLE weather_raw ADD PARTITION(year=2008) LOCATION '/user/cloudera/data/weather/2008';
-ALTER TABLE weather_raw ADD PARTITION(year=2009) LOCATION '/user/cloudera/data/weather/2009';
-ALTER TABLE weather_raw ADD PARTITION(year=2010) LOCATION '/user/cloudera/data/weather/2010';
-ALTER TABLE weather_raw ADD PARTITION(year=2011) LOCATION '/user/cloudera/data/weather/2011';
-ALTER TABLE weather_raw ADD PARTITION(year=2012) LOCATION '/user/cloudera/data/weather/2012';
-ALTER TABLE weather_raw ADD PARTITION(year=2013) LOCATION '/user/cloudera/data/weather/2013';
-ALTER TABLE weather_raw ADD PARTITION(year=2014) LOCATION '/user/cloudera/data/weather/2014';
+ALTER TABLE weather_raw ADD PARTITION(year=2004) LOCATION 's3://dimajix-training/data/weather/2004';
+ALTER TABLE weather_raw ADD PARTITION(year=2005) LOCATION 's3://dimajix-training/data/weather/2005';
+ALTER TABLE weather_raw ADD PARTITION(year=2006) LOCATION 's3://dimajix-training/data/weather/2006';
+ALTER TABLE weather_raw ADD PARTITION(year=2007) LOCATION 's3://dimajix-training/data/weather/2007';
+ALTER TABLE weather_raw ADD PARTITION(year=2008) LOCATION 's3://dimajix-training/data/weather/2008';
+ALTER TABLE weather_raw ADD PARTITION(year=2009) LOCATION 's3://dimajix-training/data/weather/2009';
+ALTER TABLE weather_raw ADD PARTITION(year=2010) LOCATION 's3://dimajix-training/data/weather/2010';
+ALTER TABLE weather_raw ADD PARTITION(year=2011) LOCATION 's3://dimajix-training/data/weather/2011';
+ALTER TABLE weather_raw ADD PARTITION(year=2012) LOCATION 's3://dimajix-training/data/weather/2012';
+ALTER TABLE weather_raw ADD PARTITION(year=2013) LOCATION 's3://dimajix-training/data/weather/2013';
+ALTER TABLE weather_raw ADD PARTITION(year=2014) LOCATION 's3://dimajix-training/data/weather/2014';
 
 
 -- Create View
@@ -115,7 +117,7 @@ WITH SERDEPROPERTIES (
    "escapeChar"    = "\\"
 )
 STORED AS TEXTFILE
-LOCATION '/user/cloudera/data/weather/isd-history';
+LOCATION 's3://dimajix-training/data/weather/isd-history';
 
 
 ----------------------------------------------------------------------------------------------
