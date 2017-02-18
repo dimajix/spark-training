@@ -3,6 +3,7 @@
 import sys
 import socket
 import optparse
+from datetime import datetime
 import select
 
 
@@ -17,6 +18,7 @@ def parse_options():
     parser.add_option('-H','--host', action='store', dest='host', nargs=1, default='0.0.0.0', help='Host to listen on')
     parser.add_option('-I','--interval', action='store', dest='interval', nargs=1, default=1, help='Interval between batches')
     parser.add_option('-B','--batch', action='store', dest='batch', nargs=1, default=5, help='Batch size (number of lines)')
+    parser.add_option('-T','--timestamp', action='store_const', dest='timestamp', const=True, default=False, help='Add Timestamp Column')
 
     (opts, args) = parser.parse_args()
 
@@ -29,6 +31,7 @@ def run_server_loop(serversocket, opts):
     input = [serversocket, sys.stdin]
     timeout = int(opts.interval)
     max_batch = int(opts.batch)
+    timestamp = opts.timestamp
     current_batch = 0
 
     while 1:
@@ -53,6 +56,8 @@ def run_server_loop(serversocket, opts):
                 line = sys.stdin.readline()
                 if not line:
                     return
+                if timestamp:
+                    line = str(datetime.now()) + "\t" + line
                 current_batch = current_batch + 1
                 for c in clients:
                     c.sendall(line)
