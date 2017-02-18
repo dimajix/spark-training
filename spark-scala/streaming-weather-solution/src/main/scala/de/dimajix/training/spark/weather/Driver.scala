@@ -1,9 +1,7 @@
 package de.dimajix.training.spark.weather
 
-import org.apache.spark.SparkConf
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.functions._
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.Seconds
@@ -35,13 +33,13 @@ class Driver(options:Options) {
         println("Creating new context")
 
         // Now create SparkContext (possibly flooding the console with logging information)
-        val conf = new SparkConf()
-            .setAppName("Spark Streaming Weather Analysis")
-            .set("spark.default.parallelism", "4")
-            .set("spark.streaming.blockInterval", "1000")
-        // val spark = SparkSession.builder
-        val ssc = new StreamingContext(conf, Seconds(1))
-        val sc = ssc.sparkContext
+        val session = SparkSession.builder()
+            .appName("Spark Streaming Weather Analysis")
+            .config("spark.default.parallelism", "4")
+            .config("spark.streaming.blockInterval", "1000")
+            .getOrCreate()
+        val sc = session.sparkContext
+        val ssc = new StreamingContext(sc, Seconds(1))
 
         // #1 Load Station data from S3/HDFS into an RDD and collect() it to local machine
         val isd_raw = sc.textFile(options.stationsPath).collect()
@@ -72,13 +70,8 @@ class Driver(options:Options) {
 
         // Process every RDD inside the stream
         windowedData.foreachRDD(rdd => {
-            // Let us create a SQL context. We need to create it in a special way, in order to guarantuee that we
-            // always get the same SQLContext. But nontheless it needs to be created lazily (i.e. not outside of
-            // the foreachRDD loop), because when making things recoverable, code outside of foreachRDD won't be
-            // necessarily executed.
-            val sql = SQLContext.getOrCreate(rdd.sparkContext)
-            // #9 Create a DataFrame from the RDD
-            val weather = sql.createDataFrame(rdd, WeatherData.schema)
+            // #9 Create a DataFrame from the RDD using the 'createDataFrame' method in the SparkSession 'session'
+            val weather = session.createDataFrame(rdd, WeatherData.schema)
             // #10 Lookup country from embedded station data.
             // #11 Perform min/max aggregations of temperature and wind speed grouped by year and country
             val result = weather.withColumn("country", country(weather("usaf"), weather("wban")))
