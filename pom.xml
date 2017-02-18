@@ -167,31 +167,31 @@
     </build>
 
     <modules>
-        <module>scala-skeleton</module>
-        <module>hadoop-skeleton</module>
-        <module>hadoop-weather-intro</module>
-        <module>hadoop-weather-exercise</module>
-        <module>hadoop-weather-solution</module>
-        <module>spark-wordcount-mini</module>
-        <module>spark-skeleton</module>
-        <module>spark-wordcount-rdd</module>
-        <module>spark-wordcount-df</module>
-        <module>spark-wordcount-filtered</module>
-        <module>spark-wordcount-sql</module>
-        <module>spark-weather-rdd-exercise</module>
-        <module>spark-weather-rdd-solution</module>
-        <module>spark-weather-df-exercise</module>
-        <module>spark-weather-df-solution</module>
-        <module>spark-weather-streaming-exercise</module>
-        <module>spark-weather-streaming-solution</module>
-        <module>spark-hive</module>
-        <module>spark-jdbc</module>
+        <module>scala/skeleton</module>
+        <module>hadoop/skeleton</module>
+        <module>hadoop/weather-intro</module>
+        <module>hadoop/weather-exercise</module>
+        <module>hadoop/weather-solution</module>
+        <module>spark-scala/wordcount-mini</module>
+        <module>spark-scala/skeleton</module>
+        <module>spark-scala/wordcount-rdd</module>
+        <module>spark-scala/wordcount-df</module>
+        <module>spark-scala/wordcount-filtered</module>
+        <module>spark-scala/wordcount-sql</module>
+        <module>spark-scala/weather-rdd-exercise</module>
+        <module>spark-scala/weather-rdd-solution</module>
+        <module>spark-scala/weather-df-exercise</module>
+        <module>spark-scala/weather-df-solution</module>
+        <module>spark-scala/weather-hive</module>
+        <module>spark-scala/weather-jdbc</module>
+        <module>spark-scala/streaming-wordcount</module>
+        <module>spark-scala/streaming-windowed-wordcount</module>
+        <module>spark-scala/streaming-stateful-wordcount</module>
+        <module>spark-scala/streaming-recoverable-wordcount</module>
+        <module>spark-scala/streaming-weather-exercise</module>
+        <module>spark-scala/streaming-weather-solution</module>
         <!-- <module>spark-hbase</module> -->
-        <module>spark-streaming-wordcount</module>
-        <module>spark-streaming-windowed-wordcount</module>
-        <module>spark-streaming-stateful-wordcount</module>
-        <module>spark-streaming-recoverable-wordcount</module>
-        <module>hbase-intro</module>
+        <!-- <module>hbase-intro</module> -->
     </modules>
 
     <repositories>
