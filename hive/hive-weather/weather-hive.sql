@@ -2,7 +2,7 @@
 --------------------------------------------------------------------------------------------
 -- Create Database
 
-CREATE DATABASE training;
+CREATE DATABASE IF NOT EXISTS training;
 USE training;
 
 --------------------------------------------------------------------------------------------
@@ -37,24 +37,28 @@ DROP TABLE weather_2011;
 
 --------------------------------------------------------------------------------------------
 -- Using External Table
-CREATE EXTERNAL TABLE weather_raw(data STRING) PARTITIONED BY(year STRING) STORED AS TEXTFILE;
+CREATE EXTERNAL TABLE IF NOT EXISTS training.weather_raw(
+    data STRING
+)
+PARTITIONED BY(year STRING)
+STORED AS TEXTFILE;
 
-ALTER TABLE weather_raw ADD PARTITION(year=2004) LOCATION 's3://dimajix-training/data/weather/2004';
-ALTER TABLE weather_raw ADD PARTITION(year=2005) LOCATION 's3://dimajix-training/data/weather/2005';
-ALTER TABLE weather_raw ADD PARTITION(year=2006) LOCATION 's3://dimajix-training/data/weather/2006';
-ALTER TABLE weather_raw ADD PARTITION(year=2007) LOCATION 's3://dimajix-training/data/weather/2007';
-ALTER TABLE weather_raw ADD PARTITION(year=2008) LOCATION 's3://dimajix-training/data/weather/2008';
-ALTER TABLE weather_raw ADD PARTITION(year=2009) LOCATION 's3://dimajix-training/data/weather/2009';
-ALTER TABLE weather_raw ADD PARTITION(year=2010) LOCATION 's3://dimajix-training/data/weather/2010';
-ALTER TABLE weather_raw ADD PARTITION(year=2011) LOCATION 's3://dimajix-training/data/weather/2011';
-ALTER TABLE weather_raw ADD PARTITION(year=2012) LOCATION 's3://dimajix-training/data/weather/2012';
-ALTER TABLE weather_raw ADD PARTITION(year=2013) LOCATION 's3://dimajix-training/data/weather/2013';
-ALTER TABLE weather_raw ADD PARTITION(year=2014) LOCATION 's3://dimajix-training/data/weather/2014';
+ALTER TABLE training.weather_raw ADD PARTITION(year=2004) LOCATION 's3://dimajix-training/data/weather/2004';
+ALTER TABLE training.weather_raw ADD PARTITION(year=2005) LOCATION 's3://dimajix-training/data/weather/2005';
+ALTER TABLE training.weather_raw ADD PARTITION(year=2006) LOCATION 's3://dimajix-training/data/weather/2006';
+ALTER TABLE training.weather_raw ADD PARTITION(year=2007) LOCATION 's3://dimajix-training/data/weather/2007';
+ALTER TABLE training.weather_raw ADD PARTITION(year=2008) LOCATION 's3://dimajix-training/data/weather/2008';
+ALTER TABLE training.weather_raw ADD PARTITION(year=2009) LOCATION 's3://dimajix-training/data/weather/2009';
+ALTER TABLE training.weather_raw ADD PARTITION(year=2010) LOCATION 's3://dimajix-training/data/weather/2010';
+ALTER TABLE training.weather_raw ADD PARTITION(year=2011) LOCATION 's3://dimajix-training/data/weather/2011';
+ALTER TABLE training.weather_raw ADD PARTITION(year=2012) LOCATION 's3://dimajix-training/data/weather/2012';
+ALTER TABLE training.weather_raw ADD PARTITION(year=2013) LOCATION 's3://dimajix-training/data/weather/2013';
+ALTER TABLE training.weather_raw ADD PARTITION(year=2014) LOCATION 's3://dimajix-training/data/weather/2014';
 
 
 -- Create View
 
-CREATE VIEW weather AS
+CREATE VIEW training.weather AS
     SELECT 
         year,
         SUBSTR(`data`,5,6) AS `usaf`,
@@ -69,14 +73,14 @@ CREATE VIEW weather AS
         SUBSTR(`data`,70,1) AS wind_speed_qual,
         CAST(SUBSTR(`data`,88,5) AS FLOAT)/10 AS air_temperature, 
         SUBSTR(`data`,93,1) AS air_temperature_qual 
-    FROM weather_raw; 
+    FROM training.weather_raw;
 
 -- Look into VIEW
-SELECT * FROM weather LIMIT 10;
+SELECT * FROM training.weather LIMIT 10;
 
 ----------------------------------------------------------------------------------------------
 -- Import isd Table using normal Table and LOAD DATA with local data
-CREATE TABLE isd_raw(
+CREATE TABLE training.stations(
     usaf STRING,
     wban STRING,
     name STRING,
@@ -98,7 +102,7 @@ STORED AS TEXTFILE;
 LOAD DATA LOCAL INPATH 'data/weather/isd-history' OVERWRITE INTO TABLE isd_raw;
 
 -- Import isd Table using external table
-CREATE EXTERNAL TABLE isd_raw(
+CREATE EXTERNAL TABLE training.stations(
     usaf STRING,
     wban STRING,
     name STRING,
@@ -126,8 +130,8 @@ SELECT
     isd.country,
     MIN(w.air_temperature) as tmin,
     MAX(w.air_temperature) as tmax 
-FROM weather w
-INNER JOIN isd_raw isd 
+FROM training.weather w
+INNER JOIN training.stations isd
     ON w.usaf=isd.usaf 
     AND w.wban=isd.wban
 WHERE
@@ -139,8 +143,8 @@ SELECT
     w.year,
     MIN(w.air_temperature) as tmin,
     MAX(w.air_temperature) as tmax 
-FROM weather w
-INNER JOIN isd_raw isd 
+FROM training.weather w
+INNER JOIN training.stations isd
     ON w.usaf=isd.usaf 
     AND w.wban=isd.wban
 WHERE
