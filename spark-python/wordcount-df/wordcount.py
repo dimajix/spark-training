@@ -32,8 +32,12 @@ def parse_options():
     """
 
     parser = optparse.OptionParser(description='PySpark WordCount.')
-    parser.add_option('-i', '--input', action='store', nargs=1, help='Input file or directory')
-    parser.add_option('-o', '--output', action='store', nargs=1, help='Output file or directory')
+    parser.add_option('-i', '--input', action='store', nargs=1,
+                        default='s3://dimajix-training/data/alice/',
+                        help='Input file or directory')
+    parser.add_option('-o', '--output', action='store', nargs=1,
+                        default='alice-counts',
+                        help='Output file or directory')
 
     (opts, args) = parser.parse_args()
 
@@ -47,7 +51,7 @@ def main():
     session = create_session(appName="WordCount")
 
     logger.info("Starting processing")
-    text = session.read.text('s3://dimajix-training/data/alice/')
+    text = session.read.text(opts.input)
     words = text.select(explode(split(text.value,' ')).alias('word')).filter(col('word') != '')
     counts = words.groupBy(words.word).count().orderBy('count',ascending=False)
     csv = counts.select(concat('word',lit(','),'count'))

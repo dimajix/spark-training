@@ -31,8 +31,12 @@ def parse_options():
     """
 
     parser = optparse.OptionParser(description='PySpark WordCount.')
-    parser.add_option('-i', '--input', action='store', nargs=1, help='Input file or directory')
-    parser.add_option('-o', '--output', action='store', nargs=1, help='Output file or directory')
+    parser.add_option('-i', '--input', action='store', nargs=1,
+                      default='s3://dimajix-training/data/alice/',
+                      help='Input file or directory')
+    parser.add_option('-o', '--output', action='store', nargs=1,
+                      default='alice-counts',
+                      help='Output file or directory')
 
     (opts, args) = parser.parse_args()
 
