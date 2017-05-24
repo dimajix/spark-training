@@ -25,9 +25,6 @@ def create_context(appName):
     # Create SparkConf containing some custom configurations
     conf = SparkConf()
     conf.set("spark.hadoop.validateOutputSpecs", "false")
-    #conf.set('spark.ui.enabled','false')
-    #conf.set('spark.executor.memory','8g')
-    #conf.set('spark.executor.cores','6')
 
     sc = SparkContext(appName=appName, conf=conf)
     return sc
@@ -39,7 +36,7 @@ def parse_options():
     :return:
     """
 
-    parser = optparse.OptionParser(description='PySpark WordCount.')
+    parser = optparse.OptionParser(description='PySpark Weather Analysis.')
     parser.add_option('-s', '--stations', action='store', nargs=1, help='Input file or directory containing station data')
     parser.add_option('-w', '--weather', action='store', nargs=1, help='Input file or directory containing weather data')
     parser.add_option('-o', '--output', action='store', nargs=1, help='Output file or directory')
@@ -53,7 +50,7 @@ def main():
     opts = parse_options()
 
     logger.info("Creating Spark Context")
-    sc = create_context(appName="WordCount")
+    sc = create_context(appName="PySpark Weather Analysis")
 
     logger.info("Starting processing")
 

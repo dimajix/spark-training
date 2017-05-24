@@ -36,7 +36,7 @@ def parse_options():
     :return:
     """
 
-    parser = optparse.OptionParser(description='PySpark WordCount.')
+    parser = optparse.OptionParser(description='PySpark Weather Analysis.')
     parser.add_option('-s', '--stations', action='store', nargs=1, help='Input file or directory containing station data')
     parser.add_option('-w', '--weather', action='store', nargs=1, help='Input file or directory containing weather data')
     parser.add_option('-o', '--output', action='store', nargs=1, help='Output file or directory')
@@ -50,20 +50,22 @@ def main():
     opts = parse_options()
 
     logger.info("Creating Spark Context")
-    sc = create_context(appName="WordCount")
+    sc = create_context(appName="PySpark Weather Analysis")
 
     logger.info("Starting processing")
 
-    # 1. Load the weather stations data from HDFS as a text file. Then extract a StationData object from every text
-    #    line via an appropriate 'rdd.map'. You can simply use the constructor of StationData to perform the extraction,
+    # 1. Load the weather stations data from HDFS or S3 as a text file. The location of the file is available in
+    #    the variable 'opts.stations'. Then extract a StationData object from every text line via an appropriate
+    #    'rdd.map'. You can simply use the constructor of StationData to perform the extraction,
     #    i.e.
     #           StationData(text_line)
     #
     #    Store the result in 'stations'
     stations = ...
 
-    # 2, Load the weather data itself from HDFS as a text file. Extract WeatherData objects similar as you have
-    #    extracted the StationData.
+    # 2, Load the weather data itself from HDFS or S3 as a text file. Again the location of the file is available
+    #    in the options object 'opts' as 'opts.weather'. Extract WeatherData objects similar as you have extracted
+    #    the StationData.
     weather = ...
 
     # 3. Create a key for stations consisting of usaf + wban. This can be easily done with the RDD method keyBy

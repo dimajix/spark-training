@@ -47,7 +47,7 @@ def main():
     session = create_session(appName="WordCount")
 
     logger.info("Starting processing")
-    text = session.read.text('/user/cloudera/alice.txt')
+    text = session.read.text('s3://dimajix-training/data/alice/')
     words = text.select(explode(split(text.value,' ')).alias('word')).filter(col('word') != '')
     counts = words.groupBy(words.word).count().orderBy('count',ascending=False)
     csv = counts.select(concat('word',lit(','),'count'))
