@@ -1,4 +1,5 @@
 #!/bin/bash
+basedir=$(readlink -f $(dirname $0))
 
 APP_NAME="spark-hive"
 APP_MAIN="de.dimajix.training.spark.hive.Driver"
