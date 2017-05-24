@@ -169,6 +169,7 @@
     <modules>
         <module>scala/skeleton</module>
         <module>hadoop/skeleton</module>
+        <module>hadoop/wordcount</module>
         <module>hadoop/weather-intro</module>
         <module>hadoop/weather-exercise</module>
         <module>hadoop/weather-solution</module>
