@@ -2,7 +2,7 @@
 
 AWS_INFO_DIR="/mnt/var/lib/info/"
 
-ANACONDA_PREFIX=/opt/anaconda3
+ANACONDA_PREFIX=/emr/anaconda3
 ANACONDA_VERSION=4.2.0
 ANACONDA_INSTALLER=Anaconda3-${ANACONDA_VERSION}-Linux-x86_64.sh
 
