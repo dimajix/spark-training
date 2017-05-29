@@ -78,7 +78,7 @@ install_startup() {
     sudo tee /usr/local/bin/jupyter-notebook > /dev/null <<EOL
 #!/bin/bash
 source ${ANACONDA_PREFIX}/bin/activate
-jupyter notebook --NotebookApp.ip=0.0.0.0 --NotebookApp.port=8888 --NotebookApp.open_browser=False
+jupyter notebook --NotebookApp.ip=0.0.0.0 --NotebookApp.port=8899 --NotebookApp.open_browser=False
 EOL
     sudo chmod a+rx /usr/local/bin/jupyter-notebook
 
