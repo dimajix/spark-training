@@ -1,45 +1,38 @@
-# Setup Instructions
+# Spark Training Repository
 
-## Additional Data
+This repository contains many different examples, exercises and tutorials for Spark and Hadoop trainings performed
+by dimajix. You can always find the latest version on GitHub at
 
-You need some additional data for some modules:
-
-    http://download.dimajix.net/training/amazon_baby.zip
-    http://download.dimajix.net/training/bike-sharing.tgz
-    http://download.dimajix.net/training/weather.tgz
-    
-## Zeppelin  
-    
-    http://download.dimajix.net/training/zeppelin-0.5.6-incubating.tgz
+    https://github.com/dimajix/spark-training
 
 
-## Directory Structure
+## Contents
 
-For easiest results, I recommend to have the following directory layout
+The repository contains different types of documents
+* Source Code for Spark/Scala
+* Jupyter Notebooks for PySpark
+* Zeppelin Notebooks for Spark/Scala
+* Hive SQL scripts
+* Pig scripts
+* ...and much more
 
-/home/cloudera
-         |
-         +---- spark-training
-         |        |
-         |        +----- exameple-01
-         |        |
-         |        +----- exameple-02
-         |        |
-         |        ...
-         |
-         +---- data
-                  |
-                  +--- weather
-                          |
-                          +--- isd-history
-                          +--- 2004
-                          +--- 2005
-                          .
-                          .
-                          +--- 2014
-                          
 
-## Building
+## External Dependencies
 
-mvn install
+Some notebooks require some test data provided by dimajix on S3 at s3://dimajix-training/data/.
 
+
+## Building Executables
+
+The source code can be built using Maven, simply by running
+
+    mvn install
+
+from the root directory.
+
+
+## Running Examples
+
+Most code is either provided as interactive Notebooks (Jupyter and/or Zeppelin) or as compilable programs. Programs
+which create jar files always contain start scripts, which take care of setting any environment variables and Spark
+configuration properties.
