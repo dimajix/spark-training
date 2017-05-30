@@ -36,13 +36,14 @@ DROP TABLE weather_2011;
 
 
 --------------------------------------------------------------------------------------------
--- Using External Table
+-- Create new table for all weather data. The table is partitioned by year.
 CREATE EXTERNAL TABLE IF NOT EXISTS training.weather_raw(
     data STRING
 )
 PARTITIONED BY(year STRING)
 STORED AS TEXTFILE;
 
+-- Add all partitions
 ALTER TABLE training.weather_raw ADD PARTITION(year=2004) LOCATION 's3://dimajix-training/data/weather/2004';
 ALTER TABLE training.weather_raw ADD PARTITION(year=2005) LOCATION 's3://dimajix-training/data/weather/2005';
 ALTER TABLE training.weather_raw ADD PARTITION(year=2006) LOCATION 's3://dimajix-training/data/weather/2006';
@@ -56,8 +57,7 @@ ALTER TABLE training.weather_raw ADD PARTITION(year=2013) LOCATION 's3://dimajix
 ALTER TABLE training.weather_raw ADD PARTITION(year=2014) LOCATION 's3://dimajix-training/data/weather/2014';
 
 
--- Create View
-
+-- Create View for extracting relevant measurements
 CREATE VIEW training.weather AS
     SELECT 
         year,
@@ -79,28 +79,6 @@ CREATE VIEW training.weather AS
 SELECT * FROM training.weather LIMIT 10;
 
 ----------------------------------------------------------------------------------------------
--- Import isd Table using normal Table and LOAD DATA with local data
-CREATE TABLE training.stations(
-    usaf STRING,
-    wban STRING,
-    name STRING,
-    country STRING,
-    state STRING,
-    icao STRING,
-    latitude FLOAT,
-    longitude FLOAT,
-    elevation FLOAT,
-    date_begin STRING,
-    date_end STRING) 
-ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
-WITH SERDEPROPERTIES (
-   "separatorChar" = ",",
-   "quoteChar"     = "\"",
-   "escapeChar"    = "\\"
-)
-STORED AS TEXTFILE;
-LOAD DATA LOCAL INPATH 'data/weather/isd-history' OVERWRITE INTO TABLE isd_raw;
-
 -- Import isd Table using external table
 CREATE EXTERNAL TABLE training.stations(
     usaf STRING,
@@ -150,3 +128,29 @@ INNER JOIN training.stations isd
 WHERE
     w.air_temperature_qual = "1"
 GROUP BY w.year,isd.country
+
+
+----------------------------------------------------------------------------------------------
+-- Backup
+
+-- Import isd Table using normal Table and LOAD DATA with local data
+CREATE TABLE training.stations(
+    usaf STRING,
+    wban STRING,
+    name STRING,
+    country STRING,
+    state STRING,
+    icao STRING,
+    latitude FLOAT,
+    longitude FLOAT,
+    elevation FLOAT,
+    date_begin STRING,
+    date_end STRING)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+WITH SERDEPROPERTIES (
+   "separatorChar" = ",",
+   "quoteChar"     = "\"",
+   "escapeChar"    = "\\"
+)
+STORED AS TEXTFILE;
+LOAD DATA LOCAL INPATH 'data/weather/isd-history' OVERWRITE INTO TABLE isd_raw;
