@@ -7,7 +7,7 @@ from pyspark import SparkConf
 conf = SparkConf()
 sc = SparkContext(appName="WordCount", conf=conf)
 
-sc.textFile("alice.txt") \
+sc.textFile("s3://dimajix-training/data/alice") \
     .flatMap(lambda x: x.split()) \
     .filter(lambda x: x != "") \
     .map(lambda x: (x,1)) \
