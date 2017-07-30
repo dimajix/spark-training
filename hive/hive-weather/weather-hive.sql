@@ -7,12 +7,12 @@ USE training;
 
 --------------------------------------------------------------------------------------------
 -- Load some data to play with
-CREATE EXTERNAL TABLE weather_2011(data STRING)
+CREATE EXTERNAL TABLE training.weather_2011(data STRING)
 STORED AS TEXTFILE
 LOCATION 's3://dimajix-training/data/weather/2011';
 
 -- Look inside
-SELECT * FROM weather_2011 limit 10;
+SELECT * FROM training.weather_2011 limit 10;
 SELECT SUBSTR(data,5,6) AS usaf FROM weather_2011 LIMIT 10;
 
 SELECT
@@ -99,7 +99,8 @@ WITH SERDEPROPERTIES (
    "escapeChar"    = "\\"
 )
 STORED AS TEXTFILE
-LOCATION 's3://dimajix-training/data/weather/isd-history';
+LOCATION 's3://dimajix-training/data/weather/isd-history'
+TBLPROPERTIES ("skip.header.line.count"="1");
 
 
 ----------------------------------------------------------------------------------------------
