@@ -4,12 +4,9 @@
 import unittest
 import os
 import sys
-import platform
 
 
 def activate_pyspark():
-    on_windows = platform.system() == "Windows"
-
     # Detect existing SPARK_HOME. If it is set, retrieve it. Otherwise provide some fixed installation directory.
     if 'SPARK_HOME' in os.environ:
         SPARK_HOME = os.environ['SPARK_HOME']
