@@ -6,4 +6,3 @@ specifically well suited for unittests and for running PySpark programs locally 
 # Running
 
     ./standalone.py
-    

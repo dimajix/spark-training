@@ -18,10 +18,7 @@ def activate_pyspark():
         os.environ['SPARK_HOME'] = SPARK_HOME
 
     # Provide the correct Python version to Spark
-    if on_windows:
-        os.environ['PYSPARK_PYTHON'] = os.path.join(sys.prefix, 'python.exe')
-    else:
-        os.environ['PYSPARK_PYTHON'] = os.path.join(sys.prefix, 'bin', 'python')
+    os.environ['PYSPARK_PYTHON'] = sys.executable
 
     # Add PySpark packages to the Python package path
     sys.path.append(os.path.join(SPARK_HOME, 'python'))
