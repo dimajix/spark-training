@@ -106,30 +106,17 @@ TBLPROPERTIES ("skip.header.line.count"="1");
 ----------------------------------------------------------------------------------------------
 -- Performing Queries
 SELECT
-    isd.country,
-    MIN(w.air_temperature) as tmin,
-    MAX(w.air_temperature) as tmax 
-FROM training.weather w
-INNER JOIN training.stations isd
-    ON w.usaf=isd.usaf 
-    AND w.wban=isd.wban
-WHERE
-    w.air_temperature_qual = "1"
-GROUP BY isd.country;
-
-SELECT
-    isd.country,
     w.year,
-    MIN(w.air_temperature) as tmin,
-    MAX(w.air_temperature) as tmax 
+    isd.country,
+    MIN(CASE WHEN w.air_temperature_qual="1" THEN w.air_temperature END) as temp_min,
+    MAX(CASE WHEN w.air_temperature_qual="1" THEN w.air_temperature END) as temp_max,
+    MIN(CASE WHEN w.wind_speed_qual="1" THEN w.wind_speed END) as wind_min,
+    MAX(CASE WHEN w.wind_speed_qual="1" THEN w.wind_speed END) as wind_max,
 FROM training.weather w
 INNER JOIN training.stations isd
     ON w.usaf=isd.usaf 
     AND w.wban=isd.wban
-WHERE
-    w.air_temperature_qual = "1"
-GROUP BY w.year,isd.country
-
+GROUP BY year, isd.country;
 
 ----------------------------------------------------------------------------------------------
 -- Backup
