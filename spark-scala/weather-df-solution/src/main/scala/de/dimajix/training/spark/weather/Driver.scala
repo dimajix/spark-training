@@ -47,13 +47,12 @@ class Driver(options:Options) {
         .withColumn("year", weather("date").substr(0,4))
         .groupBy("country", "year")
         .agg(
-              col("year"),
-              col("country"),
               min(when(col("air_temperature_quality") === lit(1), col("air_temperature")).otherwise(9999)).as("temp_min"),
               max(when(col("air_temperature_quality") === lit(1), col("air_temperature")).otherwise(-9999)).as("temp_max"),
               min(when(col("wind_speed_quality") === lit(1), col("wind_speed")).otherwise(9999)).as("wind_min"),
               max(when(col("wind_speed_quality") === lit(1), col("wind_speed")).otherwise(-9999)).as("wind_max")
         )
-        .write.parquet(options.outputPath)
+        .coalesce(1)
+        .write.csv(options.outputPath)
   }
 }

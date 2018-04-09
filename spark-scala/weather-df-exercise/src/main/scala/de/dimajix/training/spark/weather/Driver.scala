@@ -45,6 +45,8 @@ class Driver(options:Options) {
 
     // 8. Aggregate minimum/maximum values, pay attention to quality!
 
-    // 9. Save as ParquetFile
+    // 9. Coalesca all partitions into a single one
+
+    // 10. Save as CSV file
   }
 }

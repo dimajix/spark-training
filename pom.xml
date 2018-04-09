@@ -12,7 +12,7 @@
     <properties>
         <hadoop.version>2.7.3</hadoop.version>
         <hadoop.mr1.version>2.7.3-mr1</hadoop.mr1.version>
-        <spark.version>2.0.2</spark.version>
+        <spark.version>2.2.1</spark.version>
         <hive.version>1.2.0</hive.version>
         <hbase.version>1.2.0</hbase.version>
         <zookeeper.version>3.4.5</zookeeper.version>
