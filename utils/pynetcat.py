@@ -51,6 +51,7 @@ def run_server_loop(serversocket, opts):
                 # handle the server socket
                 client, address = serversocket.accept()
                 clients.append(client)
+                print("Accepted connection from " + str(address))
 
             elif s == sys.stdin:
                 line = sys.stdin.readline()
