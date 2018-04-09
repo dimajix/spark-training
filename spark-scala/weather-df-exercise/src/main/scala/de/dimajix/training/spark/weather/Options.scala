@@ -13,7 +13,7 @@ class Options(args: Seq[String]) {
     @Option(name = "--help", usage = "display help", help = true)
     var help:Boolean = false
     @Option(name = "--input", usage = "input dirs", metaVar = "<inputDirectory>")
-    var inputPath: String = "weather/2005,weather/2006,weather/2007,weather/2008,weather/2009,weather/2010,weather/2011"
+    var inputPath: String = "weather/20*"
     @Option(name = "--stations", usage = "stations definitioons", metaVar = "<stationsPath>")
     var stationsPath: String = "weather/isd-history"
     @Option(name = "--output", usage = "output dir", metaVar = "<outputDirectory>")
