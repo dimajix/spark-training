@@ -3,8 +3,6 @@ package de.dimajix.training.spark.weather
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.FloatType
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
   * Created by kaya on 03.12.15.
@@ -28,9 +26,7 @@ object Driver {
 
 
 class Driver(options:Options) {
-  private val logger: Logger = LoggerFactory.getLogger(classOf[Driver])
-
-  def run(spark: SparkSession) = {
+  def run(spark: SparkSession) : Unit = {
     // Load Weather data as a text file
     val rawWeather = spark.read.text(options.inputPath)
 

@@ -5,8 +5,6 @@ import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.functions.lit
 import org.apache.spark.sql.functions.substring
 import org.apache.spark.sql.types.FloatType
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
   * Created by kaya on 03.12.15.
@@ -18,21 +16,19 @@ object Driver {
     val driver = new Driver(options)
 
     // Now create SparkContext (possibly flooding the console with logging information)
-    val sql = SparkSession
+    val spark = SparkSession
         .builder()
         .appName("Spark Weather Analysis")
         .getOrCreate()
 
     // ... and run!
-    driver.run(sql)
+    driver.run(spark)
   }
 }
 
 
 class Driver(options:Options) {
-  private val logger: Logger = LoggerFactory.getLogger(classOf[Driver])
-
-  def run(sql: SparkSession) = {
+  def run(spark: SparkSession) : Unit = {
     // 1. Load raw weather data from text file, as specified in options.inputPath
     val rawWeather = ...
 
