@@ -30,7 +30,7 @@ object Driver {
 class Driver(options:Options) {
   def run(spark: SparkSession) : Unit = {
     // 1. Load raw weather data from text file, as specified in options.inputPath
-    val rawWeather = ...
+    val rawWeather = spark.emptyDataFrame // YOUR CODE HERE INSTEAD!!!
 
     // 2. Extract relevant columns from weather data
     val weather = rawWeather.select(
