@@ -1,0 +1,6 @@
+{ "name":"Alice", "age":14, "sex":"female", "height":156 }
+{ "name":"Bob", "age":21, "sex":"male", "height":181 }
+{ "name":"Charlie", "age":27, "sex":"male", "height":176 }
+{ "name":"Eve", "age":24, "sex":"female", "height":167 }
+{ "name":"Frances", "age":19, "sex":"female", "height":172 }
+{ "name":"George", "age":31, "sex":"male", "height":191 }
