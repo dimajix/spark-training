@@ -170,13 +170,11 @@
         <module>scala/skeleton</module>
         <module>hadoop/skeleton</module>
         <module>hadoop/wordcount</module>
-        <module>hadoop/weather-intro</module>
         <module>hadoop/weather-exercise</module>
         <module>hadoop/weather-solution</module>
         <module>spark-scala/wordcount-mini</module>
         <module>spark-scala/skeleton</module>
         <module>spark-scala/wordcount-rdd</module>
-        <module>spark-scala/wordcount-filtered</module>
         <module>spark-scala/weather-rdd-exercise</module>
         <module>spark-scala/weather-rdd-solution</module>
         <module>spark-scala/weather-df-exercise</module>
@@ -189,8 +187,6 @@
         <module>spark-scala/streaming-recoverable-wordcount</module>
         <module>spark-scala/streaming-weather-exercise</module>
         <module>spark-scala/streaming-weather-solution</module>
-        <!-- <module>spark-hbase</module> -->
-        <!-- <module>hbase-intro</module> -->
     </modules>
 
     <repositories>
