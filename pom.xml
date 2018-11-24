@@ -12,7 +12,7 @@
     <properties>
         <hadoop.version>2.8.3</hadoop.version>
         <hadoop.mr1.version>2.8.3-mr1</hadoop.mr1.version>
-        <spark.version>2.3.0</spark.version>
+        <spark.version>2.3.2</spark.version>
         <hive.version>2.3.3</hive.version>
         <hbase.version>1.4.4</hbase.version>
         <zookeeper.version>3.4.5</zookeeper.version>
@@ -170,13 +170,8 @@
         <module>scala/skeleton</module>
         <module>hadoop/skeleton</module>
         <module>hadoop/wordcount</module>
-        <module>hadoop/weather-exercise</module>
-        <module>hadoop/weather-solution</module>
-        <module>spark-scala/wordcount-mini</module>
         <module>spark-scala/skeleton</module>
         <module>spark-scala/wordcount-rdd</module>
-        <module>spark-scala/weather-hive</module>
-        <module>spark-scala/weather-jdbc</module>
         <module>spark-scala/streaming-wordcount</module>
         <module>spark-scala/streaming-windowed-wordcount</module>
         <module>spark-scala/streaming-stateful-wordcount</module>
