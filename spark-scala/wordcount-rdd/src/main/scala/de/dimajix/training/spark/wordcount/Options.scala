@@ -11,7 +11,7 @@ import org.kohsuke.args4j.Option
   */
 class Options(args: Seq[String]) {
     @Option(name = "--input", usage = "input directory", metaVar = "<inputDirectory>")
-    var inputPath: String = "alice"
+    var inputPath: String = "s3://dimajix-training/data/alice"
     @Option(name = "--output", usage = "output directory", metaVar = "<outputDirectory>")
     var outputPath: String = "alice_wordcount"
 
