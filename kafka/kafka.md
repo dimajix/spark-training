@@ -3,7 +3,7 @@
     --broker-list localhost:9092 \
     --topic lala
 
-# Consume Messages
+# Consume Messageskaf   
 /opt/kafka/bin/kafka-console-consumer.sh \
     --bootstrap-server localhost:9092 \
     --topic lala \

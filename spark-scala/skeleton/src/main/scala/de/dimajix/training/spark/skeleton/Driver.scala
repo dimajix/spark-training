@@ -31,6 +31,6 @@ class Driver(options:Options) {
     private val logger: Logger = LoggerFactory.getLogger(classOf[Driver])
 
     def run(spark: SparkSession) = {
-        val sc = spark.sparkContext
+        // Your application logic here
     }
 }

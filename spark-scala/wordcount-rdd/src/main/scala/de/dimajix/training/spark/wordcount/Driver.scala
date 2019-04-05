@@ -16,7 +16,7 @@ object Driver {
 
     // Now create SparkContext (possibly flooding the console with logging information)
     val conf = new SparkConf()
-      .setAppName("Spark Attribution")
+      .setAppName("Spark WordCount")
     val sc = new SparkContext(conf)
 
     // ... and run!
