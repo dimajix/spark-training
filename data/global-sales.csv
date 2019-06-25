@@ -1,0 +1,21 @@
+company,parent_company,company_name,revenue
+1,,Global Earth Inc,10000
+2,1,European Markets,0
+3,2,Germany Sales GmbH,2000
+4,2,Spain Products,123000
+5,2,Swiss Made,213000
+6,2,France Superstars,241000
+7,3,Berlin Store,287000
+8,3,Hamburg Store,312000
+9,3,Hessian Store Group,10000
+10,9,Frankfurt Shop Central,287000
+11,9,Frankfurt Shop East,121000
+12,9,Darmstadt Shop,90000
+13,1,American Markets,100000
+14,1,Asian Markets,100000
+15,1,African Markets,100000
+16,13,USA Group,2131000
+17,15,Egypt Products,97000
+18,14,China Inc,2891000
+19,14,Japanese Stores,2179820
+20,14,Korean United,198000
