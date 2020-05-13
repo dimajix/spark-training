@@ -6,7 +6,10 @@ APP_VERSION="1.0.0"
 
 basedir=$(readlink -f $(dirname $0))
 
-: ${SPARK_MASTER:="k8s://https://192.168.99.109:8443"}
+K8S_CONTEXT=$(kubectl config view -o jsonpath="{.current-context}")
+K8S_MASTER=$(kubectl config view -o jsonpath="{.clusters[?(@.name==\"$K8S_CONTEXT\")].cluster.server}")
+
+: ${SPARK_MASTER:="k8s://$K8S_MASTER"}
 : ${SPARK_EXECUTOR_INSTANCES:="2"}
 : ${SPARK_EXECUTOR_CORES:="2"}
 : ${SPARK_EXECUTOR_MEMORY:="2G"}
@@ -19,8 +22,9 @@ spark-submit \
     --deploy-mode cluster \
     --name Streaming-Twitter \
     --class $APP_MAIN \
-    --conf spark.kubernetes.namespace=default \
+    --conf spark.kubernetes.namespace=dimajix \
+    --conf spark.shuffle.partitions=8 \
     --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
     --conf spark.executor.instances=$SPARK_EXECUTOR_INSTANCES \
-    --conf spark.kubernetes.container.image=874361956431.dkr.ecr.eu-central-1.amazonaws.com/dimajix-training/streaming-twitter \
+    --conf spark.kubernetes.container.image=874361956431.dkr.ecr.eu-central-1.amazonaws.com/dimajix-training/twitter-streaming \
     $APP_JAR "$@"

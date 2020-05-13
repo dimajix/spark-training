@@ -8,8 +8,6 @@ docker image tag <hash> 874361956431.dkr.ecr.eu-central-1.amazonaws.com/dimajix-
 docker image push 874361956431.dkr.ecr.eu-central-1.amazonaws.com/dimajix-training/streaming-twitter
 ```
 
-
-
 # Test Kafka
 ```
 kubectl -n dimajix \
@@ -92,4 +90,9 @@ kubectl -n dimajix \
     --from-beginning
 ```
 
+# Prepare Kubernetes
 
+```
+kubectl create serviceaccount spark -n dimajix
+kubectl create rolebinding spark-role --clusterrole=edit --serviceaccount=dimajix:spark --namespace=dimajix
+```

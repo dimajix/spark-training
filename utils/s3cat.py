@@ -1,12 +1,14 @@
 #!/usr/bin/python2
-from __future__ import print_function
 
 import boto3
 import optparse
 import time
 import logging
 import tempfile
-from urlparse import urlparse
+try:
+    from urlparse import urlparse
+except:
+    from urllib.parse import urlparse
 from datetime import datetime
 
 
@@ -38,11 +40,12 @@ class Server(object):
         current_batch = 0
 
         for line in source:
+            line = line.decode('utf-8')
             if self.timestamp:
                 line = str(datetime.now()) + "\t" + line
 
             current_batch += 1
-            print(line, end='')
+            print(line.rstrip())
 
             if current_batch > self.max_batchsize:
                 current_batch = 0
