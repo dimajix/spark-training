@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kafka
+spec:
+  selector:
+    matchLabels:
+      app: kafka
+  serviceName: kafka-broker
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      containers:
+      - name: kafka
+        image: "wurstmeister/kafka:2.12-2.5.0"
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "0.5"
+          requests:
+            memory: "1Gi"
+            cpu: "0.2"
+        ports:
+        - containerPort: 9092
+          name: client
+        command:
+        - "start-kafka.sh"
+        env:
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          value: zookeeper
+        - name: HOSTNAME_COMMAND
+          value: "hostname -f" 
+        - name: BROKER_ID_COMMAND
+          value: "hostname | awk -F'-' '{print $$2}'"
+        volumeMounts:
+        - name: datadir
+          mountPath: /kafka
+  volumeClaimTemplates:
+  - metadata:
+      name: datadir
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

@@ -23,7 +23,7 @@ spark-submit \
     --name Streaming-Twitter \
     --class $APP_MAIN \
     --conf spark.kubernetes.namespace=dimajix \
-    --conf spark.shuffle.partitions=8 \
+    --conf spark.sql.shuffle.partitions=8 \
     --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
     --conf spark.executor.instances=$SPARK_EXECUTOR_INSTANCES \
     --conf spark.kubernetes.container.image=874361956431.dkr.ecr.eu-central-1.amazonaws.com/dimajix-training/twitter-streaming \

@@ -14,7 +14,7 @@ class Options(args: Seq[String]) {
     @Option(name = "--help", usage = "display help", help = true)
     var help:Boolean = false
     @Option(name = "--kafka-bootstrap-server", usage = "input table", metaVar = "<host:port>")
-    var kafkaBootstrapServer: String = "kafka-bootstrap.dimajix:9092"
+    var kafkaBootstrapServer: String = "kafka-bootstrap:9092"
     @Option(name = "--input", usage = "input topic", metaVar = "<inputTopic>")
     var inputTopic: String = "tweets"
     @Option(name = "--output", usage = "output topic", metaVar = "<outputTopic>")
