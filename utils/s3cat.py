@@ -1,11 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 from __future__ import print_function
 
-import socket
 import boto3
 import optparse
 import time
-import select
 import logging
 import tempfile
 from urlparse import urlparse

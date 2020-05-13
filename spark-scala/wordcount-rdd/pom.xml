@@ -8,7 +8,7 @@
     <name>spark-wordcount-rdd</name>
 
     <parent>
-        <groupId>de.dimajix.training</groupId>
+        <groupId>com.dimajix.training</groupId>
         <artifactId>spark-training-root</artifactId>
         <version>1.0.0</version>
         <relativePath>../..</relativePath>

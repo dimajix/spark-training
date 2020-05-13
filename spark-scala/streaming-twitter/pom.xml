@@ -3,9 +3,9 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>hadoop-wordcount</artifactId>
+    <artifactId>spark-streaming-twitter</artifactId>
     <version>1.0.0</version>
-    <name>hadoop-wordcount</name>
+    <name>spark-streaming-twitter</name>
 
     <parent>
         <groupId>com.dimajix.training</groupId>
@@ -16,6 +16,10 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
@@ -40,13 +44,20 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-common</artifactId>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.api_version}</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-client</artifactId>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${scala.api_version}</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql-kafka-0-10_${scala.api_version}</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>args4j</groupId>
             <artifactId>args4j</artifactId>
