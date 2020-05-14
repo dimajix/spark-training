@@ -18,10 +18,10 @@ spec:
         image: "wurstmeister/kafka:2.12-2.5.0"
         resources:
           limits:
-            memory: "2Gi"
+            memory: "1Gi"
             cpu: "0.5"
           requests:
-            memory: "1Gi"
+            memory: "500Mi"
             cpu: "0.2"
         ports:
         - containerPort: 9092
