@@ -21,6 +21,24 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <modules>
+        <module>scala/skeleton</module>
+        <module>hadoop/skeleton</module>
+        <module>hadoop/wordcount</module>
+        <module>spring/hashtag-to-mysql</module>
+        <module>spark-scala/skeleton</module>
+        <module>spark-scala/wordcount-rdd</module>
+        <module>spark-scala/weather-df</module>
+        <module>spark-scala/streaming-twitter</module>
+    </modules>
+
+    <repositories>
+        <repository>
+            <id>maven-central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>
@@ -109,23 +127,6 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <modules>
-        <module>scala/skeleton</module>
-        <module>hadoop/skeleton</module>
-        <module>hadoop/wordcount</module>
-        <module>spark-scala/skeleton</module>
-        <module>spark-scala/wordcount-rdd</module>
-        <module>spark-scala/weather-df</module>
-        <module>spark-scala/streaming-twitter</module>
-    </modules>
-
-    <repositories>
-        <repository>
-            <id>maven-central</id>
-            <url>https://repo1.maven.org/maven2/</url>
-        </repository>
-    </repositories>
 
     <dependencyManagement>
         <dependencies>

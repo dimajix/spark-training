@@ -1,0 +1,44 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: mariadb
+spec:
+  selector:
+    matchLabels:
+      app: mariadb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: "mariadb:10.3"
+          resources:
+            limits:
+              memory: "500Mi"
+              cpu: "0.5"
+            requests:
+              memory: "200Mi"
+              cpu: "0.2"
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root_pwd
+            - name: MYSQL_DATABASE
+              value: hashtags
+            - name: MYSQL_USER
+              value: user
+            - name: MYSQL_PASSWORD
+              value: password
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: maria-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: maria-persistent-storage
+          persistentVolumeClaim:
+            claimName: maria-pv-claim

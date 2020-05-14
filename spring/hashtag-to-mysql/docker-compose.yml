@@ -1,0 +1,47 @@
+version: '3'
+services:
+  mysql:
+    image: mariadb:10.3
+    hostname: mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_pwd
+      - MYSQL_DATABASE=hashtags
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    ports:
+      - 3306:3306
+    networks:
+      - twitter
+
+  kafka:
+    image: wurstmeister/kafka:2.12-2.5.0
+    hostname: kafka
+    restart: unless-stopped
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper
+      - KAFKA_LISTENERS=INSIDE://:9092,OUTSIDE://:9094
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INSIDE
+    ports:
+      - 9092:9092
+    networks:
+      - twitter
+
+  zookeeper:
+    image: wurstmeister/zookeeper:3.4.6
+    hostname: zookeeper
+    restart: unless-stopped
+    ports:
+      - 2181:2181
+    networks:
+      - twitter
+
+  hashtag2mysql:
+    image: dimajix-training/hashtag2mysql:1.0.0
+    networks:
+      - twitter
+
+networks:
+  twitter:
+

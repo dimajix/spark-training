@@ -1,0 +1,23 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  datasource:
+    url: jdbc:mysql://mysql:3306/hashtags
+    username: user
+    password: password
+
+  kafka:
+    consumer:
+      group-id: hashtag2mysql
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      bootstrap-servers: kafka:9092
+    listener:
+      missing-topics-fatal: false
+
+logging:
+  level:
+    root: WARN
