@@ -14,33 +14,10 @@ kubectl apply -n dimajix -f kafka-ss.yml
 
 ## Create Producer
 ```
-kubectl -n dimajix \
-    run \
-    --generator=run-pod/v1 kafka-producer \
-    -i \
-    --tty \
-    --rm \
-    --image=wurstmeister/kafka:2.12-2.5.0 \
-    --command \
-    -- \
-    /opt/kafka/bin/kafka-console-producer.sh \
-    --bootstrap-server kafka-bootstrap:9092 \
-    --topic lala
+scripts/kafka-console-producer --topic lala
 ```
 
 ## Create Consumer
 ```
-kubectl -n dimajix \
-    run \
-    --generator=run-pod/v1 kafka-consumer \
-    -i \
-    --tty \
-    --rm \
-    --image=wurstmeister/kafka:2.12-2.5.0 \
-    --command \
-    -- \
-    /opt/kafka/bin/kafka-console-consumer.sh \
-    --bootstrap-server kafka-bootstrap:9092 \
-    --topic lala \
-    --from-beginning
+scripts/kafka-console-consumer --topic lala --from-beginning
 ```
