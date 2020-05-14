@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: zk-hs
   labels:
-    app: zk
+    app: zookeeper
 spec:
   ports:
   - port: 2888
@@ -12,18 +12,18 @@ spec:
     name: leader-election
   clusterIP: None
   selector:
-    app: zk
+    app: zookeeper
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: zookeeper
   labels:
-    app: zk
+    app: zookeeper
 spec:
   ports:
   - port: 2181
     name: client
   selector:
-    app: zk
+    app: zookeeper
 
