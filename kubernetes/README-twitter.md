@@ -16,7 +16,7 @@ First we need to create a so called *service account* and grant permissions to c
 
 ```
 kubectl create serviceaccount spark -n dimajix
-kubectl create rolebinding spark-role --clusterrole=edit --serviceaccount=dimajix:spark --namespace=dimajix
+kubectl create rolebinding spark-role --clusterrole=edit --serviceaccount=dimajix:spark -n dimajix
 ```
 
 ## Fill in data
