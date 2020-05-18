@@ -14,7 +14,7 @@ spring:
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      bootstrap-servers: kafka:9092
+      bootstrap-servers: kafka-bootstrap:9092
     listener:
       missing-topics-fatal: false
 

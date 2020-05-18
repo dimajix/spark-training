@@ -3,13 +3,13 @@
 ## Deploy
 First we deploy a small Kafka cluster and Zookeeper cluster within Kubernetes.
 ```
-kubectl apply -f namespace.yml 
+kubectl create namespace $(whoami) 
 
-kubectl apply -n dimajix -f zookeeper-svc.yml 
-kubectl apply -n dimajix -f zookeeper-ss.yml 
+kubectl apply -f zookeeper-svc.yml 
+kubectl apply -f zookeeper-ss.yml 
 
-kubectl apply -n dimajix -f kafka-svc.yml 
-kubectl apply -n dimajix -f kafka-ss.yml 
+kubectl apply -f kafka-svc.yml 
+kubectl apply -f kafka-ss.yml 
 ```
 
 ## Create Producer

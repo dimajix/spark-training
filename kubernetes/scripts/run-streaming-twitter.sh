@@ -8,6 +8,7 @@ basedir=$(readlink -f $(dirname $0))
 
 K8S_CONTEXT=$(kubectl config view -o jsonpath="{.current-context}")
 K8S_MASTER=$(kubectl config view -o jsonpath="{.clusters[?(@.name==\"$K8S_CONTEXT\")].cluster.server}")
+K8S_NAMESPACE=$(whoami)
 
 : ${SPARK_MASTER:="k8s://$K8S_MASTER"}
 : ${SPARK_EXECUTOR_INSTANCES:="2"}
@@ -22,7 +23,7 @@ spark-submit \
     --deploy-mode cluster \
     --name Streaming-Twitter \
     --class $APP_MAIN \
-    --conf spark.kubernetes.namespace=dimajix \
+    --conf spark.kubernetes.namespace=$K8S_NAMESPACE \
     --conf spark.sql.shuffle.partitions=8 \
     --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
     --conf spark.executor.instances=$SPARK_EXECUTOR_INSTANCES \

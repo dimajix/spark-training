@@ -4,20 +4,38 @@ First we build a Docker image from `spark-scala/streaming-twitter`. After having
 create and push a Docker image as follows. This will then be used for running the application in Kubernetes
 
 ```
-docker image build .
-docker image tag <hash> 874361956431.dkr.ecr.eu-central-1.amazonaws.com/dimajix-training/twitter-streaming
+docker image tag dimajix-training/streaming-twitter:1.0.0 874361956431.dkr.ecr.eu-central-1.amazonaws.com/dimajix-training/twitter-streaming
 docker image push 874361956431.dkr.ecr.eu-central-1.amazonaws.com/dimajix-training/twitter-streaming
+
+docker image tag dimajix-training/hashtag2mysql:1.0.0 874361956431.dkr.ecr.eu-central-1.amazonaws.com/dimajix-training/hashtag2mysql
+docker image push 874361956431.dkr.ecr.eu-central-1.amazonaws.com/dimajix-training/hashtag2mysql
 ```
 
-# Demo
+
+# Preparation
 
 ## Prepare Kubernetes
 First we need to create a so called *service account* and grant permissions to create new pods in our namespace.
 
 ```
-kubectl create serviceaccount spark -n dimajix
-kubectl create rolebinding spark-role --clusterrole=edit --serviceaccount=dimajix:spark -n dimajix
+kubectl create serviceaccount spark
+kubectl create rolebinding spark-role --clusterrole=edit --serviceaccount=$(whoami):spark
 ```
+
+## Deploy MariaDB
+```
+kubectl apply -f manifests/maria-svc.yml
+kubectl apply -f manifests/maria-pv.yml
+kubectl apply -f manifests/maria-deploy.yml
+```
+
+## Deploy Hashtag2Mysql
+```
+kubectl apply -f manifests/hashtag2mysql-deploy.yml
+```
+
+
+# Spark Demo
 
 ## Fill in data
 
@@ -41,5 +59,16 @@ scripts/kafka-console-consumer.sh --topic hashtags  --from-beginning
 ## Start Spark job
 Finally we can simply start the Spark job via
 ```
+export PATH=$PATH:/opt/spark/bin
 scripts/run-streaming-twitter.sh --output hashtags
+```
+
+## Peek into Database
+First create a port forwarding to localhost
+```
+kubectl port-forward svc/mysql 3306
+```
+Now connect via MySQL client
+```
+mariadb -h 127.0.0.1 -P 3306 -u root --password=root_pwd
 ```
