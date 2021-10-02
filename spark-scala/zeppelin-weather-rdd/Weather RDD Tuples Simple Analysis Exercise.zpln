@@ -1,0 +1,759 @@
+﻿{
+  "paragraphs": [
+    {
+      "text": "%md\n# Weather Data Analytics\nThis notebook performs some basic weather data analytics using the Spark RDD interface.",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:14:39+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {},
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12,
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>Weather Data Analytics</h1>\n<p>This notebook performs some basic weather data analytics using the Spark RDD interface.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461649_1832461180",
+      "id": "20160612-172712_662322978",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:1332",
+      "dateFinished": "2021-10-02T08:14:39+0000",
+      "dateStarted": "2021-10-02T08:14:39+0000"
+    },
+    {
+      "text": "%md\n# 1. Inspect Data\nAs a very first step, we should have a look at our data. We also define some global variables where the data is actually stored.",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:14:41+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12,
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>1. Inspect Data</h1>\n<p>As a very first step, we should have a look at our data. We also define some global variables where the data is actually stored.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461649_1940165274",
+      "id": "20160612-172712_1254548845",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:1333",
+      "dateFinished": "2021-10-02T08:14:41+0000",
+      "dateStarted": "2021-10-02T08:14:41+0000"
+    },
+    {
+      "text": "val storageLocation = \"s3://dimajix-training/data/weather\"",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:14:21+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12,
+        "results": {},
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "fontSize": 9
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461649_761492218",
+      "id": "20160612-172712_1207991669",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "READY",
+      "$$hashKey": "object:1334"
+    },
+    {
+      "text": "val weather_2011 = sc.textFile(storageLocation + \"/2011\")\n\n// Print the first 10 entries of weather_2011\n// YOUR CODE HERE",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:14:21+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12,
+        "results": {},
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "fontSize": 9
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461649_653175024",
+      "id": "20160612-172712_405582145",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "READY",
+      "$$hashKey": "object:1335"
+    },
+    {
+      "text": "%md\n# 2. Helper functions\nFirst we need to define some helper functions for extracting the data from the raw data.",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:15:12+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12,
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>2. Helper functions</h1>\n<p>First we need to define some helper functions for extracting the data from the raw data.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461649_706772891",
+      "id": "20160612-172712_566207539",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:1336",
+      "dateFinished": "2021-10-02T08:15:12+0000",
+      "dateStarted": "2021-10-02T08:15:12+0000"
+    },
+    {
+      "text": "def getFloat(str:String) : Float = {\n  if (str.isEmpty)\n    return Float.NaN\n  else if (str(0) == '+')\n    return str.substring(1).toFloat\n  else\n    return str.toFloat\n}\n\n\n// This function can be used for extracting a WeatherData object from a single line of the weather data\ndef extractWeatherData(row:String) = {\n  val date = row.substring(15,23)\n  val time = row.substring(23,27)\n  val usaf = row.substring(4,10)\n  val wban = row.substring(10,15)\n  val airTemperatureQuality = row.charAt(92)\n  val airTemperature = row.substring(87,92)\n  val windSpeedQuality = row.charAt(69)\n  val windSpeed = row.substring(65,69)\n\n  (date,time,usaf,wban,airTemperatureQuality == '1',airTemperature.toFloat/10,windSpeedQuality == '1',windSpeed.toFloat/10)\n}\n\n\n// date => _1\n// time => _2\n// usaf => _3\n// wban => _4\n// airTemperatureQuality => _5\n// airTemperature => _6\n// windSpeedQuality => _7\n// windSpeed => _8",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:15:00+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461649_437660855",
+      "id": "20160612-172712_750068116",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "READY",
+      "$$hashKey": "object:1337"
+    },
+    {
+      "text": "%md\n# 3. Load Weather Data\nNow we can load both Weather data and the station data using the helper functions defined above. The raw data can be found at storageLocation + \"/<<year>>\"\n\n1. Load data from raw text files for years 2003 to 2014 (you might start with a single year for perfomance reasons)\n2. Put all RDDs from all years into a single RDD using SparkContext.union method\n3. Transform the raw data into a meaningful RDD with WeatherData as object type. Use the extractWeatherData for this Transformation\n4. Have a look at the first couple of entries (say the first 10 entries)",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:18:19+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12,
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>3. Load Weather Data</h1>\n<p>Now we can load both Weather data and the station data using the helper functions defined above. The raw data can be found at storageLocation + &ldquo;/&laquo;year&raquo;&rdquo;</p>\n<ol>\n<li>Load data from raw text files for years 2003 to 2014 (you might start with a single year for perfomance reasons)</li>\n<li>Put all RDDs from all years into a single RDD using SparkContext.union method</li>\n<li>Transform the raw data into a meaningful RDD with WeatherData as object type. Use the extractWeatherData for this Transformation</li>\n<li>Have a look at the first couple of entries (say the first 10 entries)</li>\n</ol>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461649_1975424237",
+      "id": "20160612-172712_2008652784",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:1338",
+      "dateFinished": "2021-10-02T08:18:19+0000",
+      "dateStarted": "2021-10-02T08:18:19+0000"
+    },
+    {
+      "text": "// 1.  Get RDDs for all years 2003 to 2014\n// YOUR CODE HERE\nval weather = ...\n\n// 2. Put all RDDs into a single one using the \"union\" method of the SparkContext\n// YOUR CODE HERE\n\n// 3. Now extract the weather tuples from the raw data using the extractWeatherData method defined above\n// YOUR CODE HERE\n\n// 4. Let's have a look at the first couple of entries\n// YOUR CODE HERE",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:15:32+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461649_2000269502",
+      "id": "20160612-172712_984409848",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "READY",
+      "$$hashKey": "object:1339"
+    },
+    {
+      "text": "%md\n# 4. Create new Keys\nSince we want to aggregate the data by weather station and year, we need to create a new key \"usaf,wban,year\" from our weather measurement data. This can be done by one additional transformation. The resulting RDD should have elements of type \n\n    ((usaf,wban,year),weather)\n\nNote the nesting of tuples - this is required, because Spark only understands how to extract a key for grouping from pairs. Here our pair is \"usaf,wban,year\".",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:17:36+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>4. Create new Keys</h1>\n<p>Since we want to aggregate the data by weather station and year, we need to create a new key &ldquo;usaf,wban,year&rdquo; from our weather measurement data. This can be done by one additional transformation. The resulting RDD should have elements of type</p>\n<pre><code>((usaf,wban,year),weather)\n</code></pre>\n<p>Note the nesting of tuples - this is required, because Spark only understands how to extract a key for grouping from pairs. Here our pair is &ldquo;usaf,wban,year&rdquo;.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461649_1484709774",
+      "id": "20160612-172712_430126835",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:1340",
+      "dateFinished": "2021-10-02T08:17:36+0000",
+      "dateStarted": "2021-10-02T08:17:36+0000"
+    },
+    {
+      "text": "// Now we want to create a new key (station + year), so we cann groupings and aggregations\n// YOUR CODE HERE\nval weather_per_station_and_year = ...\n    \n// Check that everything looks nice    \n// YOUR CODE HERE\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:14:21+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12,
+        "results": {},
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "fontSize": 9
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461650_1813746061",
+      "id": "20160612-172712_711760043",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "READY",
+      "$$hashKey": "object:1341"
+    },
+    {
+      "text": "%md\n# 5. Aggregate Data\nNow we want to perform the analysis itself. We want to calculate the minimum and maximum wind speed and temperature per year and country. We will use the 'aggregateByKey' method of an RDD. This requires some custom state classes used during the aggregation. So our plan is as follows:\n\n1. Initialize a tuple containing (minTemp, maxTemp, minWind, maxWind) appropriately to represent \"no information so far\" state.\n3. Add a method \"reduce(self, other)\" which accepts an aggregate tuple and an original weather tuple instance and returns a new aggregate tuple instance containing the merged information\n4. Add a method \"combine(self, other)\" which accepts two aggregate tuples and returns a new aggregate tuple containing the combined information\n5. Put all together by using the aggregateByKey method of the last RDD using the WeatherMinMax class for aggregation\n6. Print some results from the aggregated data\n \nPay attention to the validTemperature and validWindSpeed flags when merging information!",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:17:52+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12,
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>5. Aggregate Data</h1>\n<p>Now we want to perform the analysis itself. We want to calculate the minimum and maximum wind speed and temperature per year and country. We will use the 'aggregateByKey' method of an RDD. This requires some custom state classes used during the aggregation. So our plan is as follows:</p>\n<ol>\n<li>Initialize a tuple containing (minTemp, maxTemp, minWind, maxWind) appropriately to represent &ldquo;no information so far&rdquo; state.</li>\n<li>Add a method &ldquo;reduce(self, other)&rdquo; which accepts an aggregate tuple and an original weather tuple instance and returns a new aggregate tuple instance containing the merged information</li>\n<li>Add a method &ldquo;combine(self, other)&rdquo; which accepts two aggregate tuples and returns a new aggregate tuple containing the combined information</li>\n<li>Put all together by using the aggregateByKey method of the last RDD using the WeatherMinMax class for aggregation</li>\n<li>Print some results from the aggregated data</li>\n</ol>\n<p>Pay attention to the validTemperature and validWindSpeed flags when merging information!</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461650_2121358146",
+      "id": "20160612-172712_1324064767",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:1342",
+      "dateFinished": "2021-10-02T08:17:52+0000",
+      "dateStarted": "2021-10-02T08:17:52+0000"
+    },
+    {
+      "text": "// Reduce method for merging in another measurements tuple\ndef reduce(self:(Float,Float,Float,Float), other:(String, String, String, String, Boolean, Float, Boolean, Float))  = {\n    val minT = if(other._5) self._1.min(other._6) else self._1\n    val maxT = ...\n    val minW = ...\n    val maxW = ...\n    (minT,maxT,minW,maxW)\n}\n// Combine method for combining two aggregate tuples\ndef combine(self:(Float,Float,Float,Float), other:(Float,Float,Float,Float))  = {\n    val minT = self._1.min(other._1)\n    val maxT = ...\n    val minW = ...\n    val maxW = ...\n    (minT,maxT,minW,maxW)\n}\n\nval startingAggregateValue = (9999f,-9999f,9999f,-9999f)\nval weather_minmax = weather_per_station_and_year\n    .aggregateByKey(startingAggregateValue)(\n        (x,y) =>  reduce(x,y),\n        (x,y) => combine(x,y))\n\nweather_minmax.take(30).foreach(println)\n\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:17:34+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461650_1045497814",
+      "id": "20160612-172712_1330988755",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "READY",
+      "$$hashKey": "object:1343"
+    },
+    {
+      "text": "%md\n# 6. Pretty Printing\nSince Zeppelin supports some pretty printing using the magic \"%table\" keyword, we want to make use of it.",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:17:55+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true
+        },
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12,
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>6. Pretty Printing</h1>\n<p>Since Zeppelin supports some pretty printing using the magic &ldquo;%table&rdquo; keyword, we want to make use of it.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461650_236002686",
+      "id": "20160612-172712_1738338133",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:1344",
+      "dateFinished": "2021-10-02T08:17:55+0000",
+      "dateStarted": "2021-10-02T08:17:55+0000"
+    },
+    {
+      "text": "def mkString(p:Any*) = {\n  p.iterator.toList.mkString(\"\\t\")\n}\n\nprintln(\"%table\")\nprintln(\"USAF\\tWBAN\\tYear\\tTempMin\\tTempMax\\tWindMin\\tWindMax\")\nweather_minmax.collect().map(x => mkString(x._1._1,x._1._2,x._1._3,x._2._1,x._2._2,x._2._3,x._2._4)).foreach(println)\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:18:19+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": {},
+        "enabled": true,
+        "graph": {
+          "mode": "multiBarChart",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [
+            {
+              "name": "Country",
+              "index": 0,
+              "aggr": "sum"
+            }
+          ],
+          "values": [
+            {
+              "name": "WindMin",
+              "index": 4,
+              "aggr": "min"
+            },
+            {
+              "name": "WindMax",
+              "index": 5,
+              "aggr": "max"
+            },
+            {
+              "name": "TempMax",
+              "index": 3,
+              "aggr": "max"
+            },
+            {
+              "name": "TempMin",
+              "index": 2,
+              "aggr": "min"
+            }
+          ],
+          "groups": [
+            {
+              "name": "Year",
+              "index": 1,
+              "aggr": "sum"
+            }
+          ],
+          "scatter": {
+            "xAxis": {
+              "name": "Country",
+              "index": 0,
+              "aggr": "sum"
+            },
+            "yAxis": {
+              "name": "Year",
+              "index": 1,
+              "aggr": "sum"
+            }
+          }
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461650_1250519914",
+      "id": "20160612-172712_1881467543",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "READY",
+      "$$hashKey": "object:1345"
+    },
+    {
+      "text": "",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:14:21+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12,
+        "results": {},
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        },
+        "fontSize": 9
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633162461650_1097376049",
+      "id": "20160612-172712_128293126",
+      "dateCreated": "2021-10-02T08:14:21+0000",
+      "status": "READY",
+      "$$hashKey": "object:1346"
+    }
+  ],
+  "name": "Weather RDD Tuples Simple Analysis Exercise",
+  "id": "2GHMQTN21",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {},
+  "path": "/Weather RDD Tuples Simple Analysis Exercise"
+}

@@ -1,0 +1,1001 @@
+﻿{
+  "paragraphs": [
+    {
+      "text": "%md\n# Weather Data Analytics\nThis notebook performs some basic weather data analytics using the Spark RDD interface. We will calculate the minimum and maximum temperature of multiple weather stations per station and per year.",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:13:08+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12,
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>Weather Data Analytics</h1>\n<p>This notebook performs some basic weather data analytics using the Spark RDD interface. We will calculate the minimum and maximum temperature of multiple weather stations per station and per year.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017108_568811889",
+      "id": "20160612-163247_1542375865",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "status": "FINISHED",
+      "focus": true,
+      "$$hashKey": "object:3583",
+      "dateFinished": "2021-10-02T08:13:08+0000",
+      "dateStarted": "2021-10-02T08:13:08+0000"
+    },
+    {
+      "text": "%md\n# 1. Inspect Data\nAs a very first step, we should have a look at our data. We also define some global variables where the data is actually stored.",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:13:13+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12,
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>1. Inspect Data</h1>\n<p>As a very first step, we should have a look at our data. We also define some global variables where the data is actually stored.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017109_937611182",
+      "id": "20160612-163650_405020982",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:3584",
+      "dateFinished": "2021-10-02T08:13:13+0000",
+      "dateStarted": "2021-10-02T08:13:13+0000"
+    },
+    {
+      "text": "val storageLocation = \"s3://dimajix-training/data/weather\"",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T07:50:23+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mstorageLocation\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m = s3://dimajix-training/data/weather\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017109_820837410",
+      "id": "20160612-163728_898081422",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "dateStarted": "2021-10-02T07:50:23+0000",
+      "dateFinished": "2021-10-02T07:50:52+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:3585"
+    },
+    {
+      "text": "val weather_2011 = sc.textFile(storageLocation + \"/2011\")\n\n// Print the first 10 entries of weather_2011\nweather_2011.take(10).foreach(println)\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T07:53:39+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "0188010010999992011010100004+70933-008667FM-12+0009ENJA V0203401N011010120019N0050001N1-00561-00981102641ADDAA106000021AY181061AY231061GF108991081081008001999999MA1999999102521MD1210171+9999MW1851REMSYN088AAXX  01001 01001 11550 83411 11056 21098 30252 40264 52017 69901 78583 888// 333 91121;\n0101010010999992011010101004+70933-008667FM-12+0009ENJA V0203301N010019999999N9999999N1-00541-00951102681ADDMA1999999102561MD1210161+9999REMSYN060AAXX  01011 01001 46/// /3310 11054 21095 30256 40268 52016;\n0101010010999992011010102004+70933-008667FM-12+0009ENJA V0203401N012019999999N9999999N1-00521-00991102721ADDMA1999999102601MD1210141+9999REMSYN060AAXX  01021 01001 46/// /3412 11052 21099 30260 40272 52014;\n0101010010999992011010103004+70933-008667FM-12+0009ENJA V0203401N010019999999N9999999N1-00521-00961102761ADDMA1999999102641MD1210121+9999REMSYN060AAXX  01031 01001 46/// /3410 11052 21096 30264 40276 52012;\n0101010010999992011010104004+70933-008667FM-12+0009ENJA V0203401N010019999999N9999999N1-00511-00941102801ADDMA1999999102681MD1310121+9999REMSYN060AAXX  01041 01001 46/// /3410 11051 21094 30268 40280 53012;\n0101010010999992011010105004+70933-008667FM-12+0009ENJA V0203401N011019999999N9999999N1-00511-00931102821ADDMA1999999102701MD1210101+9999REMSYN060AAXX  01051 01001 46/// /3411 11051 21093 30270 40282 52010;\n0272010010999992011010106004+70933-008667FM-12+0009ENJA V0203401N009010120019N0100001N1-00501-00931102881ADDAA112000021AA224000591AJ199991999999999AY181061AY231061GF106991061081008001001001IA1289KA1999N-00651MA1999999102761MD1310111+9999MW1011REMSYN106AAXX  01061 01001 11560 63409 11050 21093 30276 40288 53011 69902 70183 86800 333 21065 44999 70005 91118;EQDQ01  09962SNDP  \n0101010010999992011010107004+70933-008667FM-12+0009ENJA V0203401N008019999999N9999999N1-00501-00961102871ADDMA1999999102751MD1010071+9999REMSYN060AAXX  01071 01001 46/// /3408 11050 21096 30275 40287 50007;\n0101010010999992011010108004+70933-008667FM-12+0009ENJA V0203401N008019999999N9999999N1-00501-00941102911ADDMA1999999102791MD1210091+9999REMSYN060AAXX  01081 01001 46/// /3408 11050 21094 30279 40291 52009;\n0161010010999992011010109004+70933-008667FM-12+0009ENJA V0203301N009012200019N0300001N1-00521-00961102921ADDAY121031AY211031GF104991021081002501071001MA1999999102801MD1210041+9999MW1011REMSYN072AAXX  01091 01001 41380 43309 11052 21096 30280 40292 52004 70121 82870;\n\u001b[1m\u001b[34mweather_2011\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.rdd.RDD[String]\u001b[0m = s3://dimajix-training/data/weather/2011 MapPartitionsRDD[1] at textFile at <console>:27\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://ip-10-200-101-247.eu-central-1.compute.internal:4040/jobs/job?id=0",
+              "$$hashKey": "object:4182"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017109_1113153099",
+      "id": "20160612-163932_1437349723",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "dateStarted": "2021-10-02T07:53:39+0000",
+      "dateFinished": "2021-10-02T07:53:47+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:3586"
+    },
+    {
+      "text": "%md\n# 2. Helper functions\nFirst we need to define some helper functions for extracting the data from the raw data.",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:15:05+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12,
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>2. Helper functions</h1>\n<p>First we need to define some helper functions for extracting the data from the raw data.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017109_880935403",
+      "id": "20160612-163303_1347355000",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:3587",
+      "dateFinished": "2021-10-02T08:13:42+0000",
+      "dateStarted": "2021-10-02T08:13:42+0000"
+    },
+    {
+      "text": "def getFloat(str:String) : Float = {\n  if (str.isEmpty)\n    return Float.NaN\n  else if (str(0) == '+')\n    return str.substring(1).toFloat\n  else\n    return str.toFloat\n}\n\n\n// This function can be used for extracting a WeatherData object from a single line of the weather data\ndef extractWeatherData(row:String) = {\n  val date = row.substring(15,23)\n  val time = row.substring(23,27)\n  val usaf = row.substring(4,10)\n  val wban = row.substring(10,15)\n  val airTemperatureQuality = row.charAt(92)\n  val airTemperature = row.substring(87,92)\n  val windSpeedQuality = row.charAt(69)\n  val windSpeed = row.substring(65,69)\n\n  (date,time,usaf,wban,airTemperatureQuality == '1',airTemperature.toFloat/10,windSpeedQuality == '1',windSpeed.toFloat/10)\n}\n\n\n// date => _1\n// time => _2\n// usaf => _3\n// wban => _4\n// airTemperatureQuality => _5\n// airTemperature => _6\n// windSpeedQuality => _7\n// windSpeed => _8\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:01:55+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mgetFloat\u001b[0m: \u001b[1m\u001b[32m(str: String)Float\u001b[0m\n\u001b[1m\u001b[34mextractWeatherData\u001b[0m: \u001b[1m\u001b[32m(row: String)(String, String, String, String, Boolean, Float, Boolean, Float)\u001b[0m\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017109_335081122",
+      "id": "20160612-163457_2001070366",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "dateStarted": "2021-10-02T08:01:55+0000",
+      "dateFinished": "2021-10-02T08:01:55+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:3588"
+    },
+    {
+      "text": "%md\n# 3. Load Weather Data\nNow we can load both Weather data and the station data using the helper functions defined above. The raw data can be found at storageLocation + \"/<<year>>\"\n\n1. Load data from raw text files for years 2003 to 2014 (you might start with a single year for perfomance reasons)\n2. Put all RDDs from all years into a single RDD using SparkContext.union method\n3. Transform the raw data into a meaningful RDD with WeatherData as object type. Use the extractWeatherData for this Transformation\n4. Have a look at the first couple of entries (say the first 10 entries)",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:13:45+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12,
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>3. Load Weather Data</h1>\n<p>Now we can load both Weather data and the station data using the helper functions defined above. The raw data can be found at storageLocation + &ldquo;/&laquo;year&raquo;&rdquo;</p>\n<ol>\n<li>Load data from raw text files for years 2003 to 2014 (you might start with a single year for perfomance reasons)</li>\n<li>Put all RDDs from all years into a single RDD using SparkContext.union method</li>\n<li>Transform the raw data into a meaningful RDD with WeatherData as object type. Use the extractWeatherData for this Transformation</li>\n<li>Have a look at the first couple of entries (say the first 10 entries)</li>\n</ol>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017110_1762825544",
+      "id": "20160612-163641_1104737597",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:3589",
+      "dateFinished": "2021-10-02T08:13:45+0000",
+      "dateStarted": "2021-10-02T08:13:45+0000"
+    },
+    {
+      "text": "// Get RDDs for all years\nval raw_weather_years = (2003 to 2014) map {i => sc.textFile(storageLocation + \"/\" + i.toString)}\n\n// Put all RDDs into a single one using the \"union\" method of the SparkContext\nval raw_weather = sc.union(raw_weather_years)\n\n// Now extract the WeatherData objects from the raw data using the extractWeatherData method defined above\nval weather = raw_weather.map(extractWeatherData)\n\n// Let's have a look at the first couple of entries\nweather.take(10).foreach(println)",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:02:01+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "(20030101,1150,010015,99999,true,-2.0,true,1.5)\n(20030101,1220,010015,99999,false,999.9,true,1.0)\n(20030101,1250,010015,99999,false,999.9,true,1.5)\n(20030101,1320,010015,99999,true,-1.0,true,0.0)\n(20030101,1350,010015,99999,true,-1.0,true,1.0)\n(20030101,1420,010015,99999,true,-2.0,true,1.0)\n(20030101,1450,010015,99999,false,999.9,true,1.0)\n(20030101,1520,010015,99999,true,-2.0,true,0.0)\n(20030101,1550,010015,99999,true,-2.0,true,0.5)\n(20030101,1620,010015,99999,true,-2.0,true,1.0)\n\u001b[1m\u001b[34mraw_weather_years\u001b[0m: \u001b[1m\u001b[32mscala.collection.immutable.IndexedSeq[org.apache.spark.rdd.RDD[String]]\u001b[0m = Vector(s3://dimajix-training/data/weather/2003 MapPartitionsRDD[164] at textFile at <console>:34, s3://dimajix-training/data/weather/2004 MapPartitionsRDD[166] at textFile at <console>:34, s3://dimajix-training/data/weather/2005 MapPartitionsRDD[168] at textFile at <console>:34, s3://dimajix-training/data/weather/2006 MapPartitionsRDD[170] at textFile at <console>:34, s3://dimajix-training/data/weather/2007 MapPartitionsRDD[172] at textFile at <console>:34, s3://dimajix-training/data/weather/2008 MapPartitionsRDD[174] at textFile at <console>:34, s3://dimajix-training/data/weather/2009 MapPartitionsRDD[176] at textFile at <console>:34, s3://dimajix-training/data/weather...\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://ip-10-200-101-247.eu-central-1.compute.internal:4040/jobs/job?id=7",
+              "$$hashKey": "object:4384"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017110_1421993602",
+      "id": "20160612-164230_463213510",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "dateStarted": "2021-10-02T08:02:01+0000",
+      "dateFinished": "2021-10-02T08:02:02+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:3590"
+    },
+    {
+      "text": "%md\n# 4. Create new Keys\nSince we want to aggregate the data by weather station and year, we need to create a new key \"usaf,wban,year\" from our weather measurement data. This can be done by one additional transformation. The resulting RDD should have elements of type \n\n    ((usaf,wban,year),weather)\n\nNote the nesting of tuples - this is required, because Spark only understands how to extract a key for grouping from pairs. Here our pair is \"usaf,wban,year\".",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:13:51+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/markdown",
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>4. Create new Keys</h1>\n<p>Since we want to aggregate the data by weather station and year, we need to create a new key &ldquo;usaf,wban,year&rdquo; from our weather measurement data. This can be done by one additional transformation. The resulting RDD should have elements of type</p>\n<pre><code>((usaf,wban,year),weather)\n</code></pre>\n<p>Note the nesting of tuples - this is required, because Spark only understands how to extract a key for grouping from pairs. Here our pair is &ldquo;usaf,wban,year&rdquo;.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017110_1422581387",
+      "id": "20160612-171740_805016664",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:3591",
+      "dateFinished": "2021-10-02T08:13:51+0000",
+      "dateStarted": "2021-10-02T08:13:51+0000"
+    },
+    {
+      "text": "// Now we want to create a new key (station + year), so we cann groupings and aggregations\nval weather_per_station_and_year = weather.map(x =>\n        (\n          (x._2,x._3,x._1.substring(0,4)),\n          x\n        )\n    )\n    \n// Check that everything looks nice    \nweather_per_station_and_year.take(10).foreach(println)",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:02:24+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "((1150,010015,2003),(20030101,1150,010015,99999,true,-2.0,true,1.5))\n((1220,010015,2003),(20030101,1220,010015,99999,false,999.9,true,1.0))\n((1250,010015,2003),(20030101,1250,010015,99999,false,999.9,true,1.5))\n((1320,010015,2003),(20030101,1320,010015,99999,true,-1.0,true,0.0))\n((1350,010015,2003),(20030101,1350,010015,99999,true,-1.0,true,1.0))\n((1420,010015,2003),(20030101,1420,010015,99999,true,-2.0,true,1.0))\n((1450,010015,2003),(20030101,1450,010015,99999,false,999.9,true,1.0))\n((1520,010015,2003),(20030101,1520,010015,99999,true,-2.0,true,0.0))\n((1550,010015,2003),(20030101,1550,010015,99999,true,-2.0,true,0.5))\n((1620,010015,2003),(20030101,1620,010015,99999,true,-2.0,true,1.0))\n\u001b[1m\u001b[34mweather_per_station_and_year\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.rdd.RDD[((String, String, String), (String, String, String, String, Boolean, Float, Boolean, Float))]\u001b[0m = MapPartitionsRDD[189] at map at <console>:28\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://ip-10-200-101-247.eu-central-1.compute.internal:4040/jobs/job?id=8",
+              "$$hashKey": "object:4488"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017110_1093760355",
+      "id": "20160612-172035_733173976",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "dateStarted": "2021-10-02T08:02:24+0000",
+      "dateFinished": "2021-10-02T08:02:25+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:3592"
+    },
+    {
+      "text": "%md\n# 5. Aggregate Data\nNow we want to perform the analysis itself. We want to calculate the minimum and maximum wind speed and temperature per year and country. We will use the 'aggregateByKey' method of an RDD. This requires some custom state classes used during the aggregation. So our plan is as follows:\n\n1. Initialize a tuple containing (minTemp, maxTemp, minWind, maxWind) appropriately to represent \"no information so far\" state.\n3. Add a method \"reduce(self, other)\" which accepts an aggregate tuple and an original weather tuple instance and returns a new aggregate tuple instance containing the merged information\n4. Add a method \"combine(self, other)\" which accepts two aggregate tuples and returns a new aggregate tuple containing the combined information\n5. Put all together by using the aggregateByKey method of the last RDD using the WeatherMinMax class for aggregation\n6. Print some results from the aggregated data\n \nPay attention to the validTemperature and validWindSpeed flags when merging information!",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:17:45+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12,
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>5. Aggregate Data</h1>\n<p>Now we want to perform the analysis itself. We want to calculate the minimum and maximum wind speed and temperature per year and country. We will use the 'aggregateByKey' method of an RDD. This requires some custom state classes used during the aggregation. So our plan is as follows:</p>\n<ol>\n<li>Initialize a tuple containing (minTemp, maxTemp, minWind, maxWind) appropriately to represent &ldquo;no information so far&rdquo; state.</li>\n<li>Add a method &ldquo;reduce(self, other)&rdquo; which accepts an aggregate tuple and an original weather tuple instance and returns a new aggregate tuple instance containing the merged information</li>\n<li>Add a method &ldquo;combine(self, other)&rdquo; which accepts two aggregate tuples and returns a new aggregate tuple containing the combined information</li>\n<li>Put all together by using the aggregateByKey method of the last RDD using the WeatherMinMax class for aggregation</li>\n<li>Print some results from the aggregated data</li>\n</ol>\n<p>Pay attention to the validTemperature and validWindSpeed flags when merging information!</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017110_199683246",
+      "id": "20160612-165444_43708871",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "dateStarted": "2021-10-02T08:13:53+0000",
+      "dateFinished": "2021-10-02T08:13:53+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:3593"
+    },
+    {
+      "text": "// Reduce method for merging in another measurements tuple\ndef reduce(self:(Float,Float,Float,Float), other:(String, String, String, String, Boolean, Float, Boolean, Float))  = {\n    val minT = if(other._5) self._1.min(other._6) else self._1\n    val maxT = if(other._5) self._2.max(other._6) else self._2\n    val minW = if(other._7) self._3.min(other._8) else self._3\n    val maxW = if(other._7) self._4.max(other._8) else self._4\n    (minT,maxT,minW,maxW)\n}\n// Combine method for combining two aggregate tuples\ndef combine(self:(Float,Float,Float,Float), other:(Float,Float,Float,Float))  = {\n    val minT = self._1.min(other._1)\n    val maxT = self._2.max(other._2)\n    val minW = self._3.min(other._3)\n    val maxW = self._4.max(other._4)\n    (minT,maxT,minW,maxW)\n}\n\nval weather_minmax = weather_per_station_and_year\n    .aggregateByKey((9999f,-9999f,9999f,-9999f))(\n        (x,y) =>  reduce(x,y),\n        (x,y) => combine(x,y))\n\nweather_minmax.take(30).foreach(println)\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:16:03+0000",
+      "progress": 99,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "((0622,726540,2004),(-6.0,21.0,3.1,13.9))\n((0847,701780,2012),(9999.0,-9999.0,9999.0,-9999.0))\n((0207,703160,2005),(-6.0,10.0,4.6,14.4))\n((2238,725080,2004),(6.0,6.0,4.6,4.6))\n((1139,726540,2006),(9999.0,-9999.0,9999.0,-9999.0))\n((1841,723240,2008),(9999.0,-9999.0,9999.0,-9999.0))\n((0709,703610,2007),(9999.0,-9999.0,9999.0,-9999.0))\n((2247,725744,2007),(9999.0,-9999.0,9999.0,-9999.0))\n((0315,727504,2009),(17.0,17.0,1.5,1.5))\n((0626,727440,2011),(9999.0,-9999.0,9999.0,-9999.0))\n((1728,718980,2014),(0.0,13.0,1.5,7.2))\n((0342,727923,2009),(9999.0,-9999.0,9999.0,-9999.0))\n((2344,722590,2006),(9999.0,-9999.0,9999.0,-9999.0))\n((0305,063400,2007),(11.0,11.0,1.5,1.5))\n((0446,725260,2011),(9999.0,-9999.0,9999.0,-9999.0))\n((0615,726440,2011),(9999.0,-9999.0,9999.0,-9999.0))\n((0614,703950,2013),(9999.0,-9999.0,9999.0,-9999.0))\n((0630,724510,2010),(9999.0,-9999.0,9999.0,-9999.0))\n((2319,725053,2014),(9999.0,-9999.0,9999.0,-9999.0))\n((1736,702710,2014),(9999.0,-9999.0,9999.0,-9999.0))\n((0606,722170,2006),(9999.0,-9999.0,9999.0,-9999.0))\n((0000,700632,2011),(-37.0,20.0,0.0,9.8))\n((1942,723170,2006),(9999.0,-9999.0,9999.0,-9999.0))\n((0519,060600,2014),(3.0,14.0,0.0,11.3))\n((2336,727680,2005),(1.0,1.0,2.1,2.1))\n((2324,744657,2008),(9999.0,-9999.0,9999.0,-9999.0))\n((1816,722680,2009),(9999.0,-9999.0,9999.0,-9999.0))\n((0730,722003,2010),(9999.0,-9999.0,9999.0,-9999.0))\n((0348,702190,2007),(9999.0,-9999.0,9999.0,-9999.0))\n((1013,727680,2008),(9999.0,-9999.0,9999.0,-9999.0))\n\u001b[1m\u001b[34mreduce\u001b[0m: \u001b[1m\u001b[32m(self: (Float, Float, Float, Float), other: (String, String, String, String, Boolean, Float, Boolean, Float))(Float, Float, Float, Float)\u001b[0m\n\u001b[1m\u001b[34mcombine\u001b[0m: \u001b[1m\u001b[32m(self: (Float, Float, Float, Float), other: (Float, Float, Float, Float))(Float, Float, Float, Float)\u001b[0m\n\u001b[1m\u001b[34mweather_minmax\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.rdd.RDD[((String, String, String), (Float, Float, Float, Float))]\u001b[0m = ShuffledRDD[190] at aggregateByKey at <console>:43\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://ip-10-200-101-247.eu-central-1.compute.internal:4040/jobs/job?id=9",
+              "$$hashKey": "object:6582"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017110_862830659",
+      "id": "20160612-165608_1558163597",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "dateStarted": "2021-10-02T08:08:00+0000",
+      "dateFinished": "2021-10-02T08:09:37+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:3594"
+    },
+    {
+      "text": "%md\n# 6. Pretty Printing\nSince Zeppelin supports some pretty printing using the magic \"%table\" keyword, we want to make use of it.",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:13:59+0000",
+      "progress": 0,
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "markdown",
+          "editOnDblClick": true,
+          "completionSupport": false
+        },
+        "editorMode": "ace/mode/markdown",
+        "colWidth": 12,
+        "editorHide": true,
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [],
+              "values": [],
+              "groups": [],
+              "scatter": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "<h1>6. Pretty Printing</h1>\n<p>Since Zeppelin supports some pretty printing using the magic &ldquo;%table&rdquo; keyword, we want to make use of it.</p>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017111_447374986",
+      "id": "20160612-165809_312461986",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:3595",
+      "dateFinished": "2021-10-02T08:13:59+0000",
+      "dateStarted": "2021-10-02T08:13:59+0000"
+    },
+    {
+      "text": "def mkString(p:Any*) = {\n  p.iterator.toList.mkString(\"\\t\")\n}\n\nprintln(\"%table\")\nprintln(\"USAF\\tWBAN\\tYear\\tTempMin\\tTempMax\\tWindMin\\tWindMax\")\nweather_minmax.collect().map(x => mkString(x._1._1,x._1._2,x._1._3,x._2._1,x._2._2,x._2._3,x._2._4)).foreach(println)\n",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T08:11:43+0000",
+      "progress": 45,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9,
+        "results": [
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "keys": [
+                {
+                  "name": "Country",
+                  "index": 0,
+                  "aggr": "sum"
+                }
+              ],
+              "values": [
+                {
+                  "name": "WindMin",
+                  "index": 4,
+                  "aggr": "min"
+                },
+                {
+                  "name": "WindMax",
+                  "index": 5,
+                  "aggr": "max"
+                },
+                {
+                  "name": "TempMax",
+                  "index": 3,
+                  "aggr": "max"
+                },
+                {
+                  "name": "TempMin",
+                  "index": 2,
+                  "aggr": "min"
+                }
+              ],
+              "groups": [
+                {
+                  "name": "Year",
+                  "index": 1,
+                  "aggr": "sum"
+                }
+              ],
+              "scatter": {
+                "xAxis": {
+                  "name": "Country",
+                  "index": 0,
+                  "aggr": "sum"
+                },
+                "yAxis": {
+                  "name": "Year",
+                  "index": 1,
+                  "aggr": "sum"
+                }
+              },
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "USAF": "string",
+                      "WBAN": "string",
+                      "Year": "string",
+                      "TempMin": "string",
+                      "TempMax": "string",
+                      "WindMin": "string",
+                      "WindMax": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            },
+            "helium": {}
+          },
+          {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "USAF": "string",
+                      "WBAN": "string",
+                      "Year": "string",
+                      "TempMin": "string",
+                      "TempMax": "string",
+                      "WindMin": "string",
+                      "WindMax": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        ],
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "SPARK JOB",
+          "tooltip": "View in Spark web UI",
+          "group": "spark",
+          "values": [
+            {
+              "jobUrl": "http://ip-10-200-101-247.eu-central-1.compute.internal:4040/jobs/job?id=10",
+              "$$hashKey": "object:5918"
+            }
+          ],
+          "interpreterSettingId": "spark"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017111_1974887581",
+      "id": "20160612-165917_2071306598",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "dateStarted": "2021-10-02T08:11:06+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:3596",
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "USAF\tWBAN\tYear\tTempMin\tTempMax\tWindMin\tWindMax\n0622\t726540\t2004\t-6.0\t21.0\t3.1\t13.9\n1139\t726540\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2238\t725080\t2004\t6.0\t6.0\t4.6\t4.6\n0207\t703160\t2005\t-6.0\t10.0\t4.6\t14.4\n1841\t723240\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0847\t701780\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0709\t703610\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2247\t725744\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0315\t727504\t2009\t17.0\t17.0\t1.5\t1.5\n0626\t727440\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1728\t718980\t2014\t0.0\t13.0\t1.5\t7.2\n0342\t727923\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2344\t722590\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0305\t063400\t2007\t11.0\t11.0\t1.5\t1.5\n0446\t725260\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0615\t726440\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0614\t703950\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0630\t724510\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2319\t725053\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1736\t702710\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0000\t700632\t2011\t-37.0\t20.0\t0.0\t9.8\n0606\t722170\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1942\t723170\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0519\t060600\t2014\t3.0\t14.0\t0.0\t11.3\n2336\t727680\t2005\t1.0\t1.0\t2.1\t2.1\n1816\t722680\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0730\t722003\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2324\t744657\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0348\t702190\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1013\t727680\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n2337\t726410\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1457\t726450\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2000\t010160\t2011\t-20.0\t8.2\t0.0\t21.0\n1920\t010877\t2012\t-2.0\t19.0\t1.0\t32.9\n0335\t723240\t2005\t8.0\t16.0\t0.0\t3.1\n0714\t063500\t2006\t-4.0\t13.0\t2.1\t9.3\n0142\t725744\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0728\t726170\t2004\t-2.0\t6.0\t0.0\t0.0\n0404\t077610\t2006\t16.0\t16.0\t3.6\t4.6\n0443\t036490\t2003\t6.0\t6.0\t1.5\t1.5\n2107\t703160\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1137\t726410\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2229\t702670\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0805\t727850\t2005\t11.0\t11.0\t4.6\t4.6\n1516\t722590\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0324\t727440\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1309\t063400\t2007\t11.0\t17.0\t2.6\t9.8\n1215\t725640\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0630\t725640\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0640\t727850\t2004\t11.0\t11.0\t2.1\t2.1\n0731\t727680\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1010\t702670\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1303\t725640\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0639\t726415\t2003\t10.0\t10.0\t0.0\t0.0\n1013\t034820\t2004\t9.0\t9.0\t2.6\t2.6\n1236\t722170\t2003\t12.0\t24.0\t0.0\t2.6\n2100\t064780\t2004\t-5.5\t26.2\t0.0\t14.0\n0722\t703610\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1630\t999999\t2012\t-25.7\t39.9\t0.1\t8.5\n0810\t063500\t2003\t-1.0\t13.0\t1.0\t3.6\n0850\t703610\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0528\t718980\t2006\t-4.0\t13.0\t1.0\t6.7\n0036\t726170\t2005\t0.0\t0.0\t5.7\t5.7\n1955\t724627\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2207\t724500\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1111\t727815\t2004\t-3.0\t12.0\t1.5\t5.7\n2343\t063500\t2011\t3.0\t19.0\t0.5\t11.8\n0947\t726980\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0006\t725416\t2012\t26.0\t26.0\t4.1\t4.1\n0117\t725090\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0348\t725053\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1027\t727923\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1350\t036490\t2012\t-2.0\t28.0\t0.5\t10.8\n1737\t725210\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n2010\t726410\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1152\t718280\t2010\t-11.0\t8.0\t0.0\t7.2\n1209\t726450\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0115\t725760\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1030\t720699\t2013\t-1.0\t-1.0\t9999.0\t-9999.0\n0727\t723240\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1842\t725640\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0954\t724627\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1125\t063440\t2008\t-5.0\t26.0\t0.5\t15.4\n0237\t727680\t2003\t9999.0\t-9999.0\t0.0\t0.0\n0508\t702670\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1140\t727440\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1912\t725560\t2004\t27.0\t27.0\t4.1\t4.1\n0028\t722590\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1754\t703950\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1140\t726777\t2003\t-6.0\t-6.0\t14.4\t14.4\n1122\t724273\t2011\t9.0\t9.0\t9999.0\t-9999.0\n0125\t727120\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2256\t720371\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2248\t724290\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1848\t718980\t2013\t-1.0\t15.0\t0.0\t8.8\n2151\t744865\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2311\t726450\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1031\t723240\t2003\t3.0\t22.0\t0.0\t2.6\n1400\t010550\t2014\t-8.2\t23.4\t1.0\t25.0\n1251\t725620\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0257\t725760\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2101\t063400\t2012\t1.0\t10.0\t2.1\t5.1\n0930\t722530\t2008\t23.0\t23.0\t14.4\t14.4\n0920\t010860\t2012\t-11.0\t21.0\t0.0\t18.5\n1221\t724290\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2021\t723150\t2004\t23.0\t23.0\t5.7\t5.7\n2301\t063500\t2008\t0.0\t11.0\t1.0\t8.2\n0056\t701780\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1403\t702190\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1410\t724273\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0830\t720113\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1839\t725744\t2003\t-5.0\t-5.0\t4.6\t4.6\n2017\t703160\t2008\t-1.0\t-1.0\t2.6\t2.6\n1830\t718280\t2005\t-20.0\t22.0\t0.0\t10.3\n0836\t725760\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0202\t063400\t2013\t-4.0\t20.0\t0.0\t6.2\n2314\t701780\t2005\t-1.0\t26.0\t0.0\t3.6\n1845\t703160\t2004\t-7.0\t10.0\t3.6\t8.7\n0114\t725080\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0501\t727923\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1815\t036490\t2013\t8.0\t8.0\t3.6\t3.6\n1438\t725260\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2107\t353946\t2006\t-8.0\t27.0\t0.0\t8.0\n0621\t724290\t2005\t-7.0\t-7.0\t4.6\t4.6\n0521\t727504\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1537\t701780\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2137\t725180\t2003\t-11.0\t7.0\t0.0\t5.7\n1302\t725620\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0502\t725210\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0451\t725560\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1534\t727680\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0731\t724500\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2115\t724010\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0222\t744865\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1318\t724010\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0534\t702730\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1823\t724010\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0329\t710920\t2010\t-23.0\t1.0\t4.1\t15.9\n0007\t722031\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1020\t725180\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1255\t722003\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0428\t702730\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0924\t722031\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0246\t701330\t2004\t-6.0\t14.0\t2.6\t11.3\n0653\t718980\t2004\t4.0\t15.0\t0.0\t9.3\n0211\t727440\t2005\t-20.0\t7.0\t2.1\t7.2\n0127\t722194\t2007\t-13.0\t22.0\t0.0\t11.8\n2336\t725760\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1524\t702710\t2005\t-1.0\t-1.0\t0.0\t0.0\n1540\t724500\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n2059\t725416\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0350\t010520\t2009\t-15.0\t18.0\t0.0\t14.4\n0602\t724273\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1650\t722170\t2003\t9999.0\t-9999.0\t9999.0\t-9999.0\n2359\t701780\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2124\t724273\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1816\t727680\t2004\t1.0\t12.0\t2.6\t12.9\n0613\t722170\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1144\t718280\t2007\t-27.0\t8.0\t2.6\t7.7\n0315\t725267\t2014\t-10.0\t22.0\t0.0\t5.1\n2335\t720371\t2010\t1.0\t1.0\t5.1\t5.1\n1138\t726540\t2005\t-10.0\t-6.0\t3.6\t6.7\n0433\t724510\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0132\t744865\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1157\t723240\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0901\t723150\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0109\t727680\t2004\t16.0\t16.0\t5.1\t5.1\n1739\t725560\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1129\t718280\t2013\t-35.0\t13.0\t1.0\t9.8\n1000\t726450\t2003\t9999.0\t-9999.0\t9999.0\t-9999.0\n0528\t034054\t2013\t1.0\t1.0\t3.1\t3.1\n0952\t063400\t2006\t1.0\t1.0\t2.6\t3.1\n1711\t723150\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2156\t726088\t2004\t15.0\t15.0\t3.1\t3.1\n1331\t726170\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1839\t723240\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1001\t725140\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1715\t722031\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0416\t036490\t2012\t9.0\t9.0\t1.5\t1.5\n1537\t725440\t2005\t22.0\t22.0\t7.2\t7.2\n1651\t702710\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0019\t115180\t2005\t2.0\t14.0\t0.0\t9.3\n0030\t999999\t2010\t-26.3\t43.7\t0.0\t9.9\n0746\t722530\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1401\t725080\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0702\t727120\t2003\t0.0\t0.0\t3.6\t3.6\n0634\t725640\t2008\t-10.0\t-10.0\t1.5\t1.5\n0326\t063400\t2010\t-10.0\t13.0\t0.0\t6.2\n0319\t060600\t2004\t-2.0\t3.0\t3.1\t4.1\n0929\t725440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1732\t723240\t2005\t13.0\t13.0\t2.1\t2.1\n1333\t725260\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1010\t725090\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1944\t077610\t2013\t24.0\t24.0\t0.5\t0.5\n0914\t726170\t2010\t18.0\t18.0\t9999.0\t-9999.0\n1154\t724290\t2004\t-23.0\t24.0\t0.0\t11.3\n1610\t726450\t2013\t-4.4\t-4.4\t9999.0\t-9999.0\n0531\t725260\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1849\t726410\t2014\t22.0\t22.0\t9999.0\t-9999.0\n1526\t702670\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2028\t701780\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1302\t725440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0157\t727850\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1100\t010650\t2008\t-29.1\t22.1\t0.0\t10.0\n1525\t702730\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1415\t725760\t2004\t-22.0\t8.0\t0.0\t4.6\n1720\t726088\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0057\t727440\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1708\t722194\t2007\t-9.0\t23.0\t5.7\t6.7\n2242\t701780\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2319\t722346\t2006\t5.0\t6.0\t3.1\t4.1\n0021\t703160\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1315\t726360\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1335\t725640\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2117\t115180\t2012\t0.0\t0.0\t2.1\t2.1\n2242\t726410\t2005\t24.0\t24.0\t3.1\t3.1\n0142\t701330\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0546\t726440\t2004\t11.0\t11.0\t5.1\t5.1\n0541\t702710\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0512\t725640\t2004\t0.0\t7.0\t5.1\t7.2\n1008\t063500\t2008\t1.0\t19.0\t1.5\t7.7\n1114\t726360\t2005\t-2.0\t-2.0\t6.2\t8.2\n1832\t725560\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0023\t115180\t2011\t0.0\t0.0\t6.7\t6.7\n0834\t702710\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1823\t726440\t2008\t-13.0\t-13.0\t8.7\t8.7\n1943\t723240\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2109\t727923\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0741\t725260\t2003\t-8.0\t0.0\t0.0\t5.1\n2001\t727440\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1325\t723150\t2013\t17.0\t17.0\t9999.0\t-9999.0\n0001\t703610\t2004\t2.0\t15.0\t0.0\t2.6\n2248\t063500\t2010\t-1.0\t17.0\t0.5\t6.2\n0559\t028450\t2003\t19.0\t20.0\t1.5\t5.1\n1444\t727120\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1147\t718980\t2014\t2.0\t12.0\t1.0\t5.7\n0512\t115180\t2013\t-1.0\t1.0\t1.5\t6.7\n0724\t702730\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1033\t727120\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2012\t725760\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1755\t710920\t2009\t-31.0\t-3.0\t5.7\t5.7\n0900\t722530\t2012\t-0.6\t29.4\t0.0\t10.8\n1129\t724010\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0344\t725180\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1607\t723240\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1405\t726088\t2005\t-11.0\t19.0\t0.0\t7.7\n0209\t725560\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2301\t725760\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0815\t703500\t2008\t5.0\t5.0\t0.0\t0.0\n0728\t725620\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1853\t727504\t2008\t-21.0\t0.0\t0.0\t8.2\n0259\t700632\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0831\t725260\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1252\t710920\t2014\t-29.0\t10.0\t2.6\t11.3\n0930\t074600\t2003\t-7.0\t21.0\t0.0\t12.9\n1408\t724500\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1702\t718980\t2010\t1.0\t14.0\t3.1\t7.2\n2343\t725210\t2009\t11.0\t11.0\t9999.0\t-9999.0\n2137\t727120\t2003\t-1.0\t-1.0\t2.6\t2.6\n0218\t724010\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0529\t703160\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2011\t726360\t2003\t-2.0\t23.0\t1.5\t6.7\n0210\t036490\t2012\t10.0\t10.0\t3.6\t3.6\n1113\t725260\t2005\t-8.0\t-2.0\t0.0\t8.2\n0419\t727120\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1330\t724510\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1220\t010231\t2014\t-4.0\t21.0\t0.0\t26.8\n1430\t060600\t2003\t13.0\t13.0\t9.8\t9.8\n1334\t726088\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0650\t726360\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0308\t727440\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0436\t724010\t2003\t16.0\t21.0\t1.5\t3.1\n0042\t727850\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1426\t744657\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0155\t720113\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0104\t726980\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1338\t744865\t2004\t8.0\t8.0\t6.2\t6.2\n1449\t727120\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0905\t726450\t2012\t-3.0\t-3.0\t9999.0\t-9999.0\n0453\t725640\t2014\t-18.9\t9.4\t4.6\t4.6\n1220\t727120\t2008\t-11.0\t1.0\t3.6\t12.9\n0900\t010470\t2006\t-36.4\t24.8\t0.0\t12.0\n1743\t722590\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0731\t725090\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1513\t725744\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0122\t703500\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1306\t703160\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1506\t726170\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1325\t724010\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2132\t725080\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0859\t725744\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0218\t727440\t2004\t-15.0\t18.0\t0.0\t10.8\n0219\t063500\t2009\t0.0\t16.0\t2.1\t3.6\n1533\t727120\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2145\t722003\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0947\t726170\t2008\t2.0\t2.0\t6.7\t6.7\n2017\t723170\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2029\t727923\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1236\t722003\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1008\t727440\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1650\t060600\t2013\t-12.0\t32.0\t0.0\t13.9\n1654\t725416\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1121\t723150\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1628\t725140\t2004\t-9.0\t20.0\t2.6\t5.7\n2147\t702190\t2008\t-7.0\t-7.0\t5.1\t5.1\n0210\t727440\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2150\t010231\t2013\t-2.0\t21.0\t1.0\t27.3\n1750\t063500\t2012\t3.0\t24.0\t1.0\t6.2\n1842\t701170\t2003\t9999.0\t-9999.0\t10.2\t10.2\n0616\t063500\t2009\t3.0\t16.0\t1.5\t9.8\n0536\t725080\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0013\t718980\t2004\t5.0\t18.0\t0.0\t9.8\n1411\t702190\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0231\t727815\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1832\t718280\t2007\t-24.0\t9.0\t2.1\t11.8\n1247\t724010\t2004\t12.0\t22.0\t2.1\t4.6\n1619\t725140\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0538\t725140\t2006\t16.0\t16.0\t2.1\t2.1\n1312\t718980\t2014\t0.0\t13.0\t0.0\t6.2\n1809\t726980\t2004\t3.0\t3.0\t1.5\t1.5\n1248\t726540\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0239\t703500\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0041\t063500\t2011\t4.0\t17.0\t0.5\t5.1\n1358\t727815\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0913\t725640\t2004\t11.0\t12.0\t3.1\t4.1\n1945\t060600\t2006\t15.0\t15.0\t4.6\t4.6\n1918\t744865\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1611\t703610\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0831\t725440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2336\t702040\t2008\t-9.0\t2.0\t2.6\t16.5\n1830\t702730\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1719\t723170\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0424\t702730\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1324\t702670\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0314\t701780\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0747\t722530\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0914\t744865\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1654\t724010\t2008\t-1.0\t23.0\t0.0\t12.9\n0742\t063500\t2008\t-1.0\t17.0\t0.0\t7.7\n2029\t723170\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2111\t063500\t2009\t2.0\t17.0\t0.5\t4.6\n0921\t726088\t2005\t8.0\t8.0\t1.5\t6.2\n2019\t726410\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0718\t727680\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1044\t725210\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1833\t703610\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1120\t726360\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1505\t726540\t2003\t1.0\t1.0\t3.6\t3.6\n1927\t725760\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1218\t701780\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1949\t727923\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0803\t724290\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0324\t060600\t2008\t7.0\t7.0\t0.5\t0.5\n2329\t724010\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n2331\t718280\t2014\t-25.0\t20.0\t1.5\t9.3\n2213\t744865\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1245\t074600\t2011\t26.0\t26.0\t2.1\t2.1\n1243\t074600\t2010\t8.0\t8.0\t0.0\t0.0\n0400\t702040\t2007\t-19.0\t-1.0\t0.0\t14.4\n0228\t718980\t2010\t4.0\t12.0\t0.0\t4.1\n0538\t726410\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2247\t727120\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2140\t718280\t2004\t-27.0\t13.0\t0.0\t10.8\n1236\t744865\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1131\t723340\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1941\t722530\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0647\t727850\t2003\t13.0\t13.0\t2.6\t2.6\n0635\t725080\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1106\t727680\t2004\t-15.0\t16.0\t1.5\t6.7\n1220\t725620\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0402\t723240\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2000\t722031\t2007\t-2.0\t38.0\t0.0\t7.7\n0010\t710920\t2012\t-28.0\t6.0\t1.5\t15.4\n1528\t722680\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1511\t702190\t2010\t0.0\t0.0\t9999.0\t-9999.0\n1124\t726170\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2101\t725760\t2004\t-11.0\t26.0\t4.1\t7.7\n0826\t703160\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1308\t701330\t2003\t-11.0\t9.0\t3.1\t11.3\n0049\t718980\t2004\t11.0\t14.0\t6.2\t11.3\n0910\t724010\t2003\t-5.0\t8.0\t1.5\t4.6\n2010\t701330\t2004\t-15.0\t-15.0\t5.1\t5.1\n0005\t702670\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1621\t722170\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2103\t726088\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2144\t060600\t2007\t9.0\t11.0\t2.1\t5.1\n2040\t722170\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1208\t724273\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1306\t701330\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0315\t727440\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2351\t725640\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0920\t723150\t2003\t9.0\t9.0\t1.5\t1.5\n1800\t723170\t2009\t-5.6\t35.0\t0.0\t12.9\n0450\t012100\t2008\t-4.0\t20.0\t0.0\t18.0\n0809\t722680\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n2140\t701780\t2003\t8.0\t8.0\t4.6\t4.6\n2212\t722170\t2003\t23.0\t23.0\t4.1\t4.1\n0906\t726440\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1216\t722128\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2209\t725090\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1516\t726980\t2003\t10.0\t10.0\t6.7\t6.7\n1241\t725210\t2003\t0.0\t8.0\t5.7\t8.2\n2310\t724500\t2005\t22.0\t22.0\t0.0\t0.0\n2203\t726088\t2005\t-16.0\t10.0\t2.1\t11.8\n2321\t060600\t2006\t-3.0\t18.0\t0.5\t8.2\n2003\t703610\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2100\t725090\t2012\t-8.9\t35.6\t0.0\t17.0\n1354\t723150\t2012\t2.0\t17.0\t9999.0\t-9999.0\n0418\t727815\t2008\t6.0\t6.0\t2.1\t2.1\n0346\t703500\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1252\t724290\t2007\t21.0\t21.0\t9999.0\t-9999.0\n1231\t725260\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0835\t060600\t2009\t-3.0\t16.0\t3.1\t8.7\n1343\t722170\t2005\t16.0\t16.0\t2.6\t2.6\n1203\t727845\t2004\t-2.0\t0.0\t0.0\t2.6\n1104\t703950\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0436\t702730\t2004\t-3.0\t0.0\t1.5\t6.7\n1846\t726980\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1220\t701170\t2005\t9999.0\t-9999.0\t6.1\t6.1\n0037\t726540\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1656\t703950\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1901\t724510\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0229\t726170\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1100\t702730\t2008\t-17.0\t-1.0\t0.0\t2.1\n1639\t703160\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0329\t725260\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2054\t723170\t2008\t0.0\t20.0\t0.0\t8.7\n0311\t724500\t2005\t7.0\t17.0\t6.2\t6.7\n1329\t726360\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0535\t725620\t2005\t2.0\t2.0\t2.6\t2.6\n0143\t703950\t2003\t5.0\t5.0\t3.6\t3.6\n1534\t724290\t2005\t-7.0\t26.0\t0.0\t5.7\n1357\t727440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1017\t718280\t2003\t-13.0\t14.0\t3.6\t8.7\n2331\t726980\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1820\t710920\t2008\t-34.0\t5.0\t2.1\t2.1\n0136\t710920\t2008\t-33.0\t-1.0\t9999.0\t-9999.0\n0200\t725053\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1112\t710920\t2005\t-30.0\t4.0\t2.1\t12.9\n2103\t703950\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0704\t723340\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0612\t725620\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0620\t725440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1315\t726980\t2004\t11.0\t17.0\t0.0\t8.7\n1441\t725140\t2004\t11.0\t23.0\t0.0\t5.7\n1140\t703610\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0249\t744865\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0115\t702190\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0432\t726360\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1454\t725260\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0708\t727850\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1438\t726410\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1724\t702190\t2009\t-2.0\t-2.0\t9999.0\t-9999.0\n0133\t725640\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1224\t724290\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0718\t722530\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1435\t727440\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2043\t727815\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0741\t718280\t2006\t-17.0\t10.0\t1.0\t9.8\n1540\t725640\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0617\t702670\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0825\t727120\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1014\t726170\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2341\t911900\t2004\t22.0\t22.0\t6.2\t6.2\n1417\t701780\t2005\t-44.0\t8.0\t0.0\t3.1\n0350\t727505\t2013\t-20.0\t-20.0\t6.2\t6.2\n1231\t726360\t2005\t-7.0\t10.0\t0.0\t5.7\n1150\t727923\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1207\t726777\t2005\t-17.0\t12.0\t2.6\t7.2\n0117\t725416\t2006\t-18.0\t24.0\t0.0\t8.7\n1720\t010830\t2004\t-12.0\t21.0\t1.0\t21.1\n1447\t718280\t2009\t-27.0\t5.0\t0.0\t6.2\n2156\t727850\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0849\t727680\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1530\t724510\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2237\t722170\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1200\t702730\t2008\t-22.8\t15.0\t0.0\t11.8\n0400\t040180\t2010\t-8.0\t13.0\t0.0\t23.7\n1330\t722194\t2008\t-13.0\t-13.0\t0.0\t0.0\n1035\t727923\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1704\t725440\t2005\t-10.0\t21.0\t3.1\t8.2\n1108\t725440\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1719\t722170\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0314\t724510\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1530\t744865\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1629\t724510\t2004\t2.0\t13.0\t5.1\t9.8\n1507\t036720\t2014\t12.0\t12.0\t8.8\t8.8\n2009\t911900\t2005\t24.0\t24.0\t5.7\t5.7\n1146\t703160\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1224\t744865\t2008\t-4.0\t-4.0\t3.6\t3.6\n2316\t727923\t2004\t9.0\t16.0\t3.1\t6.2\n0448\t727923\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0416\t703430\t2005\t-6.0\t19.0\t0.0\t21.1\n1720\t727440\t2003\t4.0\t16.0\t0.0\t6.7\n1611\t727440\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0737\t726415\t2003\t-13.0\t24.0\t0.0\t6.7\n0027\t725090\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2036\t718280\t2009\t-14.0\t0.0\t3.6\t8.7\n0108\t710920\t2003\t4.0\t4.0\t9.3\t9.3\n1130\t911900\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2107\t702190\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1146\t725640\t2008\t-12.0\t-12.0\t2.6\t2.6\n1548\t010886\t2012\t8.0\t8.0\t14.9\t14.9\n1032\t724500\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2037\t725620\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1836\t725090\t2005\t9.0\t14.0\t6.2\t8.2\n2217\t727504\t2007\t-15.0\t32.0\t0.0\t7.7\n1229\t703500\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0253\t727815\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0507\t727815\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0256\t911900\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1542\t724500\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2206\t703160\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2113\t701330\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1801\t723150\t2008\t14.0\t14.0\t8.2\t8.2\n2253\t724627\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0547\t724500\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1925\t710920\t2008\t-27.0\t11.0\t7.2\t7.2\n2101\t727440\t2008\t-12.0\t-10.0\t3.1\t4.1\n2253\t722170\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0947\t725640\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1201\t744865\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0405\t727440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0908\t726410\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0138\t725620\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0957\t702730\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0423\t725760\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0434\t726450\t2010\t0.0\t0.0\t9999.0\t-9999.0\n2325\t726170\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0140\t724010\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1159\t725180\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0400\t010490\t2005\t-17.9\t19.7\t0.0\t14.0\n0030\t724290\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0302\t703500\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1521\t727120\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0023\t727440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0003\t723240\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1521\t063500\t2014\t4.0\t15.0\t2.6\t5.7\n0338\t718280\t2003\t-8.0\t12.0\t2.1\t4.6\n1630\t722194\t2007\t-2.0\t-2.0\t7.2\t7.2\n1003\t723170\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1729\t702730\t2004\t9999.0\t-9999.0\t0.0\t0.0\n1654\t725744\t2004\t-11.0\t1.0\t0.0\t7.2\n1635\t702710\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0026\t727440\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1947\t723340\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0258\t701330\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1818\t723240\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0359\t727815\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n2000\t725440\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0111\t724273\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2335\t710920\t2007\t-30.0\t-2.0\t1.0\t9.8\n0632\t062900\t2005\t4.0\t4.0\t0.0\t0.0\n0953\t702190\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2120\t744657\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0341\t710920\t2013\t-31.0\t-2.0\t0.0\t12.9\n1013\t060600\t2009\t4.0\t18.0\t3.1\t9.3\n2049\t726360\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1537\t727120\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0821\t010882\t2007\t3.0\t3.0\t3.1\t3.1\n1120\t065900\t2009\t-11.0\t30.0\t0.0\t12.9\n2220\t064490\t2010\t-9.0\t24.0\t0.5\t11.8\n0800\t010680\t2011\t-2.5\t10.2\t1.0\t17.0\n0545\t701330\t2009\t15.0\t15.0\t3.6\t3.6\n2308\t722194\t2009\t-8.0\t3.0\t1.5\t12.3\n0728\t727120\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2242\t725140\t2003\t-11.0\t21.0\t2.6\t6.2\n0251\t702710\t2011\t9.0\t9.0\t4.1\t4.1\n0619\t725180\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1923\t722530\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0550\t710920\t2009\t-33.0\t0.0\t3.6\t6.2\n1743\t726980\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0823\t703500\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1039\t701780\t2003\t-18.0\t-18.0\t0.0\t0.0\n1028\t060600\t2007\t17.0\t17.0\t6.2\t6.2\n2320\t115180\t2007\t21.0\t21.0\t4.1\t4.1\n0620\t725744\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1115\t727815\t2003\t-4.0\t5.0\t0.0\t6.2\n1346\t060600\t2004\t7.0\t10.0\t7.2\t7.2\n1425\t725744\t2004\t-2.0\t-1.0\t6.2\t9.8\n2325\t999999\t2011\t-26.0\t45.8\t0.0\t8.8\n1519\t710920\t2008\t-14.0\t5.0\t11.3\t11.3\n1320\t725620\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0048\t725090\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1842\t722170\t2003\t8.0\t25.0\t3.1\t3.6\n0533\t724500\t2005\t6.0\t6.0\t2.6\t2.6\n1235\t701170\t2003\t-29.5\t13.3\t0.0\t27.7\n0832\t725440\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1111\t703610\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1938\t726360\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2352\t725560\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1413\t718980\t2007\t1.0\t11.0\t1.0\t7.2\n1349\t726450\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1201\t725760\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0723\t725620\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2223\t726360\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0354\t725560\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1937\t703500\t2003\t1.0\t5.0\t7.2\t9.3\n1151\t702190\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0309\t724500\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1100\t727440\t2006\t9.0\t9.0\t3.6\t3.6\n1931\t727680\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1158\t725620\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0447\t710920\t2003\t9999.0\t-9999.0\t3.1\t3.1\n1945\t724273\t2004\t-8.0\t26.0\t3.1\t5.1\n0023\t726360\t2008\t8.0\t8.0\t2.6\t2.6\n0734\t718980\t2006\t-4.0\t13.0\t1.0\t7.7\n1734\t725090\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1600\t060600\t2010\t-12.4\t31.2\t0.0\t11.8\n0145\t727815\t2005\t-6.0\t9.0\t0.0\t6.7\n0634\t725560\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1214\t060600\t2010\t0.0\t18.0\t4.1\t4.6\n0918\t726540\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0907\t744865\t2004\t9.0\t21.0\t0.0\t3.1\n0106\t727680\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0251\t710920\t2003\t9999.0\t-9999.0\t9999.0\t-9999.0\n2303\t727680\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0325\t702190\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0456\t720371\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1534\t726088\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1725\t725180\t2008\t-6.0\t-6.0\t2.1\t2.1\n0311\t722530\t2003\t14.0\t14.0\t1.5\t1.5\n2128\t726440\t2003\t-17.0\t11.0\t6.2\t10.3\n2222\t726540\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1124\t727815\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2040\t724290\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1929\t725140\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2323\t726450\t2011\t-10.0\t-10.0\t9999.0\t-9999.0\n2333\t723170\t2004\t26.0\t27.0\t2.6\t3.1\n1117\t726540\t2004\t3.0\t6.0\t0.0\t6.7\n1750\t724010\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0047\t702190\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0554\t720113\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1142\t725090\t2004\t6.0\t6.0\t8.2\t8.2\n1806\t725210\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0432\t726980\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0650\t724510\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1030\t726410\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0215\t726980\t2005\t14.0\t14.0\t2.1\t2.1\n0341\t115180\t2012\t0.0\t13.0\t0.5\t5.7\n2214\t726410\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1027\t703500\t2003\t1.0\t10.0\t0.0\t6.7\n0219\t722590\t2005\t13.0\t13.0\t4.1\t4.1\n0555\t062390\t2007\t5.0\t11.0\t6.2\t20.6\n1611\t063500\t2009\t5.0\t16.0\t1.5\t4.6\n1746\t727440\t2003\t1.0\t1.0\t1.5\t1.5\n2120\t724273\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1529\t727850\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0147\t063500\t2011\t4.0\t17.0\t0.5\t13.4\n1120\t725560\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1300\t106160\t2009\t-14.5\t30.4\t1.0\t10.0\n0414\t727680\t2004\t-22.0\t-14.0\t4.6\t8.7\n1723\t725620\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1744\t725744\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0601\t722590\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1915\t701780\t2003\t-44.0\t5.0\t0.0\t2.6\n0625\t744657\t2007\t-13.0\t28.0\t0.0\t13.4\n1052\t724010\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1453\t034820\t2014\t5.0\t5.0\t6.7\t6.7\n1205\t723150\t2010\t13.0\t13.0\t9999.0\t-9999.0\n0541\t726410\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2050\t701780\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1634\t744657\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1650\t701780\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1740\t727850\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1433\t062900\t2004\t4.0\t6.0\t2.6\t7.2\n1640\t725744\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1213\t727815\t2005\t-3.0\t12.0\t1.5\t5.1\n1213\t722170\t2005\t6.0\t26.0\t0.0\t4.1\n0307\t702730\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1127\t725180\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1641\t727680\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0801\t725180\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1010\t999999\t2008\t-33.5\t26.1\t0.0\t8.3\n0131\t703160\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2024\t701330\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0407\t725090\t2005\t10.0\t11.0\t2.6\t5.7\n1737\t727440\t2004\t-11.0\t14.0\t2.6\t12.3\n0036\t726360\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1642\t727120\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2339\t725440\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1653\t703950\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1343\t726170\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0619\t115180\t2011\t1.0\t17.0\t1.0\t4.6\n1411\t727845\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1836\t726410\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0309\t703160\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0541\t063400\t2008\t3.0\t20.0\t1.5\t9.3\n0600\t010780\t2006\t-15.9\t18.7\t0.0\t21.0\n1838\t725260\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0610\t725180\t2003\t-4.0\t-4.0\t5.1\t5.1\n0106\t725080\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2133\t703610\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1739\t710920\t2014\t-27.0\t2.0\t1.5\t12.9\n0054\t727120\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2146\t723150\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1353\t723240\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0930\t725640\t2005\t7.0\t7.0\t6.2\t6.2\n0049\t722194\t2008\t1.0\t1.0\t3.1\t3.1\n0120\t725640\t2004\t12.0\t12.0\t3.6\t3.6\n0111\t727845\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2114\t727440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0415\t010590\t2013\t-1.0\t-1.0\t5.1\t5.1\n0133\t744865\t2004\t-4.0\t23.0\t0.0\t6.7\n1932\t718280\t2006\t-21.0\t0.0\t3.6\t9.8\n0216\t726360\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0157\t703500\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2234\t115180\t2004\t23.0\t23.0\t3.1\t3.1\n0906\t077610\t2009\t39.0\t39.0\t2.1\t2.1\n1917\t703950\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0943\t724500\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0210\t060600\t2009\t0.0\t0.0\t1.5\t1.5\n0015\t724627\t2009\t1.0\t1.0\t0.0\t0.0\n1217\t063400\t2009\t1.0\t22.0\t2.6\t10.3\n1213\t063400\t2014\t6.0\t19.0\t1.0\t6.7\n0908\t727923\t2003\t9999.0\t-9999.0\t2.1\t2.1\n1556\t710920\t2006\t-23.0\t7.0\t0.0\t10.8\n2129\t010230\t2004\t-11.0\t-11.0\t1.0\t1.0\n1507\t718980\t2010\t4.0\t13.0\t2.1\t8.7\n0935\t703610\t2004\t0.0\t14.0\t0.0\t7.2\n1500\t040180\t2005\t-5.6\t18.7\t0.5\t21.1\n1100\t701780\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1549\t702730\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0704\t725080\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1935\t727680\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2341\t724510\t2004\t22.0\t22.0\t7.2\t7.2\n1851\t725080\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2015\t726170\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2036\t701330\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0654\t724627\t2011\t-1.0\t-1.0\t0.0\t0.0\n2308\t703160\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0953\t725620\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1343\t010886\t2010\t-2.0\t11.0\t3.6\t22.6\n2347\t063500\t2009\t-7.0\t16.0\t0.0\t4.6\n1551\t722590\t2008\t24.0\t24.0\t6.2\t6.2\n1024\t723240\t2004\t5.0\t5.0\t1.5\t5.1\n0600\t726170\t2006\t-16.1\t29.4\t0.0\t10.3\n0154\t725744\t2004\t-13.0\t24.0\t0.0\t7.7\n0425\t725560\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0402\t726360\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1850\t723340\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0308\t479180\t2013\t20.0\t21.0\t4.6\t13.4\n0329\t036490\t2010\t7.0\t7.0\t4.6\t4.6\n0509\t725440\t2008\t-11.0\t-11.0\t10.3\t10.3\n2119\t726088\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0411\t725260\t2004\t3.0\t8.0\t3.1\t5.1\n0329\t727850\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2230\t125600\t2010\t-20.0\t23.0\t0.0\t10.3\n0328\t727923\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0830\t106160\t2014\t6.0\t19.0\t4.1\t7.7\n1710\t725760\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0249\t702710\t2005\t-2.0\t-2.0\t5.1\t5.1\n1944\t702670\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2214\t702670\t2003\t-12.0\t2.0\t2.1\t4.1\n1712\t722680\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1642\t702730\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0326\t718280\t2004\t-13.0\t17.0\t1.5\t8.2\n0732\t725210\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1038\t726980\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1243\t010490\t2009\t-12.0\t-10.0\t0.5\t2.6\n0442\t703500\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0549\t702710\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0549\t724290\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0325\t703500\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0143\t727120\t2005\t-18.0\t-2.0\t1.5\t9.3\n0544\t702670\t2004\t-12.0\t-12.0\t5.1\t5.1\n1646\t718980\t2007\t1.0\t14.0\t1.0\t8.7\n0255\t720371\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0926\t723240\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2251\t726440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1911\t063400\t2014\t-8.0\t19.0\t0.5\t8.2\n0521\t718980\t2004\t4.0\t12.0\t1.0\t9.3\n2217\t727850\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2206\t726410\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1315\t727130\t2008\t-34.0\t21.0\t0.0\t11.8\n1050\t726360\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0032\t722170\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0236\t724273\t2004\t21.0\t21.0\t0.0\t0.0\n0957\t744865\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1333\t725180\t2003\t16.0\t17.0\t0.0\t0.0\n0514\t710920\t2009\t-16.0\t5.0\t3.1\t3.1\n1538\t727120\t2003\t4.0\t4.0\t3.1\t3.1\n1830\t722194\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1625\t726980\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2051\t727440\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n2045\t724510\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1606\t028450\t2009\t7.0\t7.0\t2.6\t2.6\n1622\t726170\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1242\t036720\t2003\t0.0\t0.0\t3.1\t3.1\n1545\t710920\t2007\t-32.0\t5.0\t2.1\t12.9\n2040\t725640\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2145\t702730\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0000\t726360\t2008\t-13.9\t27.8\t0.0\t11.3\n1050\t011070\t2013\t-2.0\t16.0\t2.1\t20.6\n1753\t723340\t2008\t-4.0\t24.0\t0.0\t12.9\n2147\t722530\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0253\t710920\t2013\t-29.0\t9.0\t2.1\t13.9\n0649\t725440\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2023\t722128\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0741\t724500\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2020\t063500\t2012\t-16.0\t20.0\t0.5\t4.1\n1633\t724500\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1120\t065900\t2008\t-3.0\t30.0\t0.0\t11.3\n2051\t725260\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1453\t725560\t2004\t9999.0\t-9999.0\t9999.0\t-9999.0\n0220\t010015\t2011\t7.0\t7.0\t3.1\t3.1\n1947\t722590\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0551\t727120\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0932\t727845\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1343\t703160\t2008\t-2.0\t-2.0\t3.6\t3.6\n0728\t727923\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1541\t106160\t2014\t17.0\t17.0\t4.6\t4.6\n2339\t722128\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1001\t727850\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1634\t702670\t2003\t-17.0\t-17.0\t3.6\t3.6\n2210\t701330\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0654\t725260\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0135\t722003\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0333\t710920\t2005\t-27.0\t5.0\t1.5\t12.3\n0233\t727923\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0553\t725416\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0010\t722170\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1633\t725760\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1626\t702670\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0922\t724273\t2013\t-1.0\t18.0\t9999.0\t-9999.0\n0621\t010886\t2012\t0.0\t12.0\t14.9\t20.1\n2118\t725560\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1744\t744657\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0032\t701780\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0713\t744865\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1727\t702190\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1510\t726410\t2008\t1.0\t1.0\t5.7\t5.7\n0207\t725080\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0646\t703160\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1014\t723170\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1858\t036490\t2011\t15.0\t15.0\t3.6\t3.6\n1016\t727120\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0013\t723170\t2004\t19.0\t19.0\t4.6\t4.6\n2140\t726540\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0627\t722170\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2300\t724290\t2005\t9999.0\t-9999.0\t9999.0\t-9999.0\n0752\t701780\t2008\t-37.0\t-9.0\t0.0\t11.3\n0252\t725744\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0059\t063400\t2005\t6.0\t6.0\t2.1\t2.1\n1543\t722128\t2006\t4.0\t17.0\t4.1\t4.1\n1328\t726980\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1948\t718980\t2008\t5.0\t19.0\t1.0\t8.7\n0410\t727680\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0228\t727815\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0140\t701780\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1916\t063500\t2012\t3.0\t19.0\t1.0\t8.7\n1013\t744865\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0506\t727680\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0907\t727815\t2003\t3.0\t3.0\t0.0\t8.2\n0520\t010100\t2008\t-9.0\t16.0\t0.0\t18.0\n1058\t725180\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1305\t063400\t2012\t-7.0\t20.0\t1.5\t10.3\n1609\t727680\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0336\t724290\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1119\t727845\t2013\t3.0\t3.0\t9999.0\t-9999.0\n1224\t726170\t2013\t-8.0\t-8.0\t9999.0\t-9999.0\n1107\t479180\t2006\t18.0\t24.0\t6.7\t9.8\n2056\t703160\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1908\t723340\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1050\t724273\t2008\t13.0\t19.0\t9999.0\t-9999.0\n1630\t725140\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1755\t722346\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1116\t725760\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1141\t723340\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0727\t725080\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2116\t723150\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1333\t723340\t2008\t12.0\t12.0\t9.3\t9.3\n1344\t726410\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0705\t723170\t2003\t7.0\t20.0\t0.0\t5.7\n1829\t725620\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1303\t727440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2004\t703610\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1053\t010490\t2009\t1.0\t3.0\t4.6\t4.6\n0628\t727504\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1632\t701330\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1919\t723240\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0035\t723340\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1259\t725620\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0800\t028450\t2012\t-31.2\t21.6\t0.0\t10.0\n1420\t726360\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2230\t725260\t2004\t2.0\t17.0\t8.2\t8.7\n0341\t723240\t2004\t7.0\t19.0\t0.0\t4.6\n0845\t702040\t2004\t-7.0\t0.0\t5.1\t13.4\n1440\t722530\t2003\t9.0\t26.0\t4.6\t5.7\n1548\t724273\t2010\t23.0\t23.0\t9999.0\t-9999.0\n2026\t725210\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0554\t718980\t2003\t5.0\t14.0\t1.5\t6.2\n0540\t702190\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1158\t725140\t2004\t24.0\t24.0\t5.1\t5.1\n1626\t722194\t2007\t-13.0\t23.0\t1.5\t12.9\n1115\t726088\t2004\t1.0\t20.0\t0.0\t9.3\n1250\t010250\t2008\t-8.0\t21.0\t0.0\t17.5\n1547\t744865\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1821\t718280\t2003\t-3.0\t10.0\t5.7\t7.2\n0540\t725090\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1016\t703884\t2003\t-4.0\t8.0\t0.0\t20.1\n1014\t725560\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2138\t725744\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1812\t727504\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0637\t036720\t2010\t10.0\t17.0\t3.1\t3.6\n0246\t725560\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1723\t724510\t2004\t2.0\t16.0\t8.2\t8.7\n1250\t010460\t2011\t-18.0\t24.0\t0.0\t18.5\n1228\t722530\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0735\t726410\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0009\t077610\t2009\t22.0\t22.0\t3.6\t3.6\n1813\t077610\t2013\t18.0\t20.0\t2.6\t3.6\n0937\t702730\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0325\t063400\t2006\t-7.0\t21.0\t0.0\t9.3\n1137\t720371\t2008\t-14.0\t9.0\t0.0\t10.8\n1824\t725180\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0620\t722530\t2004\t1.0\t16.0\t0.0\t2.6\n2232\t063500\t2010\t1.0\t20.0\t0.5\t4.6\n0841\t703610\t2004\t0.0\t7.0\t0.0\t0.0\n0104\t725080\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1303\t063400\t2011\t7.0\t17.0\t2.6\t9.3\n0411\t722346\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1920\t727440\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0800\t710210\t2008\t-45.0\t18.0\t0.0\t7.7\n1026\t036490\t2010\t4.0\t8.0\t1.0\t9.3\n1524\t726170\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2203\t727440\t2005\t-10.0\t-3.0\t0.0\t10.3\n1400\t720371\t2011\t-12.0\t30.0\t0.0\t10.3\n1735\t727130\t2014\t-10.0\t26.0\t3.1\t6.2\n1947\t726360\t2004\t-2.0\t9.0\t3.6\t8.7\n1005\t726540\t2004\t-10.0\t12.0\t2.1\t7.7\n2251\t722003\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0202\t703950\t2003\t6.0\t6.0\t6.7\t6.7\n2038\t724627\t2014\t19.0\t19.0\t1.5\t1.5\n1334\t726360\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1941\t115180\t2006\t-10.0\t16.0\t1.5\t3.6\n2250\t999999\t2006\t-21.5\t42.2\t9999.0\t-9999.0\n0730\t722170\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1059\t724510\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1506\t060600\t2008\t5.0\t5.0\t1.0\t1.0\n0603\t702670\t2004\t-15.0\t11.0\t3.1\t3.6\n1731\t701780\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0618\t115180\t2013\t6.0\t11.0\t1.0\t2.1\n1845\t744657\t2008\t-10.0\t32.0\t0.0\t11.8\n0751\t723240\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0608\t722530\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2122\t723240\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1419\t702190\t2003\t-17.0\t-13.0\t2.6\t5.7\n0614\t722170\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1715\t725560\t2005\t-11.0\t22.0\t5.1\t8.2\n2040\t701330\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2319\t726450\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1504\t911900\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0750\t720371\t2013\t-6.0\t-6.0\t4.1\t4.1\n0451\t726440\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1312\t723150\t2011\t4.0\t4.0\t9999.0\t-9999.0\n2331\t727120\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0309\t724500\t2005\t-7.0\t-7.0\t5.1\t5.1\n1627\t726170\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1953\t726777\t2004\t-24.0\t38.0\t0.0\t18.0\n1105\t727815\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1419\t036720\t2010\t9.0\t9.0\t1.0\t1.0\n1042\t725620\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0300\t788580\t2014\t21.0\t28.0\t0.0\t14.0\n1101\t703950\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0015\t703500\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0006\t724510\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0008\t718280\t2009\t-20.0\t16.0\t4.1\t8.2\n0004\t702710\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0036\t724273\t2004\t9.0\t22.0\t3.1\t8.2\n2337\t701330\t2008\t9.0\t9.0\t5.1\t5.1\n0200\t074600\t2006\t-8.2\t22.7\t0.0\t14.9\n1506\t727815\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1837\t725260\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1742\t724010\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1041\t074600\t2011\t5.0\t5.0\t5.7\t5.7\n2115\t725210\t2009\t-13.0\t-13.0\t9999.0\t-9999.0\n1545\t726450\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0630\t726410\t2008\t-14.0\t-14.0\t4.1\t4.1\n0714\t718980\t2014\t8.0\t14.0\t3.1\t11.8\n1859\t726540\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2236\t040180\t2008\t-2.0\t-2.0\t15.4\t15.4\n2056\t724290\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0231\t725260\t2003\t-6.0\t2.0\t3.1\t5.7\n2306\t726360\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0721\t744865\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0016\t702730\t2008\t-19.0\t-12.0\t2.1\t2.6\n0356\t727505\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0811\t703500\t2005\t1.0\t9.0\t2.1\t7.7\n1045\t710920\t2005\t-32.0\t-5.0\t1.5\t15.9\n1320\t715840\t2005\t-3.0\t19.0\t1.0\t22.1\n0534\t725180\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0036\t703950\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2044\t727120\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1128\t703500\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1833\t725440\t2008\t-1.0\t-1.0\t5.7\t5.7\n0038\t718280\t2014\t-21.0\t16.0\t0.0\t7.2\n1654\t722003\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0924\t722194\t2007\t-9.0\t20.0\t0.0\t8.7\n1645\t074600\t2014\t9.0\t9.0\t3.6\t3.6\n0028\t727120\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1225\t725620\t2003\t6.0\t6.0\t1.5\t1.5\n0408\t725260\t2004\t-1.0\t21.0\t1.5\t7.7\n0558\t703500\t2003\t-1.0\t11.0\t3.6\t11.3\n2317\t726410\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1557\t727923\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0023\t727815\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0320\t725760\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1035\t710920\t2008\t-33.0\t6.0\t0.0\t0.0\n1732\t702670\t2005\t-12.0\t-7.0\t0.0\t5.7\n1952\t727120\t2004\t2.0\t2.0\t5.1\t5.1\n0936\t710920\t2004\t-24.0\t-24.0\t4.6\t9.8\n1445\t115180\t2004\t13.0\t13.0\t1.5\t1.5\n1503\t726360\t2004\t-8.0\t16.0\t1.5\t9.8\n0711\t727815\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0900\t726450\t2004\t9999.0\t-9999.0\t9999.0\t-9999.0\n1145\t722003\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2335\t725267\t2009\t-10.0\t23.0\t0.0\t11.3\n0007\t722530\t2008\t12.0\t12.0\t0.0\t0.0\n1336\t726540\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0452\t726440\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1512\t727440\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0002\t722170\t2005\t27.0\t27.0\t0.0\t0.0\n1819\t726540\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1106\t702710\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0712\t727440\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0624\t703500\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1729\t703950\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1403\t722590\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0844\t725440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2053\t703500\t2008\t-8.0\t4.0\t0.0\t19.0\n0934\t744865\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0947\t703500\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0735\t722031\t2011\t-2.0\t-2.0\t0.0\t0.0\n0744\t703950\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1827\t703950\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0300\t064490\t2008\t-5.7\t20.3\t0.0\t13.0\n2012\t725640\t2004\t-3.0\t27.0\t4.6\t10.8\n1604\t063500\t2007\t6.0\t19.0\t1.0\t7.7\n2002\t725560\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1737\t723340\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2116\t725640\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1352\t723170\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0728\t726440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2007\t726450\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1942\t063400\t2014\t3.0\t17.0\t0.5\t11.8\n1400\t036490\t2005\t-1.8\t29.6\t0.5\t10.8\n2035\t702710\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0640\t703610\t2007\t0.0\t0.0\t9999.0\t-9999.0\n1736\t701170\t2005\t9999.0\t-9999.0\t6.6\t6.6\n2337\t725560\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0548\t718980\t2006\t0.0\t13.0\t0.0\t11.8\n0554\t724290\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1522\t702710\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1849\t725620\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1921\t727850\t2003\t2.0\t11.0\t2.1\t5.1\n0416\t725760\t2005\t22.0\t22.0\t5.1\t5.1\n0526\t710920\t2005\t-27.0\t4.0\t1.0\t15.4\n1131\t726360\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2101\t723170\t2003\t20.0\t23.0\t0.0\t7.7\n1614\t725440\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1408\t723170\t2005\t0.0\t15.0\t5.1\t6.7\n0716\t036720\t2011\t13.0\t13.0\t2.6\t2.6\n0000\t724500\t2013\t-8.3\t39.4\t0.0\t13.9\n1732\t727850\t2003\t6.0\t6.0\t8.7\t8.7\n2238\t724273\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0106\t724510\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1014\t727923\t2003\t9999.0\t-9999.0\t1.5\t1.5\n0211\t744865\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2156\t028450\t2009\t3.0\t3.0\t2.1\t2.1\n1553\t727680\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0827\t718980\t2006\t-2.0\t14.0\t1.0\t6.7\n2330\t085450\t2013\t3.0\t25.0\t0.0\t13.4\n1720\t725640\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1153\t724500\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2124\t723170\t2003\t-1.0\t24.0\t0.0\t7.2\n2048\t727680\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0530\t725090\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0153\t702040\t2004\t-9.0\t7.0\t3.1\t10.3\n1140\t722530\t2004\t23.0\t23.0\t0.0\t0.0\n0238\t725260\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1551\t725180\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2357\t725744\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1006\t726440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1531\t718280\t2007\t-21.0\t15.0\t1.0\t13.4\n2033\t703160\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0900\t725260\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2126\t722194\t2008\t-18.0\t12.0\t0.0\t13.4\n0310\t703610\t2004\t2.0\t10.0\t0.0\t4.1\n1420\t702710\t2005\t-1.0\t-1.0\t0.0\t0.0\n1828\t726440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0225\t725440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0203\t702670\t2004\t-21.0\t-21.0\t0.0\t0.0\n2134\t723150\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2018\t725053\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1230\t718280\t2007\t-29.0\t10.0\t0.0\t9.8\n1741\t727680\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2032\t702190\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0714\t063500\t2008\t3.0\t17.0\t3.1\t9.3\n1335\t701330\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1601\t063500\t2009\t4.0\t18.0\t2.1\t7.7\n0544\t722530\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0044\t726360\t2003\t-13.0\t-8.0\t3.1\t5.7\n0831\t726170\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1636\t727505\t2013\t-7.0\t-7.0\t4.6\t4.6\n2148\t063500\t2008\t4.0\t15.0\t0.5\t3.1\n1030\t724290\t2008\t19.0\t19.0\t5.7\t5.7\n1612\t724290\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1420\t010680\t2007\t-7.0\t11.0\t0.5\t10.3\n2355\t725640\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0732\t744865\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n2125\t727850\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1631\t727120\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1815\t115180\t2012\t16.0\t22.0\t1.0\t2.1\n0114\t726170\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2217\t725180\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0814\t115180\t2014\t3.0\t3.0\t4.6\t4.6\n0304\t726450\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1847\t703610\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0450\t010860\t2013\t-10.0\t-1.0\t1.5\t11.3\n1627\t726088\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2305\t724510\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0226\t703160\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1451\t725210\t2007\t-4.0\t19.0\t9999.0\t-9999.0\n0046\t725744\t2005\t-6.0\t-6.0\t4.1\t4.1\n2003\t726440\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1043\t722128\t2011\t-3.0\t4.0\t0.0\t0.0\n0839\t722003\t2006\t10.0\t14.0\t2.6\t4.1\n0532\t036490\t2012\t5.0\t13.0\t2.6\t12.9\n1345\t999999\t2008\t-31.7\t29.6\t0.0\t9.6\n0213\t726440\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0516\t703950\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1837\t725260\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1214\t703950\t2003\t7.0\t12.0\t2.1\t11.3\n0049\t723340\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0829\t710920\t2013\t-32.0\t3.0\t1.0\t15.4\n1315\t724290\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0116\t723150\t2008\t11.0\t11.0\t1.5\t3.1\n1823\t722530\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1945\t725180\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1035\t725180\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1136\t724290\t2010\t-1.0\t-1.0\t9999.0\t-9999.0\n2109\t725640\t2004\t-3.0\t16.0\t7.2\t14.4\n2348\t725180\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1730\t726170\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1404\t063500\t2012\t-1.0\t28.0\t0.0\t9.3\n0100\t063440\t2004\t-6.6\t23.6\t0.0\t16.0\n0506\t725180\t2004\t-18.0\t14.0\t0.0\t8.2\n0732\t724273\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1735\t725267\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1516\t703500\t2004\t2.0\t11.0\t2.6\t4.1\n2208\t726440\t2004\t14.0\t14.0\t4.6\t4.6\n1436\t722680\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0208\t702670\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1940\t725260\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0439\t726450\t2014\t6.7\t6.7\t9999.0\t-9999.0\n1615\t703160\t2004\t1.0\t6.0\t5.7\t17.5\n1206\t722170\t2005\t2.0\t24.0\t0.0\t4.1\n1239\t723170\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1142\t703610\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0400\t723150\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2112\t702670\t2005\t-11.0\t22.0\t0.0\t2.1\n0303\t724273\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0850\t726440\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1402\t727120\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0700\t010780\t2012\t-19.0\t20.1\t0.0\t21.0\n0317\t727440\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1717\t725053\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0250\t064490\t2013\t-8.0\t22.0\t0.0\t13.4\n1144\t725744\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1711\t725260\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1143\t723340\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1123\t725080\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1926\t726088\t2005\t15.0\t15.0\t3.6\t3.6\n0739\t702190\t2005\t-4.0\t7.0\t1.5\t5.7\n0936\t701330\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0210\t723240\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1854\t725744\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1621\t723170\t2003\t2.0\t21.0\t3.6\t4.1\n0902\t725140\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0344\t726980\t2008\t0.0\t0.0\t1.5\t1.5\n1100\t028760\t2013\t-21.1\t27.4\t0.0\t14.0\n0135\t727504\t2009\t19.0\t19.0\t2.1\t2.1\n1022\t701780\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2221\t065900\t2007\t10.0\t10.0\t6.7\t6.7\n1925\t725440\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0919\t060600\t2006\t-1.0\t1.0\t3.1\t8.2\n0835\t702710\t2003\t-26.0\t-26.0\t0.0\t0.0\n1617\t725140\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1924\t012100\t2005\t9.0\t9.0\t5.1\t5.1\n1016\t725090\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1748\t722590\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2317\t710920\t2011\t-40.0\t4.0\t2.1\t13.4\n0840\t702190\t2005\t-11.0\t2.0\t2.1\t7.7\n1336\t727120\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0511\t718280\t2009\t-27.0\t13.0\t0.0\t9.3\n1320\t065900\t2008\t-3.0\t31.0\t0.0\t12.3\n0636\t725210\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0325\t726540\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1549\t703160\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0445\t703610\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0708\t701330\t2005\t-25.0\t-25.0\t0.0\t0.0\n0340\t718980\t2003\t16.0\t16.0\t0.0\t6.7\n0409\t725640\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1204\t703950\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1830\t725260\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2320\t010015\t2009\t-4.0\t4.0\t0.5\t2.1\n1947\t115180\t2011\t-1.0\t13.0\t1.5\t5.7\n0021\t701780\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1504\t724273\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1124\t726410\t2003\t3.0\t16.0\t0.0\t4.1\n1300\t036720\t2013\t-1.6\t32.5\t0.5\t13.4\n1021\t722530\t2005\t26.0\t26.0\t4.6\t4.6\n1738\t727440\t2005\t-12.0\t6.0\t2.6\t7.2\n0955\t010490\t2014\t7.0\t7.0\t1.0\t1.0\n0015\t726777\t2003\t33.0\t33.0\t6.7\t6.7\n0527\t726360\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1313\t727850\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0032\t722680\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0047\t725560\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2100\t722170\t2012\t4.4\t41.1\t0.0\t11.3\n2325\t724500\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1156\t727923\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2034\t911900\t2005\t21.0\t21.0\t7.2\t7.2\n2300\t725090\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2153\t723340\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1632\t725620\t2004\t-2.0\t7.0\t3.6\t9.8\n1220\t722530\t2005\t6.0\t18.0\t0.0\t6.2\n1336\t727845\t2005\t-1.0\t-1.0\t1.5\t1.5\n1831\t115180\t2004\t25.0\t25.0\t3.1\t3.1\n2238\t725760\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1600\t726980\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2217\t725140\t2003\t-4.0\t16.0\t0.0\t3.6\n1232\t724010\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1208\t725440\t2005\t11.0\t11.0\t0.0\t0.0\n2037\t724290\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0809\t718280\t2013\t-33.0\t14.0\t1.0\t11.3\n1223\t723170\t2004\t21.0\t23.0\t3.1\t5.1\n0220\t115180\t2007\t5.0\t6.0\t3.6\t7.7\n2000\t725140\t2005\t9999.0\t-9999.0\t9999.0\t-9999.0\n0509\t726410\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1406\t725140\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2050\t111200\t2009\t-10.0\t24.0\t0.0\t10.8\n2144\t703160\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0611\t725640\t2005\t-2.0\t-2.0\t1.5\t1.5\n2047\t726170\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1316\t725560\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0140\t722031\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0827\t702710\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1336\t701780\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1024\t722590\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1856\t725210\t2013\t0.0\t0.0\t9999.0\t-9999.0\n0300\t726360\t2008\t-9.0\t16.0\t2.6\t9.8\n0653\t724273\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0414\t726450\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1420\t703950\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1356\t726980\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1019\t702190\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1141\t703950\t2005\t0.0\t6.0\t0.0\t5.7\n0017\t063500\t2010\t0.0\t9.0\t2.1\t5.7\n2049\t718980\t2009\t5.0\t12.0\t0.0\t9.3\n1513\t726540\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2114\t726170\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1351\t722003\t2014\t12.0\t20.3\t2.1\t5.1\n1750\t702670\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1810\t726450\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0920\t911900\t2004\t22.0\t22.0\t1.5\t1.5\n1349\t724290\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0451\t727815\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1425\t725210\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1528\t726410\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0534\t726410\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0813\t727440\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0800\t701780\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1746\t726360\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0523\t725090\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1803\t703610\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1326\t725620\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0047\t726170\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0236\t703160\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0520\t722031\t2007\t-5.0\t29.0\t0.0\t8.2\n1117\t725744\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1203\t725180\t2005\t3.0\t16.0\t1.5\t3.1\n1800\t727845\t2009\t-4.0\t3.0\t0.0\t2.1\n2150\t028450\t2006\t-29.0\t19.0\t0.0\t10.8\n0212\t725440\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0800\t727505\t2013\t-10.0\t-10.0\t1.5\t1.5\n1324\t725560\t2004\t0.0\t0.0\t3.6\t3.6\n1646\t702730\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0822\t725260\t2004\t-7.0\t22.0\t1.5\t7.7\n2302\t725053\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1544\t727815\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2116\t727680\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1647\t722530\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0345\t724273\t2005\t21.0\t21.0\t2.1\t2.1\n1820\t725560\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1942\t727815\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0321\t702040\t2004\t2.0\t2.0\t8.7\t8.7\n0700\t727440\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1231\t700632\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n2000\t725090\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2012\t077610\t2013\t8.0\t18.0\t1.5\t4.1\n1315\t724084\t2006\t-8.0\t31.0\t0.0\t15.4\n2346\t723340\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0946\t727680\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1916\t702730\t2004\t9.0\t9.0\t1.5\t2.1\n1805\t703500\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0007\t723170\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1953\t725760\t2006\t-5.0\t37.0\t0.0\t11.3\n0331\t718980\t2007\t-2.0\t12.0\t1.0\t6.2\n1457\t702040\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1050\t702670\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2236\t726170\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1012\t703610\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1058\t727923\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0926\t727120\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0123\t727815\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1104\t725260\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1735\t115180\t2006\t-1.0\t-1.0\t6.7\t6.7\n0334\t724290\t2008\t21.0\t21.0\t9999.0\t-9999.0\n1427\t718280\t2009\t-24.0\t13.0\t0.0\t7.7\n0923\t722680\t2005\t2.0\t2.0\t1.5\t1.5\n1325\t727504\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0342\t724010\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0700\t725760\t2005\t9999.0\t-9999.0\t9999.0\t-9999.0\n1606\t723340\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1627\t744865\t2005\t23.0\t26.0\t4.6\t9.3\n0805\t726540\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1534\t722346\t2014\t8.8\t24.6\t0.0\t5.1\n1112\t722590\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1337\t724290\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1323\t725744\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1304\t725760\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1235\t702710\t2005\t-7.0\t-2.0\t0.0\t2.1\n0235\t726410\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1606\t726450\t2011\t-4.0\t-4.0\t9999.0\t-9999.0\n1527\t725080\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1025\t724510\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1918\t060600\t2014\t1.0\t16.0\t1.0\t5.1\n2230\t036490\t2013\t17.0\t17.0\t2.1\t2.1\n1940\t724500\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1608\t744657\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1601\t702710\t2003\t1.0\t1.0\t2.1\t2.1\n1418\t727815\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0956\t727815\t2004\t-4.0\t21.0\t0.0\t8.2\n0955\t703610\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2250\t010877\t2011\t-1.0\t18.0\t1.0\t31.4\n1045\t725560\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2004\t722194\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2041\t722170\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1319\t702190\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2242\t724290\t2005\t5.0\t19.0\t2.6\t5.1\n1130\t725560\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0608\t725640\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2310\t702190\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0010\t726540\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0100\t010820\t2012\t-28.5\t2.2\t9999.0\t-9999.0\n0230\t703610\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1113\t710920\t2011\t-37.0\t5.0\t1.5\t13.9\n0622\t727923\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2320\t060600\t2013\t-15.0\t23.0\t0.0\t13.4\n1959\t034820\t2010\t10.0\t14.0\t4.1\t8.7\n0124\t725620\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0530\t727923\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1720\t727923\t2004\t7.0\t7.0\t3.6\t3.6\n0427\t726440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1243\t725620\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1619\t725744\t2003\t-5.0\t12.0\t4.1\t6.2\n0402\t726540\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0938\t726980\t2004\t8.0\t8.0\t2.1\t2.1\n1407\t725640\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1952\t727505\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1535\t703500\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0821\t034820\t2009\t2.0\t12.0\t1.5\t5.1\n0646\t726410\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1937\t725744\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1515\t718280\t2014\t-9.0\t25.0\t2.6\t9.3\n0007\t725744\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1945\t115180\t2013\t0.0\t24.0\t6.2\t10.8\n1400\t725260\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1504\t718980\t2003\t13.0\t13.0\t1.0\t1.0\n0208\t063400\t2012\t-12.0\t15.0\t0.0\t6.7\n2143\t727815\t2008\t-2.0\t-2.0\t0.0\t0.0\n1024\t725260\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0700\t012100\t2003\t9999.0\t-9999.0\t9999.0\t-9999.0\n0842\t703610\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1940\t063400\t2006\t14.0\t24.0\t2.1\t5.1\n1307\t074600\t2009\t21.0\t21.0\t3.6\t3.6\n1404\t727120\t2005\t-7.0\t23.0\t0.0\t8.2\n1447\t702710\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2007\t722590\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1340\t701330\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1511\t727680\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1422\t723240\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1048\t726450\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1813\t911900\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1849\t702190\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0433\t727440\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1656\t702190\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2049\t727680\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2021\t727505\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1630\t724500\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0729\t726980\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0513\t727440\t2008\t-10.0\t-10.0\t5.1\t5.1\n0623\t702190\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0815\t744865\t2004\t-6.0\t13.0\t3.1\t4.6\n1545\t725080\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0020\t727923\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0517\t726440\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0936\t702670\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1359\t703500\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2126\t727815\t2004\t-1.0\t17.0\t0.0\t5.7\n0406\t726088\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0259\t727850\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1239\t725090\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1108\t723240\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0529\t725260\t2003\t-4.0\t19.0\t0.0\t9.8\n0843\t727680\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1851\t727440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1258\t703160\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0941\t724273\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0628\t726540\t2003\t-6.0\t11.0\t2.6\t10.8\n2312\t060600\t2003\t6.0\t6.0\t6.7\t6.7\n2214\t722003\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1933\t725180\t2003\t-4.0\t7.0\t2.1\t5.7\n1558\t703160\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0114\t722346\t2012\t1.0\t27.0\t0.0\t3.6\n0127\t723170\t2004\t3.0\t26.0\t2.1\t9.3\n0341\t725744\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0743\t702710\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n2230\t718980\t2004\t9999.0\t-9999.0\t2.6\t2.6\n1659\t727815\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1019\t725090\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1116\t726440\t2005\t-16.0\t12.0\t1.5\t9.8\n2137\t725620\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1233\t703950\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1612\t725140\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1709\t725080\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1733\t727440\t2008\t-11.0\t-6.0\t3.6\t4.1\n1143\t722003\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0037\t720113\t2006\t-6.0\t32.0\t0.0\t10.8\n0143\t723170\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1716\t040180\t2007\t0.0\t0.0\t2.6\t2.6\n1812\t725210\t2014\t2.0\t2.0\t9999.0\t-9999.0\n1920\t725210\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1559\t725440\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0252\t725744\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1504\t723240\t2003\t20.0\t23.0\t4.1\t5.1\n0026\t725620\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2347\t725090\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0235\t722194\t2014\t-6.0\t26.8\t0.0\t5.7\n1151\t725180\t2004\t-24.0\t24.0\t0.0\t12.9\n0832\t724290\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0735\t074600\t2008\t1.0\t9.0\t0.0\t2.1\n0418\t727680\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1839\t726170\t2013\t-7.0\t-7.0\t9999.0\t-9999.0\n2009\t724510\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2108\t725210\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0015\t725090\t2004\t11.0\t11.0\t5.7\t5.7\n1501\t725260\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0906\t726170\t2004\t-8.0\t19.0\t0.0\t5.7\n1109\t725180\t2005\t11.0\t11.0\t2.6\t2.6\n0838\t063500\t2009\t-14.0\t22.0\t0.5\t7.7\n1922\t725260\t2003\t0.0\t0.0\t5.1\t5.1\n1332\t744865\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0424\t724010\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1250\t718980\t2012\t1.0\t12.0\t0.0\t13.9\n0824\t028450\t2004\t17.0\t17.0\t2.6\t2.6\n1304\t725744\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1347\t703160\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1103\t718980\t2009\t1.0\t13.0\t0.0\t5.7\n0127\t725560\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1107\t710920\t2012\t-27.0\t-3.0\t1.5\t15.9\n0106\t727923\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2118\t725210\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1024\t726410\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0807\t726450\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1751\t725260\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2330\t724510\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2053\t723240\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1413\t726360\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1052\t724510\t2004\t9999.0\t-9999.0\t9999.0\t-9999.0\n1401\t703160\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2308\t726980\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0655\t725416\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2037\t726980\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1306\t727440\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0551\t725560\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0833\t722680\t2005\t14.0\t14.0\t5.7\t5.7\n0744\t702710\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0615\t725180\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0101\t725744\t2003\t-2.0\t-2.0\t5.7\t5.7\n0215\t726540\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1711\t725744\t2003\t-4.0\t-4.0\t6.2\t6.2\n2233\t726410\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0256\t726410\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0323\t723340\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0420\t725744\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1225\t726540\t2003\t-2.0\t5.0\t2.6\t9.3\n0224\t724290\t2005\t-1.0\t-1.0\t8.2\t8.2\n1403\t723170\t2005\t0.0\t21.0\t3.6\t3.6\n0835\t725260\t2005\t-9.0\t24.0\t3.6\t6.7\n2134\t727850\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2025\t723170\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0344\t727680\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0203\t725140\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1245\t723150\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0526\t725210\t2005\t-13.0\t16.0\t0.0\t8.2\n1623\t725620\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1635\t703500\t2005\t-1.0\t4.0\t0.0\t4.1\n0448\t722170\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2358\t060600\t2011\t4.0\t11.0\t0.5\t4.6\n1038\t724010\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0237\t726088\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1646\t725140\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1204\t703950\t2005\t2.0\t7.0\t2.1\t3.1\n1242\t702190\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1620\t115180\t2007\t11.0\t11.0\t6.2\t6.2\n0735\t077610\t2008\t10.0\t10.0\t2.6\t2.6\n2000\t060600\t2013\t-14.4\t25.5\t0.0\t18.0\n1256\t724510\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0013\t725180\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1246\t726360\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0436\t727815\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1755\t724010\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2330\t702670\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0711\t725090\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2022\t725744\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0536\t702670\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1341\t727505\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0601\t726980\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0237\t726540\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0534\t718980\t2012\t0.0\t12.0\t1.0\t6.2\n2109\t036720\t2013\t15.0\t15.0\t4.1\t4.1\n1638\t726980\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0427\t724273\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2042\t703610\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0630\t725744\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0333\t724510\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1126\t703500\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2038\t726170\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1338\t722170\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1545\t701780\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0932\t726450\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0923\t744865\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1611\t106160\t2014\t2.0\t12.0\t3.1\t4.1\n1638\t727680\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1927\t724510\t2004\t-1.0\t15.0\t0.0\t5.1\n1000\t726360\t2008\t-12.0\t10.0\t1.5\t13.4\n1910\t702670\t2005\t8.0\t22.0\t4.1\t5.7\n0740\t036490\t2003\t15.0\t17.0\t1.5\t5.1\n0340\t115180\t2006\t-1.0\t-1.0\t1.0\t1.0\n0720\t060600\t2003\t-13.0\t24.0\t0.0\t11.3\n1500\t010150\t2005\t-5.3\t18.6\t1.0\t23.0\n2027\t726450\t2004\t15.0\t16.0\t4.1\t5.7\n2250\t064500\t2012\t-12.0\t25.0\t0.0\t12.9\n1620\t725180\t2008\t0.0\t0.0\t3.6\t3.6\n0100\t010820\t2013\t-34.1\t17.7\t9999.0\t-9999.0\n0317\t725260\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1700\t010100\t2010\t-11.5\t18.1\t0.0\t19.0\n0651\t028450\t2012\t-3.0\t7.0\t3.1\t3.1\n0023\t911900\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0603\t744865\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0315\t727120\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0409\t725080\t2004\t19.0\t19.0\t2.1\t2.1\n2120\t723170\t2004\t0.0\t21.0\t2.6\t4.6\n2036\t722170\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1042\t726360\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0044\t727815\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0000\t722680\t2003\t9999.0\t-9999.0\t9999.0\t-9999.0\n2139\t701330\t2005\t-2.0\t-2.0\t15.9\t15.9\n0139\t725090\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1500\t726360\t2011\t-16.0\t-16.0\t3.1\t3.1\n2007\t703610\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1323\t725260\t2005\t-8.0\t19.0\t0.0\t9.3\n0412\t725090\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0915\t727815\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2033\t702190\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2145\t727815\t2008\t-12.0\t-7.0\t2.1\t4.6\n2337\t720113\t2009\t-10.0\t-10.0\t7.7\t7.7\n1843\t725440\t2005\t-7.0\t19.0\t2.6\t5.1\n1453\t010460\t2013\t6.0\t6.0\t8.2\t8.2\n2339\t725620\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0400\t722346\t2012\t2.0\t22.0\t0.0\t5.1\n0433\t725760\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0039\t701330\t2004\t-13.0\t1.0\t4.6\t17.0\n0005\t723340\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1924\t722128\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1350\t060600\t2003\t-12.0\t30.0\t0.0\t13.9\n0220\t028450\t2011\t-31.0\t21.0\t0.0\t13.9\n1351\t353946\t2006\t-6.0\t18.0\t1.0\t2.0\n0843\t726450\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0038\t725560\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1402\t723170\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2244\t726440\t2004\t-7.0\t6.0\t2.6\t6.2\n0124\t723150\t2003\t9.0\t9.0\t0.0\t0.0\n0020\t718980\t2010\t4.0\t13.0\t1.5\t7.2\n1418\t703160\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1015\t710920\t2005\t-18.0\t-4.0\t3.1\t15.4\n0522\t727440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1116\t725416\t2006\t-10.0\t24.0\t0.0\t6.7\n1437\t911900\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1146\t726170\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0728\t725140\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1325\t726980\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0815\t703160\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0927\t722590\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1508\t724290\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0038\t727120\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0129\t063500\t2008\t3.0\t17.0\t1.0\t4.6\n1419\t036720\t2013\t9.0\t13.0\t1.5\t2.6\n1836\t702190\t2003\t1.0\t13.0\t3.1\t8.7\n1225\t725760\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1410\t703950\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0649\t702710\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0900\t725640\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0450\t010590\t2011\t-22.0\t23.0\t0.0\t29.3\n1832\t723340\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0736\t726450\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0020\t724010\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2027\t724510\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1722\t722128\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0836\t726980\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0331\t718980\t2012\t0.0\t9.0\t1.5\t9.8\n0250\t010879\t2013\t-1.0\t16.0\t0.0\t32.4\n0204\t725620\t2004\t-3.0\t26.0\t3.1\t7.7\n2016\t063400\t2007\t9.0\t15.0\t2.1\t4.6\n1000\t010280\t2008\t-15.0\t10.5\t0.0\t19.0\n1704\t722530\t2004\t8.0\t25.0\t5.1\t7.7\n1554\t725744\t2004\t-12.0\t18.0\t0.0\t18.0\n1100\t478310\t2011\t2.8\t29.3\t0.5\t12.3\n1025\t744865\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0908\t115180\t2011\t13.0\t16.0\t4.1\t6.2\n1423\t703160\t2003\t0.0\t11.0\t3.6\t11.3\n0515\t722003\t2008\t-13.0\t17.0\t0.0\t8.2\n2309\t028450\t2006\t-15.0\t-15.0\t2.6\t2.6\n1210\t727923\t2005\t3.0\t12.0\t2.1\t9.3\n1139\t701780\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0052\t060600\t2006\t-4.0\t10.0\t1.0\t5.7\n0054\t727504\t2008\t-11.0\t-11.0\t4.1\t4.1\n1440\t724010\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1200\t999999\t2010\t-33.3\t32.4\t0.0\t14.7\n0215\t702730\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0336\t724290\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1433\t722530\t2003\t21.0\t21.0\t1.5\t1.5\n2138\t726170\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1905\t701330\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1448\t074600\t2010\t14.0\t14.0\t2.1\t2.1\n2353\t722003\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0321\t722530\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2139\t725440\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0602\t063400\t2011\t-3.0\t18.0\t0.5\t4.6\n1113\t726440\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0510\t703500\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0738\t063400\t2010\t-7.0\t18.0\t1.0\t8.7\n0105\t724290\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0830\t727680\t2005\t-14.0\t-14.0\t9.8\t9.8\n1639\t701780\t2003\t-4.0\t-4.0\t4.6\t4.6\n0604\t718980\t2011\t1.0\t12.0\t1.0\t9.3\n1701\t115180\t2005\t0.0\t0.0\t4.6\t4.6\n0433\t727815\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0851\t028450\t2014\t-14.0\t10.0\t5.1\t9.8\n2244\t726360\t2004\t1.0\t1.0\t9.8\t9.8\n0904\t722031\t2006\t13.0\t13.0\t4.1\t4.1\n0522\t725440\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1515\t720371\t2008\t7.0\t20.0\t0.0\t7.7\n0437\t725140\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1615\t710920\t2009\t-26.0\t11.0\t4.1\t7.2\n1138\t720371\t2008\t18.0\t18.0\t3.1\t3.1\n1000\t724273\t2007\t13.0\t18.0\t9999.0\t-9999.0\n0916\t723150\t2004\t6.0\t18.0\t0.0\t4.6\n0724\t726440\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0734\t724510\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0643\t702670\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0721\t727120\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0446\t702040\t2004\t-12.0\t1.0\t4.1\t13.9\n0910\t725090\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0606\t723170\t2004\t8.0\t8.0\t0.0\t0.0\n2207\t703500\t2005\t4.0\t12.0\t4.6\t6.7\n1434\t723340\t2003\t23.0\t24.0\t2.1\t4.1\n0155\t727130\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1533\t724290\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0724\t115180\t2014\t12.0\t12.0\t2.1\t2.1\n0559\t725620\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0738\t727440\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0316\t725440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1143\t724273\t2004\t8.0\t22.0\t0.0\t6.2\n1943\t063400\t2010\t-4.0\t15.0\t0.5\t8.7\n1113\t701780\t2005\t12.0\t12.0\t1.5\t1.5\n2101\t725744\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0613\t726980\t2003\t15.0\t15.0\t3.1\t3.1\n0351\t726450\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0049\t724510\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1337\t727845\t2013\t-6.0\t-6.0\t9999.0\t-9999.0\n2037\t726170\t2008\t-13.0\t-13.0\t4.1\t4.1\n2335\t727120\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2214\t727440\t2005\t-11.0\t-1.0\t2.1\t15.4\n0508\t725090\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1033\t722170\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2232\t718280\t2004\t-27.0\t9.0\t3.1\t8.7\n2215\t725260\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1934\t726360\t2003\t-7.0\t0.0\t5.1\t8.2\n1351\t725440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1534\t726450\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0101\t727845\t2005\t0.0\t5.0\t0.0\t3.1\n1851\t725140\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0935\t703950\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1644\t725560\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0820\t725180\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1930\t726170\t2011\t12.0\t26.0\t2.6\t4.1\n1010\t726540\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0414\t710920\t2010\t-28.0\t5.0\t3.1\t14.4\n1749\t063500\t2008\t3.0\t13.0\t2.6\t4.6\n1851\t727845\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0813\t727505\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0212\t726410\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1531\t701780\t2003\t-1.0\t14.0\t0.0\t3.1\n0445\t724273\t2003\t15.0\t15.0\t4.1\t4.1\n1053\t718980\t2004\t-1.0\t13.0\t0.0\t3.6\n1116\t725440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1043\t702670\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0018\t723170\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2236\t710920\t2004\t-12.0\t-8.0\t1.5\t7.7\n1322\t702190\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0734\t060600\t2004\t4.0\t12.0\t1.0\t6.2\n1440\t726410\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1518\t727815\t2004\t-4.0\t11.0\t0.0\t3.6\n2218\t725640\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0207\t725180\t2005\t13.0\t13.0\t3.6\t3.6\n0446\t703500\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2013\t727680\t2004\t1.0\t18.0\t3.6\t14.9\n0509\t723150\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1718\t036490\t2004\t0.0\t0.0\t6.7\t6.7\n2307\t702190\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2336\t725090\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0402\t718980\t2010\t5.0\t13.0\t1.0\t3.6\n1227\t726980\t2004\t8.0\t8.0\t0.0\t0.0\n0803\t726450\t2010\t6.0\t6.0\t9999.0\t-9999.0\n2024\t701330\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0838\t726410\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1504\t727923\t2004\t10.0\t14.0\t0.0\t6.7\n1200\t040180\t2003\t-8.8\t18.4\t0.0\t19.5\n2339\t727815\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1245\t702710\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0109\t703160\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1112\t725090\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2100\t710600\t2011\t-31.7\t27.0\t0.0\t8.2\n0632\t724290\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0135\t724084\t2012\t3.0\t27.0\t2.1\t4.1\n1214\t725260\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0114\t726450\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0304\t722590\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1249\t724273\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0018\t703610\t2004\t-1.0\t10.0\t0.0\t4.1\n0239\t726540\t2005\t-7.0\t3.0\t0.0\t10.8\n0117\t703160\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0813\t724500\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2014\t726170\t2004\t2.0\t2.0\t6.2\t6.2\n0707\t725620\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0041\t725180\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0110\t722680\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1736\t718980\t2013\t0.0\t15.0\t1.5\t9.8\n1626\t726360\t2004\t-9.0\t12.0\t3.6\t7.2\n2000\t725440\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1247\t725090\t2008\t3.0\t3.0\t7.2\t7.2\n0207\t702710\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1844\t703500\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1446\t701330\t2005\t-23.0\t12.0\t2.1\t8.7\n1733\t710920\t2007\t-31.0\t-2.0\t1.5\t11.8\n0548\t723150\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0533\t702670\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1802\t725760\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1730\t724273\t2011\t7.0\t7.0\t9999.0\t-9999.0\n1428\t063440\t2005\t1.0\t1.0\t7.2\t7.2\n0125\t727845\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2240\t115180\t2013\t-2.0\t1.0\t2.1\t4.1\n1825\t723340\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0816\t725210\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1814\t727504\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0052\t726170\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1844\t727845\t2005\t5.0\t5.0\t5.1\t5.1\n0401\t718980\t2005\t1.0\t15.0\t3.1\t9.3\n1005\t725760\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1226\t724010\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1110\t010100\t2014\t1.0\t1.0\t6.2\t6.2\n2324\t060600\t2010\t14.0\t14.0\t2.6\t2.6\n2153\t725560\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0200\t994720\t2014\t-9.8\t17.0\t0.0\t14.9\n0444\t701330\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1533\t722003\t2011\t-15.0\t-15.0\t0.0\t0.0\n1006\t063500\t2014\t4.0\t22.0\t1.5\t5.1\n0726\t726450\t2012\t3.0\t3.0\t9999.0\t-9999.0\n0820\t703500\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0405\t726440\t2004\t2.0\t21.0\t3.1\t8.2\n0222\t723170\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1243\t725744\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0041\t727504\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0705\t479180\t2008\t26.0\t26.0\t4.6\t4.6\n2139\t726410\t2003\t9999.0\t-9999.0\t10.3\t10.3\n0253\t726450\t2010\t-3.0\t4.0\t9999.0\t-9999.0\n1403\t725440\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1619\t034820\t2012\t8.0\t8.0\t8.2\t8.2\n1716\t063500\t2004\t12.0\t12.0\t4.1\t4.1\n1827\t703950\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0944\t722590\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1525\t718280\t2014\t-25.0\t17.0\t0.0\t8.2\n0447\t722590\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1534\t725140\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1228\t106160\t2014\t18.0\t18.0\t5.7\t5.7\n1916\t703160\t2005\t2.0\t13.0\t0.0\t9.3\n1347\t726540\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0600\t725440\t2003\t9999.0\t-9999.0\t9999.0\t-9999.0\n1136\t724500\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1440\t726450\t2003\t-1.0\t17.0\t1.5\t6.7\n1610\t703160\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1348\t701330\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0053\t703500\t2007\t3.0\t6.0\t2.6\t4.6\n0932\t911900\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1836\t724010\t2004\t4.0\t26.0\t2.1\t6.7\n0612\t703610\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0120\t710920\t2011\t-28.0\t7.0\t3.1\t10.3\n2240\t727120\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0125\t726440\t2005\t-6.0\t13.0\t4.1\t8.2\n0132\t725744\t2004\t0.0\t0.0\t10.3\t10.3\n0935\t034820\t2014\t18.0\t18.0\t8.8\t8.8\n1229\t702670\t2004\t4.0\t4.0\t0.0\t0.0\n2259\t063500\t2010\t-8.0\t16.0\t0.0\t6.7\n0723\t725080\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0205\t725260\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0932\t703610\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1250\t010520\t2009\t-15.0\t23.0\t0.0\t19.0\n2130\t727440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0507\t744657\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0754\t725560\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1000\t062390\t2014\t1.6\t21.1\t1.0\t22.0\n0111\t725640\t2005\t0.0\t0.0\t9.3\t9.3\n1516\t718980\t2008\t4.0\t14.0\t0.0\t6.7\n1127\t727815\t2004\t-4.0\t11.0\t0.0\t4.6\n0525\t724290\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1025\t725760\t2003\t-1.0\t-1.0\t3.1\t3.1\n0542\t727120\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0731\t725140\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2018\t702730\t2004\t1.0\t1.0\t0.0\t0.0\n0537\t723170\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1721\t703160\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1808\t725260\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1607\t725090\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0110\t726450\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0501\t727120\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1237\t724273\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0000\t724290\t2004\t9999.0\t-9999.0\t9999.0\t-9999.0\n1318\t724273\t2008\t-1.0\t11.0\t0.0\t3.6\n0549\t724290\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0608\t725760\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1142\t726540\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1831\t724290\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0338\t726088\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1228\t701780\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1151\t723240\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0919\t727815\t2004\t-3.0\t14.0\t0.0\t6.2\n0250\t710920\t2004\t-25.0\t-6.0\t1.5\t13.4\n1658\t702710\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0940\t725180\t2003\t17.0\t19.0\t0.0\t3.1\n0544\t722590\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2017\t725180\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0520\t010100\t2009\t-10.0\t18.0\t0.0\t16.5\n2019\t726410\t2004\t6.0\t6.0\t6.2\t6.2\n1439\t703160\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0602\t727815\t2005\t-2.0\t12.0\t0.0\t3.1\n1320\t010014\t2010\t-6.0\t23.0\t0.0\t12.3\n0220\t010740\t2013\t4.0\t9.0\t1.0\t7.7\n2305\t701780\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0620\t727923\t2003\t6.0\t6.0\t0.0\t4.6\n1914\t722680\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2000\t011070\t2011\t-3.9\t17.3\t0.0\t23.0\n2300\t085450\t2013\t3.0\t28.6\t0.0\t13.4\n0836\t726450\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2206\t724500\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0522\t726440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0748\t726360\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2357\t727505\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1331\t723170\t2005\t8.0\t25.0\t1.5\t8.7\n0351\t718280\t2003\t-8.0\t5.0\t3.1\t4.6\n0327\t725210\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1717\t725760\t2008\t-7.0\t-7.0\t1.5\t1.5\n1315\t727120\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0630\t723170\t2003\t-5.0\t-5.0\t5.1\t5.1\n0922\t726360\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2036\t727440\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1828\t724290\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2117\t727923\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1511\t744865\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1520\t701780\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0957\t063500\t2010\t-1.0\t19.0\t0.5\t4.1\n0823\t034820\t2010\t13.0\t14.0\t2.1\t4.6\n1301\t725620\t2008\t-8.0\t-8.0\t0.0\t0.0\n1609\t725090\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1219\t744865\t2005\t4.0\t14.0\t1.5\t3.1\n0133\t722170\t2004\t14.0\t18.0\t0.0\t3.1\n0011\t702730\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2119\t703950\t2005\t8.0\t8.0\t15.4\t15.4\n1409\t726980\t2005\t4.0\t4.0\t2.1\t2.1\n1930\t115180\t2010\t-14.0\t27.0\t0.0\t13.4\n2015\t700632\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2006\t702730\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2314\t722530\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0840\t726440\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2021\t723150\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1900\t010110\t2012\t-18.0\t6.3\t0.0\t20.0\n0923\t723150\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0633\t744865\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0858\t725080\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1929\t710920\t2005\t-28.0\t-5.0\t1.5\t13.9\n1537\t724510\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0653\t727845\t2012\t-1.0\t18.0\t9999.0\t-9999.0\n1241\t725440\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1545\t724290\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0938\t724500\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0051\t718980\t2011\t-3.0\t13.0\t1.0\t5.1\n0645\t724010\t2004\t-1.0\t22.0\t0.0\t2.6\n1516\t744865\t2008\t8.0\t8.0\t9.8\t9.8\n1220\t726440\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2114\t726980\t2004\t4.0\t7.0\t3.6\t4.1\n1621\t115180\t2010\t-2.0\t16.0\t2.6\t7.2\n0622\t115180\t2003\t17.0\t17.0\t3.1\t3.1\n1411\t703160\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0254\t726170\t2009\t17.0\t17.0\t0.0\t0.0\n0555\t703950\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2314\t725090\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0243\t744657\t2006\t8.0\t20.0\t3.1\t5.1\n1826\t726980\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0026\t479180\t2003\t26.0\t26.0\t3.1\t3.1\n1701\t725180\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0441\t701780\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1000\t703500\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1707\t726360\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1720\t725620\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1939\t725090\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0933\t701330\t2003\t1.0\t5.0\t2.1\t3.6\n1435\t724627\t2013\t12.0\t14.0\t0.0\t2.1\n0817\t724273\t2005\t0.0\t11.0\t0.0\t0.0\n1150\t727680\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1828\t726540\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1521\t726410\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0426\t063500\t2008\t0.0\t16.0\t0.5\t4.6\n2032\t703500\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0039\t702190\t2005\t-4.0\t2.0\t2.6\t5.1\n1810\t726440\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0804\t726540\t2004\t-4.0\t-4.0\t8.2\t8.2\n1452\t710920\t2010\t-27.0\t13.0\t7.2\t13.9\n2321\t725620\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1105\t726440\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1210\t725140\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0059\t725620\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2233\t722680\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1451\t725210\t2005\t-7.0\t29.0\t1.5\t10.3\n1402\t744865\t2008\t9.0\t9.0\t6.7\t6.7\n0448\t702670\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0200\t115180\t2005\t-12.3\t21.2\t0.0\t12.0\n0044\t723170\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1045\t725180\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2306\t725440\t2004\t-2.0\t-2.0\t1.5\t1.5\n0020\t010250\t2012\t-9.0\t15.0\t0.0\t13.4\n0617\t727680\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0700\t063500\t2009\t-15.3\t24.5\t0.0\t9.0\n0815\t725140\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0239\t727923\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0911\t725180\t2004\t-11.0\t18.0\t0.0\t1.5\n1033\t725140\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0435\t725760\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0612\t727923\t2003\t6.0\t6.0\t6.7\t6.7\n0238\t725180\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n2000\t010580\t2014\t-37.1\t24.3\t1.0\t18.0\n1825\t063440\t2008\t-4.0\t28.0\t0.0\t13.4\n1333\t063500\t2012\t-6.0\t16.0\t2.6\t9.3\n1445\t725640\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0605\t710920\t2009\t-31.0\t6.0\t9999.0\t-9999.0\n0709\t036720\t2009\t11.0\t11.0\t4.1\t4.1\n1200\t024100\t2009\t-22.9\t28.9\t0.0\t10.0\n1512\t727505\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0044\t703160\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0536\t725416\t2008\t-11.0\t19.0\t0.0\t6.2\n1529\t718980\t2008\t0.0\t12.0\t1.0\t9.8\n1324\t063500\t2009\t-2.0\t-2.0\t3.1\t3.1\n1902\t702190\t2003\t0.0\t11.0\t0.0\t9.3\n0346\t727680\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1700\t010580\t2012\t-36.0\t18.9\t0.0\t11.0\n0525\t702670\t2003\t-7.0\t-7.0\t4.6\t4.6\n1408\t036720\t2003\t12.0\t16.0\t1.5\t4.6\n0800\t724290\t2008\t-18.0\t14.0\t2.1\t11.3\n0628\t725080\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1843\t703500\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2321\t725180\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1547\t063400\t2014\t3.0\t22.0\t0.5\t9.3\n0303\t725744\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0636\t701780\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1350\t710920\t2009\t-26.0\t8.0\t5.7\t5.7\n2315\t725416\t2008\t-12.0\t27.0\t0.0\t10.8\n2137\t702670\t2004\t-15.0\t23.0\t3.6\t8.7\n0800\t063500\t2011\t-5.5\t25.9\t0.0\t10.0\n1713\t702670\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2139\t722680\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0530\t744865\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1854\t725560\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1724\t727680\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0102\t726088\t2005\t-15.0\t14.0\t4.6\t10.8\n0707\t727120\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0935\t726540\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1940\t725140\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0356\t703160\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2125\t725210\t2009\t15.0\t15.0\t9999.0\t-9999.0\n0934\t723170\t2004\t12.0\t12.0\t1.5\t1.5\n1642\t063500\t2009\t4.0\t21.0\t2.6\t7.7\n1805\t999999\t2013\t-27.3\t43.4\t0.0\t9.1\n1608\t727923\t2003\t2.0\t15.0\t0.0\t5.1\n1405\t725180\t2004\t1.0\t3.0\t3.1\t3.6\n0119\t726540\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0100\t722003\t2007\t24.0\t24.0\t5.7\t5.7\n0650\t710920\t2012\t-23.0\t5.0\t2.6\t14.9\n2229\t703500\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1445\t724273\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1330\t723340\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1055\t726540\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1050\t010680\t2014\t-8.0\t22.0\t0.5\t16.0\n1232\t726980\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0232\t727440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0531\t744865\t2004\t-2.0\t10.0\t3.6\t7.7\n1502\t725744\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n2104\t074600\t2014\t3.0\t22.0\t2.1\t6.7\n0651\t727845\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0302\t723150\t2004\t18.0\t22.0\t0.0\t7.2\n0349\t703500\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0751\t725620\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0102\t726540\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0300\t020550\t2011\t-41.0\t18.2\t0.0\t11.0\n0705\t702710\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0309\t724500\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0909\t727850\t2004\t3.0\t3.0\t2.6\t2.6\n0913\t718980\t2007\t0.0\t14.0\t1.0\t10.8\n0438\t063400\t2005\t0.0\t0.0\t1.0\t2.1\n1716\t700632\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0300\t722530\t2003\t9999.0\t-9999.0\t9999.0\t-9999.0\n1530\t725744\t2004\t-16.0\t5.0\t0.0\t7.2\n1939\t702190\t2005\t-5.0\t8.0\t0.0\t5.7\n1940\t722031\t2010\t5.0\t12.0\t3.1\t3.6\n1833\t727680\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1050\t010880\t2004\t-15.0\t23.0\t0.5\t15.4\n2308\t718280\t2006\t-16.0\t16.0\t2.6\t7.2\n1019\t703610\t2004\t-2.0\t11.0\t0.0\t1.5\n2331\t723340\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1442\t115180\t2009\t0.0\t20.0\t4.6\t5.7\n0843\t063500\t2008\t-2.0\t18.0\t2.1\t7.7\n0603\t744865\t2008\t9.0\t9.0\t4.1\t4.1\n2350\t034820\t2004\t-2.0\t24.0\t0.0\t11.8\n2125\t115180\t2014\t5.0\t5.0\t2.1\t2.1\n0011\t726980\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0602\t703610\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0953\t726540\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0719\t701330\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1551\t710920\t2014\t-28.0\t2.0\t1.0\t13.4\n0916\t063400\t2013\t2.0\t21.0\t1.5\t6.7\n1711\t723340\t2004\t16.0\t16.0\t3.1\t3.1\n0500\t702670\t2003\t9999.0\t-9999.0\t2.6\t2.6\n0731\t703950\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1418\t725090\t2005\t-2.0\t21.0\t4.1\t8.7\n2311\t911900\t2005\t22.0\t22.0\t3.6\t3.6\n1228\t723170\t2004\t1.0\t22.0\t1.5\t6.7\n1523\t727850\t2004\t-3.0\t4.0\t1.5\t6.7\n0318\t723150\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1900\t725744\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1227\t726980\t2003\t13.0\t13.0\t0.0\t0.0\n1018\t702190\t2009\t-3.0\t-3.0\t9999.0\t-9999.0\n1020\t010440\t2014\t-5.0\t14.0\t0.0\t15.4\n0702\t724500\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1215\t724290\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1843\t744865\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2152\t718280\t2004\t-25.0\t10.0\t1.0\t9.8\n0101\t725260\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1510\t720113\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0533\t074600\t2008\t1.0\t8.0\t1.0\t5.7\n0500\t723240\t2013\t22.2\t22.2\t0.0\t0.0\n0425\t725560\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2231\t722590\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1550\t064780\t2010\t-10.0\t35.0\t0.5\t15.4\n1433\t703500\t2005\t3.0\t9.0\t4.6\t7.7\n1706\t727850\t2008\t-1.0\t-1.0\t5.7\t5.7\n0234\t726410\t2004\t11.0\t22.0\t2.6\t6.2\n1922\t726360\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0556\t725210\t2004\t12.0\t13.0\t6.2\t6.2\n0318\t723150\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0138\t063400\t2010\t-8.0\t16.0\t0.5\t5.7\n0328\t724510\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0903\t718280\t2008\t-13.0\t13.0\t1.5\t6.2\n1015\t722590\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0127\t703610\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0135\t744865\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0128\t703610\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2106\t702730\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1201\t723150\t2010\t16.0\t16.0\t9999.0\t-9999.0\n1657\t701330\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1115\t703430\t2004\t2.0\t3.0\t1.5\t17.0\n1124\t703950\t2003\t6.0\t11.0\t0.0\t11.3\n1523\t725260\t2003\t9.0\t13.0\t4.1\t4.6\n1001\t725620\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2220\t724010\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0407\t725560\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1140\t723340\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1709\t115180\t2010\t19.0\t19.0\t3.6\t3.6\n1240\t725744\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0211\t703950\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2331\t702040\t2008\t-14.0\t-14.0\t2.6\t2.6\n0438\t063500\t2004\t10.0\t10.0\t4.1\t4.1\n1300\t486020\t2006\t4.0\t31.0\t0.0\t4.6\n1140\t725744\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2030\t727680\t2005\t-4.0\t-4.0\t10.3\t10.3\n1000\t010620\t2013\t-24.5\t10.2\t1.0\t13.0\n1402\t724290\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2102\t725090\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1344\t722003\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1025\t726980\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0245\t725640\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1640\t726440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2218\t725640\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1019\t727504\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1944\t718980\t2009\t3.0\t15.0\t0.0\t7.2\n0929\t703160\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0212\t702730\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0936\t723240\t2005\t0.0\t1.0\t1.5\t2.1\n1551\t724290\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0517\t479180\t2014\t27.0\t27.0\t3.1\t3.1\n1722\t726980\t2003\t3.0\t6.0\t2.1\t6.2\n1028\t725620\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1527\t722680\t2005\t6.0\t17.0\t3.6\t9.3\n0018\t726088\t2003\t7.0\t23.0\t1.5\t4.1\n1240\t060600\t2011\t5.0\t5.0\t2.6\t2.6\n0706\t722170\t2003\t8.0\t23.0\t0.0\t9.8\n1619\t744865\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1236\t703500\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1100\t036490\t2007\t-1.9\t25.9\t0.0\t11.3\n2146\t063500\t2012\t3.0\t14.0\t0.5\t4.6\n0723\t724500\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0636\t727120\t2005\t-14.0\t8.0\t0.0\t8.7\n0805\t703950\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0016\t723170\t2005\t1.0\t1.0\t0.0\t0.0\n1857\t725080\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2212\t726410\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1822\t703610\t2008\t5.0\t5.0\t3.1\t3.1\n2316\t702040\t2005\t-23.0\t14.0\t0.0\t23.1\n1257\t720113\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0912\t726777\t2003\t0.0\t0.0\t2.6\t7.2\n1219\t726360\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1852\t726360\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1642\t744865\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0514\t726450\t2003\t21.0\t21.0\t4.6\t4.6\n1250\t726410\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1746\t702190\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0940\t725620\t2003\t-3.0\t-3.0\t3.1\t3.1\n2259\t725180\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0104\t725080\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1232\t726410\t2008\t1.0\t9.0\t6.7\t7.2\n1751\t725640\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0917\t703160\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1237\t724510\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1849\t725620\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2220\t726440\t2008\t-11.0\t-11.0\t6.2\t6.2\n1248\t718280\t2007\t-16.0\t11.0\t2.1\t9.3\n0211\t703160\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1124\t724010\t2005\t22.0\t22.0\t0.0\t0.0\n0349\t722170\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2220\t010886\t2013\t-2.0\t17.0\t1.5\t30.4\n2016\t727120\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2221\t726170\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0600\t724273\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2324\t723150\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1118\t722680\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2351\t718980\t2006\t3.0\t16.0\t0.0\t11.3\n0129\t722170\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1000\t994720\t2006\t-13.0\t15.8\t0.0\t24.7\n1733\t724290\t2008\t-3.0\t17.0\t3.6\t4.1\n0126\t723150\t2003\t1.0\t1.0\t0.0\t0.0\n1530\t724500\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0610\t725080\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1332\t727923\t2005\t6.0\t11.0\t0.0\t8.2\n0323\t722680\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1208\t723150\t2014\t9.4\t9.4\t9999.0\t-9999.0\n1720\t010680\t2010\t-8.0\t7.0\t0.5\t14.4\n0920\t010015\t2007\t-10.0\t24.0\t0.0\t10.3\n1513\t703500\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2230\t085450\t2004\t3.0\t23.0\t0.0\t13.4\n0444\t115180\t2008\t10.0\t10.0\t4.1\t4.1\n1147\t718280\t2014\t-34.0\t18.0\t0.0\t12.4\n1521\t726170\t2005\t-11.0\t24.0\t1.5\t6.7\n1042\t718280\t2006\t-30.0\t16.0\t1.5\t11.3\n2246\t724290\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1508\t726360\t2008\t-10.0\t-10.0\t2.6\t2.6\n1528\t725080\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1246\t718280\t2014\t-38.0\t-2.0\t0.0\t6.7\n2242\t725744\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1542\t702670\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1955\t703500\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1353\t703500\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0140\t727505\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1228\t726440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0316\t725210\t2005\t2.0\t23.0\t3.1\t5.1\n1121\t725744\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1751\t725640\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0528\t727815\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1004\t063400\t2009\t1.0\t17.0\t3.1\t9.3\n2320\t010590\t2011\t-11.0\t17.0\t0.5\t13.4\n2118\t703500\t2004\t1.0\t11.0\t5.1\t6.2\n1635\t724627\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2001\t744865\t2004\t11.0\t17.0\t5.7\t6.2\n0211\t725260\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0127\t725260\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0237\t726088\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1410\t727923\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0723\t725744\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0236\t727845\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0338\t720371\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1638\t727440\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1949\t718980\t2007\t1.0\t9.0\t1.5\t7.2\n2044\t725140\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0020\t724273\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1735\t701330\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0515\t726170\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0830\t718280\t2014\t-33.0\t12.0\t0.0\t8.8\n0854\t720113\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1145\t726440\t2005\t-4.0\t19.0\t3.6\t10.8\n0518\t727923\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1645\t060600\t2004\t-1.0\t-1.0\t3.1\t3.1\n1844\t703610\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0010\t703160\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0416\t722003\t2008\t-8.0\t-8.0\t3.6\t3.6\n2019\t727120\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1331\t724290\t2010\t-4.0\t-4.0\t9999.0\t-9999.0\n1649\t701330\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1331\t702730\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n2206\t725260\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1842\t726540\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1708\t702710\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0503\t727440\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0613\t036720\t2009\t16.0\t16.0\t1.5\t1.5\n1832\t710920\t2009\t-26.0\t5.0\t9999.0\t-9999.0\n0036\t702670\t2005\t-5.0\t-5.0\t2.6\t2.6\n1723\t726088\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0458\t722170\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0224\t726410\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0919\t724627\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n2034\t703500\t2004\t1.0\t7.0\t1.5\t3.6\n0221\t703500\t2005\t4.0\t4.0\t4.6\t4.6\n1420\t723150\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1519\t074600\t2013\t21.0\t21.0\t3.1\t3.1\n1616\t722680\t2003\t8.0\t8.0\t0.0\t0.0\n1418\t725744\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0214\t702710\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0450\t115180\t2007\t6.0\t6.0\t2.1\t2.1\n1642\t063440\t2003\t12.0\t17.0\t2.6\t16.5\n0138\t727440\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1131\t725140\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1909\t722170\t2005\t23.0\t28.0\t2.6\t6.2\n2052\t701780\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2239\t727850\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1652\t701780\t2005\t-48.0\t16.0\t0.0\t5.7\n0736\t725620\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2113\t723240\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0929\t722680\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0719\t744865\t2005\t8.0\t18.0\t0.0\t10.8\n2132\t479180\t2009\t26.0\t26.0\t6.2\t6.2\n1100\t010620\t2010\t-18.7\t6.3\t1.0\t15.0\n0647\t725744\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n1605\t725090\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0520\t727680\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1408\t727440\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0450\t726410\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1254\t726170\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2303\t718280\t2007\t-25.0\t7.0\t4.1\t7.7\n0920\t010880\t2010\t-12.0\t10.0\t1.5\t9.8\n1923\t722590\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1011\t718280\t2004\t-14.0\t16.0\t1.0\t10.3\n0414\t063500\t2008\t-1.0\t9.0\t1.0\t6.7\n2307\t700632\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2135\t727845\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1851\t701330\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0053\t702670\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0344\t718980\t2011\t1.0\t12.0\t1.0\t7.7\n0849\t726980\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0316\t720371\t2011\t-2.0\t25.0\t0.0\t5.7\n0509\t723340\t2004\t14.0\t14.0\t4.1\t4.1\n1201\t703610\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0902\t718980\t2014\t1.0\t15.0\t1.0\t6.7\n2310\t724290\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0810\t703950\t2009\t1.0\t1.0\t9999.0\t-9999.0\n0727\t702710\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1624\t034820\t2004\t12.0\t12.0\t7.7\t7.7\n0929\t725180\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1755\t724510\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0240\t720113\t2007\t23.0\t24.0\t0.0\t2.1\n0454\t727505\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1740\t063400\t2007\t10.0\t15.0\t0.0\t2.6\n0028\t726088\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0151\t724627\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0304\t722170\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1540\t718280\t2008\t-9.0\t8.0\t7.2\t8.7\n0224\t028450\t2010\t-16.0\t0.0\t1.0\t1.0\n1237\t726540\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2126\t725080\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0425\t726440\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1120\t724290\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2223\t725620\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2349\t727815\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n2300\t021910\t2007\t-23.7\t19.1\t0.0\t16.0\n0213\t727505\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1250\t064780\t2005\t-3.0\t33.0\t0.0\t10.8\n0948\t727845\t2009\t-3.0\t-3.0\t3.6\t3.6\n1453\t727923\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n2236\t703160\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0232\t702190\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0536\t723170\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1906\t725140\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1325\t723170\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0855\t724084\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1734\t725744\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0713\t718980\t2009\t0.0\t14.0\t0.0\t9.8\n1628\t701330\t2003\t-17.0\t11.0\t3.6\t10.3\n1309\t726170\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n2134\t724510\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0400\t720113\t2013\t7.0\t7.0\t5.7\t5.7\n0014\t726360\t2005\t-3.0\t-1.0\t2.6\t6.7\n1638\t725180\t2005\t4.0\t11.0\t2.6\t5.1\n2040\t710920\t2009\t-16.0\t7.0\t9999.0\t-9999.0\n0843\t703160\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1318\t725620\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n2134\t722003\t2014\t-10.0\t-9.7\t6.2\t6.7\n2058\t744865\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0751\t701330\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1812\t726540\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2248\t702040\t2004\t2.0\t3.0\t4.1\t7.7\n1214\t725620\t2008\t-16.0\t-16.0\t13.9\t13.9\n1905\t723170\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1149\t726410\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n2235\t727850\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1744\t727120\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0814\t725620\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0444\t723240\t2003\t4.0\t21.0\t0.0\t3.1\n0636\t726450\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2048\t710920\t2009\t-30.0\t6.0\t1.0\t13.9\n0315\t703610\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2322\t726980\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0828\t726360\t2004\t-14.0\t21.0\t0.0\t7.7\n1247\t723340\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0226\t725080\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0040\t725260\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n0438\t703610\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1334\t701330\t2003\t-20.0\t0.0\t6.7\t11.8\n2051\t063500\t2008\t0.0\t8.0\t1.5\t4.6\n1931\t724510\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0645\t010520\t2010\t1.0\t1.0\t5.1\t5.1\n1437\t725640\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1841\t703610\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1942\t724010\t2004\t18.0\t18.0\t2.6\t2.6\n1705\t725260\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0917\t727845\t2009\t2.0\t2.0\t2.6\t2.6\n0852\t725440\t2010\t-6.0\t-6.0\t0.0\t0.0\n1853\t702710\t2006\t14.0\t14.0\t6.7\t6.7\n1425\t702730\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0551\t702710\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1919\t010880\t2006\t12.0\t12.0\t2.1\t2.1\n1233\t701780\t2005\t8.0\t8.0\t1.5\t1.5\n0708\t723150\t2003\t-6.0\t21.0\t0.0\t5.7\n1816\t702730\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0243\t726540\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1130\t722680\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0552\t702040\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0328\t722680\t2004\t8.0\t8.0\t4.6\t4.6\n1224\t060600\t2004\t0.0\t14.0\t3.6\t5.7\n0050\t725640\t2014\t1.0\t1.0\t9999.0\t-9999.0\n1407\t724510\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1444\t718280\t2005\t-16.0\t13.0\t0.0\t6.7\n1258\t722003\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n2108\t725090\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n1005\t725260\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0426\t727923\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1107\t722680\t2005\t17.0\t17.0\t6.7\t6.7\n1209\t727120\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n0924\t703160\t2004\t2.0\t5.0\t2.6\t12.3\n0831\t702710\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0256\t727505\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n0619\t703500\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n2041\t726450\t2004\t-6.0\t1.0\t2.6\t6.2\n2002\t726170\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0400\t010880\t2013\t-15.1\t19.5\t0.0\t16.0\n1616\t703500\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n1932\t724273\t2014\t23.9\t23.9\t9999.0\t-9999.0\n1104\t725560\t2004\t-18.0\t16.0\t0.0\t8.7\n0530\t710920\t2004\t-36.0\t-18.0\t2.6\t5.1\n1203\t725440\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n0600\t725440\t2010\t-20.0\t28.3\t0.0\t10.3\n0642\t726450\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1224\t036720\t2003\t7.0\t9.0\t0.5\t8.2\n0606\t702040\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n0825\t722346\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1300\t010460\t2006\t-5.7\t7.0\t0.0\t12.0\n0318\t718280\t2003\t-4.0\t15.0\t3.1\t7.7\n0808\t727504\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1428\t723170\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1620\t010015\t2009\t-11.0\t26.0\t0.0\t9.8\n0142\t725440\t2004\t-3.0\t23.0\t3.1\t5.7\n0954\t724510\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1752\t723240\t2003\t20.0\t20.0\t3.6\t3.6\n1800\t010100\t2004\t-12.6\t20.1\t0.0\t14.0\n0943\t034054\t2012\t-5.0\t-5.0\t0.5\t0.5\n1906\t727923\t2006\t9999.0\t-9999.0\t9999.0\t-9999.0\n1836\t725560\t2003\t10.0\t10.0\t5.7\t5.7\n1652\t700632\t2006\t-3.0\t-3.0\t4.1\t4.1\n1325\t725560\t2005\t-6.0\t18.0\t2.1\t6.2\n0915\t718980\t2012\t-5.0\t8.0\t0.0\t8.2\n0821\t701780\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0423\t722530\t2004\t17.0\t22.0\t2.1\t4.6\n1821\t063500\t2009\t5.0\t6.0\t4.6\t11.8\n2004\t727680\t2013\t9999.0\t-9999.0\t9999.0\t-9999.0\n1558\t063400\t2008\t8.0\t15.0\t2.1\t3.1\n0841\t727505\t2013\t-12.0\t-12.0\t0.0\t0.0\n1044\t722680\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1346\t726450\t2004\t2.0\t22.0\t2.6\t10.8\n0450\t111200\t2011\t-14.0\t19.0\t0.0\t6.7\n1528\t702730\t2010\t9999.0\t-9999.0\t9999.0\t-9999.0\n0323\t727815\t2008\t-1.0\t-1.0\t1.5\t1.5\n2005\t074600\t2011\t4.0\t19.0\t1.0\t3.6\n1305\t063400\t2008\t7.0\t21.0\t4.1\t7.7\n1858\t726088\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n1245\t726980\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0734\t725180\t2007\t9999.0\t-9999.0\t9999.0\t-9999.0\n0026\t702190\t2003\t-2.0\t8.0\t5.7\t7.7\n1525\t722590\t2014\t9999.0\t-9999.0\t9999.0\t-9999.0\n0500\t028760\t2010\t-27.2\t23.3\t0.0\t16.0\n0302\t724010\t2011\t9999.0\t-9999.0\t9999.0\t-9999.0\n0314\t722170\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1950\t036490\t2007\t-2.0\t22.0\t0.0\t10.8\n1728\t723170\t2012\t9999.0\t-9999.0\t9999.0\t-9999.0\n1339\t725180\t2004\t-13.0\t17.0\t1.5\t6.2\n0244\t722128\t2009\t9999.0\t-9999.0\t9999.0\t-9999.0\n1930\t725080\t2008\t9999.0\t-9999.0\t9999.0\t-9999.0\n1716\t701780\t2005\t-24.0\t12.0\t0.0\t8.2\n1404\t726088\t2003\t-9.0\t4.0\t4.6\t6.2\n1320\t010830\t2005\t-10.0\t16.0\t0.0\t20.1"
+          },
+          {
+            "type": "HTML",
+            "data": "<div class=\"result-alert alert-warning\" role=\"alert\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button><strong>Output is truncated</strong> to 102400 bytes. Learn more about <strong>ZEPPELIN_INTERPRETER_OUTPUT_LIMIT</strong></div>"
+          }
+        ]
+      },
+      "dateFinished": "2021-10-02T08:11:40+0000"
+    },
+    {
+      "text": "",
+      "user": "anonymous",
+      "dateUpdated": "2021-10-02T07:50:17+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "colWidth": 12,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true,
+        "graph": {
+          "mode": "table",
+          "height": 300,
+          "optionOpen": false,
+          "keys": [],
+          "values": [],
+          "groups": [],
+          "scatter": {}
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1633161017122_1065448016",
+      "id": "20160612-165943_1980111231",
+      "dateCreated": "2021-10-02T07:50:17+0000",
+      "status": "READY",
+      "$$hashKey": "object:3597"
+    }
+  ],
+  "name": "Weather RDD Tuples Simple Analysis Solution",
+  "id": "2GKYGDMRZ",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {},
+  "path": "/Weather RDD Tuples Simple Analysis Solution"
+}
