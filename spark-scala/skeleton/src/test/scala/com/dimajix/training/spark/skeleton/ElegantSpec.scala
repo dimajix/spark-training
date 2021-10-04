@@ -1,14 +1,14 @@
 package com.dimajix.training.spark.skeleton
 
-import org.scalatest.FlatSpec
-import org.scalatest.Matchers
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import com.dimajix.training.spark.util.LocalSparkSession
 
 /**
   * Created by kaya on 18.02.17.
   */
-class ElegantSpec extends FlatSpec with Matchers with LocalSparkSession {
+class ElegantSpec extends AnyFlatSpec with Matchers with LocalSparkSession {
     "The SparkSession" should "be valid" in {
         session should not be (null)
     }

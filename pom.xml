@@ -10,13 +10,13 @@
     <name>spark-training</name>
 
     <properties>
-        <hadoop.version>2.7.7</hadoop.version>
-        <spark.version>2.4.5</spark.version>
+        <hadoop.version>3.2.0</hadoop.version>
+        <spark.version>3.1.2</spark.version>
         <hive.version>2.3.3</hive.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <scala.api_version>2.11</scala.api_version>
-        <scala.version>2.11.8</scala.version>
+        <scala.api_version>2.12</scala.api_version>
+        <scala.version>2.12.10</scala.version>
         <encoding>UTF-8</encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -60,7 +60,7 @@
                     <inherited>true</inherited>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.6.0</version>
+                    <version>3.8.1</version>
                     <configuration>
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>
@@ -82,12 +82,12 @@
                     <inherited>true</inherited>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>3.2.0</version>
                 </plugin>
                 <plugin>
                     <groupId>net.alchim31.maven</groupId>
                     <artifactId>scala-maven-plugin</artifactId>
-                    <version>4.3.1</version>
+                    <version>4.5.3</version>
                     <executions>
                         <execution>
                             <id>scala-compile-first</id>
@@ -109,7 +109,7 @@
                 <plugin>
                     <groupId>org.scalatest</groupId>
                     <artifactId>scalatest-maven-plugin</artifactId>
-                    <version>2.0.0</version>
+                    <version>2.0.2</version>
                     <configuration>
                         <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                         <junitxml>.</junitxml>
@@ -174,14 +174,14 @@
             <dependency>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest_${scala.api_version}</artifactId>
-                <version>2.2.6</version>
+                <version>3.2.5</version>
                 <scope>test</scope>
             </dependency>
 
             <dependency>
                 <groupId>args4j</groupId>
                 <artifactId>args4j</artifactId>
-                <version>2.0.31</version>
+                <version>2.33</version>
             </dependency>
 
             <dependency>

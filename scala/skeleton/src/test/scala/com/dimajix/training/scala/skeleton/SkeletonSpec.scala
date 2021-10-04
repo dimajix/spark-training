@@ -1,9 +1,11 @@
 package com.dimajix.training.scala.skeleton
 
-import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.BeforeAndAfter
 
 
-class SkeletonSpec extends FlatSpec with Matchers with BeforeAndAfter {
+class SkeletonSpec extends AnyFlatSpec with Matchers with BeforeAndAfter {
     before {
         // Do stuff before
     }

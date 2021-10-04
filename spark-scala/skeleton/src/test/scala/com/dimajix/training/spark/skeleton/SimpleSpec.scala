@@ -1,11 +1,12 @@
 package com.dimajix.training.spark.skeleton
 
-import org.apache.spark.SparkConf
-import org.apache.spark.SparkContext
 import org.apache.spark.sql.SparkSession
-import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
+import org.scalatest.BeforeAndAfter
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class SimpleSpec extends FlatSpec with Matchers with BeforeAndAfter {
+
+class SimpleSpec extends AnyFlatSpec with Matchers with BeforeAndAfter {
     var session:SparkSession = _
 
     // Initialize a SparkContext before any test is performed
